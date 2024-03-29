@@ -1,0 +1,194 @@
+/*
+ * @copyRight by md sarwar hoshen.
+ */
+
+.layout {
+    /* height: 100vh; */
+    display: flex;
+}
+
+.header {
+    height: 5vh;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 2rem;
+    align-items: center;
+    background-color: #0B2447;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.title {
+    font-size: 24px;
+}
+
+.header-buttons {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.menu-btn {
+    margin-left: 10px;
+    background-color: #0b397a;
+    color: #fff;
+    border: 1px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.menu-btn:hover {
+    background-color: #0056b3;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    margin: 0 auto;
+}
+
+.logo {
+    font-size: 1rem;
+    font-weight: bold;
+    padding-left: 1rem;
+    align-items: left;
+    margin: 0;
+}
+
+.main-container {
+    margin-top: 5vh;
+    flex: 1;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #0B2447;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 9;
+    /* transition: left 0.3s ease; */
+}
+
+.nav-link {
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: #fff;
+    text-align: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.active {
+    background-color: rgb(71, 71, 71);
+    color: #fff;
+
+}
+
+.body-container {
+    display: flex;
+    flex: 1;
+    margin-left: 200px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.body-container-left {
+    margin-left: 0;
+}
+
+.sidebar-tab {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+    border-bottom: 2px solid transparent;
+    box-shadow: 0px 2px 4px rgba(255, 197, 197, 0.1);
+
+}
+
+.sidebar-tab.active {
+    background-color: #5B8FB9;
+}
+
+.hidden {
+    left: -200px;
+}
+
+.pac-container {
+    background-color: #FFF;
+    z-index: 2001;
+    position: fixed;
+    display: inline-block;
+    float: left;
+}
+
+.modal {
+    z-index: 2000;
+}
+
+.modal-backdrop {
+    z-index: 1000;
+}
+
+/* @media (max-width: 768px) {
+  .sidebar {
+    left: -200px;
+  }
+} */
+.card-img-top {
+    width: 250px; /* Set width */
+    height: 250px; /* Set height */
+    object-fit: cover;
+}
+
+.doctor-card {
+    display: flex;
+    align-items: center;
+    aspect-ratio: 1/1;
+    width: 250px;
+    height: 250px;
+}
+
+.department-card {
+    display: flex;
+    align-items: center;
+    width: 250px;
+    height: 100px;
+}
+
+.no-data-img {
+    height: 400px;
+    width: 400px;
+    object-fit: contain;
+}
+
+.plus-btn {
+    border: none;
+
+}
+
+.search-btn {
+    background-color: #0B2447;
+    border-color: #0B2447;
+}
+
+button.btn-primary:hover {
+    background-color: #1a4a8a;
+    border-color: #1a4a8a;
+}
+.search-btn,
+.add-btn {
+  background-color: #1a4a8a; /* Change to the desired hover color */
+  border-color: #1a4a8a; /* Change to the desired hover border color */
+}
