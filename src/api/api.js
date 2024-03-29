@@ -13,7 +13,7 @@ api.interceptors.request.use(
     const token = await getItem('apat');
     console.log("token",token);
     if (token) {
-      config.headers.Authorization = `${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -36,7 +36,7 @@ api.interceptors.response.use(
         console.log("resp::::::", resp);
         const {token} = resp.data;
         await setItem('apat', token);
-        originalRequest.headers.Authorization = `${token}`;
+        originalRequest.headers.Authorization = `Bearer ${token}`;
         return axios(originalRequest);
       } catch (error) {
         // Handle refresh token error
