@@ -55,8 +55,7 @@ export const Put = async (url, arg , ContentType) => {
 export const Get = async (url) => {
   try {
     const response = await api.get(url,{
-      withCredentials: true, 
-      credentials: 'include'
+      withCredentials: true,
     });
     // console.log('response', response.data);
     if (response.data.success) {
