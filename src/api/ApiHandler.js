@@ -56,6 +56,7 @@ export const Get = async (url) => {
   try {
     const response = await api.get(url,{
       withCredentials: true, 
+      credentials: 'include'
     });
     // console.log('response', response.data);
     if (response.data.success) {
