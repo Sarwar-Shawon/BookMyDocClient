@@ -2,11 +2,13 @@
  * @copyRight by md sarwar hoshen.
  */
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Get, Post } from "../../api";
 import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
+import TimetableAdd from "./TimeTableAdd";
+import TimetableUpdate from "./TimeTableUpdate";
 //
 const _days = {
   monday: false,
@@ -19,230 +21,125 @@ const _days = {
 };
 //
 const AppointmentsTimetable = ({ doctorId }) => {
-  const [days, setDays] = useState({});
   const [timeSlots, setTimeSlots] = useState({});
-    //
-    useEffect(() => {
-      fetchTimeSlots();
-    }, []);
-    //
-    const fetchTimeSlots = async () => {
-      try {
-        // setLoading(true);
-        const formattedDate = new Date().toISOString();
-        const resp = await Get(`${apiUrl()}/doctor/get-time-slots?date=${formattedDate}`);
-        console.log("resp:::", JSON.stringify(resp));
-        if (resp.success) {
-          setTimeSlots(resp?.data);
-        }
-      } catch (err) {
-        // setError(err?.message);
-      } finally {
-        // setLoading(false);
-      }
-    };
-  //
-  const handleDayChange = (event) => {
-    try {
-      const isChecked = event.target.checked;
-      const day = event.target.value;
-      console.log(isChecked);
-      console.log(day);
-      //
-      if (isChecked) {
-        setDays({
-          ...days,
-          [day]: { startTime: "", endTime: "", duration: 15 },
-        });
-      } else {
-        const updatedDays = { ...days };
-        delete updatedDays[day];
-        setDays(updatedDays);
-      }
-    } catch (err) {}
-  };
+  const [isLoading, setLoading] = useState(true);
+  const [showNew, setShowNew] = React.useState(false);
+  const [showUpdate, setShowUpdate] = React.useState(false);
 
-  const handleTimeChange = (event, day) => {
-    try {
-      const value = event.target.value;
-      const name = event.target.name;
-      console.log("value:", value);
-      console.log("name:", name);
-      console.log("name:", day);
-      // if (name == "duration") value = parseInt(value);
-      setDays({
-        ...days,
-        [day]: {
-          ...days[day],
-          [name]: value,
-        },
-      });
-    } catch (err) {}
-  };
-  //create timeslots by duraion form start time to end time
-  const createIntervalSlots = (startTime, endTime, duration) => {
-    const slots = {};
-    const startTimeObj = new Date(`01/01/2024 ${startTime}`);
-    const endTimeObj = new Date(`01/01/2024 ${endTime}`);
-    let currentSlot = new Date(startTimeObj);
-  
-    while (currentSlot < endTimeObj) {
-      const formattedSlot = currentSlot.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-  
-      slots[formattedSlot] = {
-        startTime: formattedSlot,
-        active: true,
-      };
-  
-      currentSlot.setMinutes(currentSlot.getMinutes() + parseInt(duration));
-    }
-  
-    console.log("slots", slots);
-    return slots;
-  };
   //
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  useEffect(() => {
+    fetchTimeSlots();
+  }, []);
+  //
+  const fetchTimeSlots = async () => {
     try {
-      const formattedSlots = Object.entries(days).map(([day, obj]) => ({
-        day,
-        startTime: obj.startTime,
-        endTime: obj.endTime,
-        duration: obj.duration,
-      }));
-      //
-      let timeSlotObj = {};
-      //
-      formattedSlots.map((slot) => {
-        timeSlotObj[slot.day.toLowerCase()] = createIntervalSlots(
-          slot.startTime,
-          slot.endTime,
-          slot.duration
-        );
-      });
-      console.log("timeSlotObj::", timeSlotObj);
-
-      if (Object.entries(timeSlotObj).length) {
-        const resp = await Post(
-          `${apiUrl()}/doctor/create-time-slots`,
-          {
-            timeSlots: timeSlotObj,
-          },
-          "application/json"
-        );
-        console.log(resp);
-        if (resp?.success) {
-          setDays({});
-        }
+      setLoading(true);
+      const formattedDate = new Date().toISOString();
+      const resp = await Get(
+        `${apiUrl()}/doctor/get-time-slots?date=${formattedDate}`
+      );
+      console.log("resp:::", JSON.stringify(resp));
+      if (resp.success) {
+        setTimeSlots(resp?.data);
       }
-    } catch (error) {
+    } catch (err) {
+      // setError(err?.message);
     } finally {
+      setLoading(false);
     }
   };
+  if (isLoading) {
+    return <LoadingView />;
+  }
   //
   return (
-    <div className="container mt-5">
-      <h2 className="mb-4">Create Time Slots</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <legend className="fw-bold">Select Available Days:</legend>
-          {Object.keys(_days).map((day) => (
-            <div className="form-check form-check-inline" key={day}>
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id={day}
-                value={day}
-                checked={days[day]}
-                onChange={handleDayChange}
-              />
-              <label className="form-check-label" htmlFor={day}>
-                {day.charAt(0).toUpperCase() + day.slice(1)}
-              </label>
-            </div>
-          ))}
-          {/* Repeat for other days */}
+    <>
+      <div className="container mt-5">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <button
+            style={{
+              width: "200px",
+              backgroundColor: "#0B2447",
+              borderColor: "#0B2447",
+              transition: "background-color 0.3s, border-color 0.3s",
+            }}
+            className="btn btn-primary"
+            onMouseOver={(e) => {
+              e.target.style.backgroundColor = "#1a4a8a";
+              e.target.style.borderColor = "#1a4a8a";
+            }}
+            onMouseOut={(e) => {
+              e.target.style.backgroundColor = "#0B2447";
+              e.target.style.borderColor = "#0B2447";
+            }}
+            onClick={() => {
+              Object.entries(timeSlots).length
+                ? setShowUpdate(true)
+                : setShowNew(true);
+            }}
+          >
+            {Object.entries(timeSlots).length
+              ? "Update TimeTable"
+              : "Add New TimeTable"}
+          </button>
         </div>
-        {Object.entries(days).map(([day, obj]) => (
-          <div className="mb-3" key={day}>
-            <legend className="fw-bold">
-              {day.charAt(0).toUpperCase() + day.slice(1)}:
-            </legend>
-            <div className="row">
-              <div className="col-md-4">
-                <div className="mb-3">
-                  <label className="form-label">Start Time:</label>
-                  <input
-                    type="time"
-                    className="form-control"
-                    value={obj.startTime}
-                    onChange={(e) => handleTimeChange(e, day)}
-                    name="startTime"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="mb-3">
-                  <label className="form-label">End Time:</label>
-                  <input
-                    type="time"
-                    className="form-control"
-                    value={obj.endTime}
-                    onChange={(e) => handleTimeChange(e, day)}
-                    name="endTime"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="mb-3">
-                  <label className="form-label">
-                    Appointment Duration (minutes):
-                  </label>
-                  <select
-                    className="form-select"
-                    value={obj.duration}
-                    name="duration"
-                    onChange={(e) => handleTimeChange(e, day)}
-                  >
-                    <option value="15">15</option>
-                    <option value="30">30</option>
-                    <option value="45">45</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+        {!Object.entries(timeSlots).length && (
+          <div className="container-fluid d-flex justify-content-center align-items-center">
+            <img src={noData} className="no-data-img" alt="No data found" />
           </div>
-        ))}
-        <button type="submit" className="btn btn-primary">
-          Create Time Slots
-        </button>
-      </form>
-      {
-         Object.entries(timeSlots).length && 
-         <TimeSlotsComponent timeSlotsData={timeSlots}/>
-      }
-    </div>
+        )}
+        {Object.entries(timeSlots).length && (
+          <TimeSlotsComponent timeSlotsData={timeSlots} />
+        )}
+      </div>
+      {showNew && (
+        <TimetableAdd
+          onCloseModal={() => {
+            setShowNew(false);
+          }}
+          title={"Add New TimeTable"}
+          setTimeSlots={(val) => setTimeSlots(val)}
+        />
+      )}
+      {showUpdate && (
+        <TimetableUpdate
+          onCloseModal={() => {
+            setShowUpdate(false);
+          }}
+          title={"Update TimeTable"}
+          timeSlots={timeSlots}
+          setTimeSlots={(val) => setTimeSlots(val)}
+        />
+      )}
+    </>
   );
 };
 const TimeSlotsComponent = ({ timeSlotsData }) => {
   return (
-    <div className="container mt-5">
+    <>
       {Object.entries(timeSlotsData).map(([day, slots]) => (
         <div key={day} className="mb-4">
           <h3>{day.charAt(0).toUpperCase() + day.slice(1)}</h3>
           <div className="row row-cols-2 row-cols-md-4 g-3">
             {Object.entries(slots).map(([time, slot]) => (
               <div key={time} className="col">
-                <div className={`card ${slot.active ? 'bg-info' : 'bg-success'}`}>
+                <div
+                  className={`card `}
+                  style={{
+                    backgroundColor: slot.active ? "#818FB4" : "#5C8374",
+                  }}
+                >
                   {/* <button type="button" className="btn-close bg-danger" aria-label="Close" style={{ position: 'absolute', top: '15px', right: '10px' }} /> */}
                   <div className="card-body">
                     <h5 className="card-title">{slot.startTime}</h5>
-                    <p className="card-text">Booked: {slot.active ? 'No' : 'Yes'}</p>
+                    <p className="card-text">
+                      Booked: {slot.active ? "No" : "Yes"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -250,7 +147,8 @@ const TimeSlotsComponent = ({ timeSlotsData }) => {
           </div>
         </div>
       ))}
-    </div>
+    </>
   );
 };
+//
 export default AppointmentsTimetable;
