@@ -16,7 +16,7 @@ export const Post = async (url, arg , ContentType) => {
     };
     
     const response = await api.post(url, arg,config);
-    console.log("response",response);
+    // console.log("response",response);
     if (response.data.success) {
       return response.data;
     }
@@ -39,7 +39,7 @@ export const Put = async (url, arg , ContentType) => {
     };
     
     const response = await api.put(url, arg , config);
-    console.log("response",response);
+    // console.log("response",response);
     if (response.data.success) {
       return response.data;
     }
@@ -72,11 +72,10 @@ export const Get = async (url) => {
 // Delete method
 export const Delete = async (url, arg) => {
   try {
-    console.log("api", api);
     const response = await api.delete(url,{
       withCredentials: true, 
     });
-    console.log("response",response);
+    // console.log("response",response);
     if (response.data.success) {
       return response.data;
     }
@@ -95,7 +94,7 @@ export const PublicPost = async (url, arg) => {
     const response = await axios.post(url, arg,{
       withCredentials: true, 
     });
-    console.log("response",response);
+    // console.log("response",response);
     if (response.data.success) {
       return response.data;
     }

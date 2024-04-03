@@ -4,8 +4,8 @@
 import React, { useState, useEffect } from "react";
 import { Get } from "../../api";
 import { apiUrl } from "../../config/appConfig";
+import noData from "../../assets/images/no-data.jpg";
 //
-
 const PatientHome = () => {
   const [departments, setDepartments] = useState([]);
   const [selDept, setSelDept] = useState("");
@@ -23,7 +23,7 @@ const PatientHome = () => {
   //
   useEffect(() => {
     setDoctors([]);
-    fetchDoctors();
+    fetchDoctors({pSkip: true});
   }, [selDept]);
   //
   useEffect(() => {
@@ -41,11 +41,12 @@ const PatientHome = () => {
     }
   };
   //
-  const fetchDoctors = async () => {
+  const fetchDoctors = async ({pSkip}) => {
     try {
       setLoading(true);
       const limit = 5;
-      const skip = doctors.length;
+      const skip = pSkip ? 0 : doctors.length;
+      console.log("skip", skip)
       const resp = await Get(`${apiUrl()}/patient/get-doctors?skip=${skip}&dept=${selDept}`);
       console.log("resp::: doctors", resp);
       if (resp.success) {
@@ -114,6 +115,44 @@ const PatientHome = () => {
           </>
         </select>
       </div>
+      {!doctors.length && (
+          <div className="container-fluid d-flex justify-content-center align-items-center">
+            <img src={noData} className="no-data-img" alt="No data found" />
+          </div>
+        )}
+      {doctors.map((doctor) => {
+          return (
+            <div
+              key={doctor._id}
+              className="doctor-card card mb-3 mx-2"
+              onClick={() => {
+                // setSelectedDoctor(doctor);
+                // setOpenAddView(true);
+              }}
+            >
+              <img
+                src={
+                  typeof doctor.img == "string"
+                    ? `${apiUrl()}/uploads/${doctor.img}`
+                    : URL.createObjectURL(doctor.img)
+                }
+                className="card-img-top"
+                alt={doctor.f_name}
+
+              />
+              <div className="card-body">
+                <h5 className="card-title">
+                  {[doctor.f_name, doctor.l_name].join(" ")}
+                </h5>
+                <p className="card-text">{doctor?.dept?.name}</p>
+                <p className="card-text">
+                  {doctor.active ? "Active" : "Inactive"}
+                </p>
+                {/* ... other customer details */}
+              </div>
+            </div>
+          );
+        })}
     </div>
   );
 };
