@@ -221,7 +221,6 @@ const fetchOrganizations = async () => {
                 <p className="card-text">
                   {nurse.active ? "Active" : "Inactive"}
                 </p>
-                {/* ... other customer details */}
               </div>
             </div>
           );

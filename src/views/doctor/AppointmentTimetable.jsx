@@ -78,12 +78,12 @@ const AppointmentsTimetable = ({ doctorId }) => {
               e.target.style.borderColor = "#0B2447";
             }}
             onClick={() => {
-              Object.entries(timeSlots).length
+              Object.entries(timeSlots).length > 0
                 ? setShowUpdate(true)
                 : setShowNew(true);
             }}
           >
-            {Object.entries(timeSlots).length
+            {Object.entries(timeSlots).length > 0
               ? "Update TimeTable"
               : "Add New TimeTable"}
           </button>
@@ -93,7 +93,7 @@ const AppointmentsTimetable = ({ doctorId }) => {
             <img src={noData} className="no-data-img" alt="No data found" />
           </div>
         )}
-        {Object.entries(timeSlots).length && (
+        {Object.entries(timeSlots).length > 0 && (
           <TimeSlotsComponent timeSlotsData={timeSlots} />
         )}
       </div>

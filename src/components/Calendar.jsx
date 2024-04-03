@@ -51,7 +51,7 @@ const AppCalendar = (props) => {
               type="button"
               className="btn btn-primary"
               onClick={() => {
-                props.onChange(props.value);
+                // props.onChange(props.value);
                 props.onCloseModal();
               }}
             >

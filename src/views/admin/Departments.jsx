@@ -179,7 +179,6 @@ const Departments = () => {
                 <p className="card-text">
                   {department.active ? "Active" : "Inactive"}
                 </p>
-                {/* ... other customer details */}
               </div>
             </div>
           );

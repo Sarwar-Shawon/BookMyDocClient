@@ -213,7 +213,6 @@ const Doctors = () => {
                 <p className="card-text">
                   {doctor.active ? "Active" : "Inactive"}
                 </p>
-                {/* ... other customer details */}
               </div>
             </div>
           );

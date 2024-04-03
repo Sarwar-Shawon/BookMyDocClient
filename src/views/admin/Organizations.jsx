@@ -179,7 +179,6 @@ const Organizations = () => {
                 <p className="card-text">
                   {organization.active ? "Active" : "Inactive"}
                 </p>
-                {/* ... other customer details */}
               </div>
             </div>
           );
