@@ -102,18 +102,6 @@ const OrganizationsAddView = ({
     }
   };
   //
-  const validateForm = () => {
-    let isValid = true;
-    const errorsObj = {};
-
-    if (!formData.name) {
-      errorsObj.doc_email = "Please enter a valid email address";
-      isValid = false;
-    }
-    setError(errorsObj);
-    return isValid;
-  };
-  //
   const addNewOrganization = async () => {
     try {
       //
@@ -193,7 +181,13 @@ const OrganizationsAddView = ({
                 className="form-control"
                 name="phone"
                 value={formData.phone}
-                onChange={handleChange}
+                onChange={(e) => {
+                  const numericInput = e.target.value.replace(/\D/g, "");
+                  setFormData({
+                    ...formData,
+                    ["phone"]: numericInput,
+                  });
+                }}
                 required
               />
             </div>
@@ -322,7 +316,7 @@ const OrganizationsAddView = ({
               <input
                 type="text"
                 className="form-control"
-                name="addr.line2"
+                name="addr.county"
                 value={formData.addr.county}
                 onChange={handleChange}
                 required
@@ -333,7 +327,7 @@ const OrganizationsAddView = ({
               <input
                 type="text"
                 className="form-control"
-                name="addr.line2"
+                name="addr.country"
                 value={formData.addr.country}
                 onChange={handleChange}
                 required

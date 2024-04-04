@@ -115,9 +115,6 @@ const fetchOrganizations = async () => {
   if (isLoading) {
     return <LoadingView />;
   }
-  console.log("nurses.length", nurses.length);
-  const imageUrl =
-    "http://localhost:3080/uploads/ee76ef83ccf7086edc43b8162ffcc415"; // URL of the uploaded image
 
   //
   return (

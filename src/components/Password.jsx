@@ -20,8 +20,9 @@ const PasswordInput = (props) => {
           className="form-control"
           placeholder={props.placeholder || "Enter password"}
           onChange={(e) => props.setPassword(e.target.value)}
-          onFocus={onFocus}
-          onBlur={onBlur}
+          onFocus={props.onFocusDisable ? null : onFocus}
+          onBlur={props.onBlurDisable ? null :onBlur}
+          required
         />
         <span
           style={{

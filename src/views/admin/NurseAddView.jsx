@@ -269,12 +269,11 @@ const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNur
                 name="phone"
                 value={formData.phone}
                 onChange={(e) => {
-                  if (
-                    e.target.value === "" ||
-                    Regex.numericRegex.test(e.target.value)
-                  ) {
-                    handleChange(e);
-                  }
+                  const numericInput = e.target.value.replace(/\D/g, "");
+                  setFormData({
+                    ...formData,
+                    ["phone"]: numericInput,
+                  });
                 }}
                 required
               />

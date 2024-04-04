@@ -17,24 +17,20 @@ import { Regex } from "../../utils";
 import { Post, Put } from "../../api";
 import { apiUrl } from "../../config/appConfig";
 
-const DoctorsAddView = ({
+const PharmacyAddView = ({
   onCloseModal,
-  addToDoctorList,
-  selectedDoctor,
-  updateDoctorList,
-  departments,
-  organizations
-
+  addToPharmacyList,
+  selectedPharmacy,
+  updatePharmacyList,
+  organizations,
 }) => {
   //
   const [errors, setError] = useState({});
   const [formData, setFormData] = useState({
-    doc_email: "",
-    f_name: "",
-    l_name: "",
-    dob: "",
+    phar_email: "",
+    name: "",
     phone: "",
-    gmc_licence: "",
+    licence: "",
     img: "",
     addr: {
       line1: "",
@@ -46,23 +42,21 @@ const DoctorsAddView = ({
       lat_lng: "",
       formatted_address: "",
     },
-    dept: "",
     active: true,
-    organization: "",
+    org: "",
   });
   const [showResp, setShowResp] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   //
   useEffect(() => {
-    console.log("selectedDoctor",selectedDoctor)
     const mergedFormData = {
       ...formData,
-      ...selectedDoctor,
+      ...selectedPharmacy,
     };
-    mergedFormData.dept = selectedDoctor?.dept?._id
-    mergedFormData.organization = selectedDoctor?.organization?._id
+    mergedFormData.org = selectedPharmacy?.org?._id;
+
     setFormData(mergedFormData);
-  }, [selectedDoctor]);
+  }, [selectedPharmacy]);
   //
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,8 +65,7 @@ const DoctorsAddView = ({
         ...formData,
         [name]: value == "true" ? true : false,
       });
-    }
-    else if (name == "img") {
+    } else if (name == "img") {
       setFormData({
         ...formData,
         [name]: e.target.files[0],
@@ -98,10 +91,12 @@ const DoctorsAddView = ({
     setIsLoading(true);
     e.preventDefault();
     try {
-      if (selectedDoctor && selectedDoctor._id) {
-        await updateDoctor();
-      } else {
-        await addNewDoctor();
+      if (validateForm()) {
+        if (selectedPharmacy && selectedPharmacy._id) {
+          await updatePharmacy();
+        } else {
+          await addNewPharmacy();
+        }
       }
     } catch (error) {
       console.error("Error:", error);
@@ -114,32 +109,20 @@ const DoctorsAddView = ({
     let isValid = true;
     const errorsObj = {};
 
-    if (!formData.doc_email || !Regex.emailRegex.test(formData.doc_email)) {
-      errorsObj.doc_email = "Please enter a valid email address";
+    if (!formData.phar_email || !Regex.emailRegex.test(formData.phar_email)) {
+      errorsObj.phar_email = "Please enter a valid email address";
       isValid = false;
     }
-    if (!formData.f_name) {
-      errorsObj.f_name = "First Name is required";
-      isValid = false;
-    }
-    if (!formData.l_name) {
-      errorsObj.l_name = "Last Name is required";
-      isValid = false;
-    }
-    if (!formData.dob) {
-      errorsObj.dob = "Date Of Birth is required";
+    if (!formData.name) {
+      errorsObj.l_name = "Name is required";
       isValid = false;
     }
     if (!formData.phone) {
       errorsObj.phone = "Phone is required";
       isValid = false;
     }
-    if (!formData.dept) {
-      errorsObj.dept = "Department is required";
-      isValid = false;
-    }
-    if (!formData.gmc_licence) {
-      errorsObj.gmc_licence = "GMC Licence is required";
+    if (!formData.licence) {
+      errorsObj.licence = "Licence is required";
       isValid = false;
     }
     if (!formData.active) {
@@ -162,15 +145,15 @@ const DoctorsAddView = ({
     return isValid;
   };
   //
-  const addNewDoctor = async () => {
+  const addNewPharmacy = async () => {
     try {
       //
-      console.log("params:: add new doctor", formData);
-      const resp = await Post(`${apiUrl()}/admin/registerDoctor`, formData);
+      console.log("params:: add new pharmacy", formData);
+      const resp = await Post(`${apiUrl()}/admin/registerPharmacy`, formData);
       console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
-        addToDoctorList({ newDoc: [resp?.data] });
+        addToPharmacyList({ newNur: [resp?.data] });
         respObj.success = true;
         respObj.msg = resp?.message;
         setShowResp(respObj);
@@ -184,15 +167,15 @@ const DoctorsAddView = ({
     }
   };
   //
-  const updateDoctor = async () => {
+  const updatePharmacy = async () => {
     try {
       //
-      console.log("params:: update doctor", formData);
-      const resp = await Put(`${apiUrl()}/admin/updateDoctor`, formData);
+      console.log("params:: update pharmacy", formData);
+      const resp = await Put(`${apiUrl()}/admin/updatePharmacy`, formData);
       console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
-        updateDoctorList({ updDoc: resp?.data });
+        updatePharmacyList({ updNur: resp?.data });
         respObj.success = true;
         respObj.msg = resp?.message;
         setShowResp(respObj);
@@ -205,11 +188,10 @@ const DoctorsAddView = ({
     } finally {
     }
   };
-  //
-  //
+  console.log("fr", formData);
   return (
     <Modal
-      title={selectedDoctor ? "Update Doctor" : "Add New Doctor"}
+      title={selectedPharmacy ? "Update Pharmacy" : "Add New Pharmacy"}
       body={
         <form onSubmit={handleSubmit} className="row">
           <ErrorAlert
@@ -224,48 +206,27 @@ const DoctorsAddView = ({
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Email:</label>
-              {errors.doc_email && (
-                <p className="text-danger">{errors.doc_email}</p>
+              {errors.phar_email && (
+                <p className="text-danger">{errors.phar_email}</p>
               )}
               <input
                 type="email"
                 className="form-control"
-                name="doc_email"
-                value={formData.doc_email}
+                name="phar_email"
+                value={formData.phar_email}
                 onChange={handleChange}
                 required
               />
             </div>
             <div className="mb-3">
-              <label className="form-label">First Name:</label>
+              <label className="form-label">Name:</label>
               <input
                 type="text"
                 className="form-control"
-                name="f_name"
-                value={formData.f_name}
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
                 required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Last Name:</label>
-              <input
-                type="text"
-                className="form-control"
-                name="l_name"
-                value={formData.l_name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Date Of Birth:</label>
-              <input
-                type="text"
-                className="form-control"
-                name="dob"
-                value={formData.dob}
-                onChange={handleChange}
               />
             </div>
             <div className="mb-3">
@@ -286,22 +247,88 @@ const DoctorsAddView = ({
               />
             </div>
             <div className="mb-3">
-              <label className="form-label">Gmc Licence:</label>
+              <label className="form-label">Licence:</label>
               <input
                 type="text"
                 className="form-control"
-                name="gmc_licence"
-                value={formData.gmc_licence}
+                name="licence"
+                value={formData.licence}
                 onChange={handleChange}
                 required
               />
             </div>
-
-           
+            <div className="mb-3">
+              <label className="form-label">Organization:</label>
+              <select
+                className="form-select"
+                name="org"
+                value={formData.org}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Organization</option>
+                <>
+                  {organizations.length &&
+                    organizations.map((org) => (
+                      <option value={org._id} key={org._id}>
+                        {org.name}
+                      </option>
+                    ))}
+                </>
+              </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Status:</label>
+              <select
+                className="form-select"
+                name="active"
+                value={formData.active}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Status</option>
+                <option value={true}>Active</option>
+                <option value={false}>Inactive</option>
+              </select>
+            </div>
+            <div className="mb-3 ">
+              <label className="form-label">Image:</label>
+              {/* <input
+                type="text"
+                className="form-control"
+                name="addr.line2"
+                value={formData.addr.country}
+                onChange={handleChange}
+                required
+              /> */}
+              <input
+                type="file"
+                className="form-control"
+                accept="image/*"
+                name="img"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="align-items-center">
+              {formData.img && (
+                <img
+                  src={
+                    typeof formData.img == "string"
+                      ? `${apiUrl()}/uploads/${formData.img}`
+                      : URL.createObjectURL(formData.img)
+                  }
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 50,
+                  }}
+                />
+              )}
+            </div>
           </div>
           {/* Address View */}
           <div className="col-md-6">
-            {/* <div className="mb-3">
+            <div className="mb-3">
               <label className="form-label">Find Address:</label>
               <PLaceAutoComplete
                 onPlaceSelected={(place) => {
@@ -364,7 +391,7 @@ const DoctorsAddView = ({
               <input
                 type="text"
                 className="form-control"
-                name="addr.line2"
+                name="addr.county"
                 value={formData.addr.county}
                 onChange={handleChange}
                 required
@@ -375,95 +402,11 @@ const DoctorsAddView = ({
               <input
                 type="text"
                 className="form-control"
-                name="addr.line2"
+                name="addr.country"
                 value={formData.addr.country}
                 onChange={handleChange}
                 required
               />
-            </div> */}
-            <div className="mb-3">
-              <label className="form-label">Department:</label>
-              <select
-                className="form-select"
-                name="dept"
-                value={formData.dept}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Department</option>
-                <>
-                  {departments.length &&
-                    departments.map((dept) => (
-                      <option value={dept._id} key={dept._id}>{dept.name}</option>
-                    ))}
-                </>
-              </select>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Organization:</label>
-              <select
-                className="form-select"
-                name="organization"
-                value={formData.organization}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Organization</option>
-                <>
-                  {organizations.length &&
-                    organizations.map((org) => (
-                      <option value={org._id} key={org._id}>{org.name}</option>
-                    ))}
-                </>
-              </select>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Status:</label>
-              <select
-                className="form-select"
-                name="active"
-                value={formData.active}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Status</option>
-                <option value={true}>Active</option>
-                <option value={false}>Inactive</option>
-              </select>
-            </div>
-            <div className="mb-3 ">
-              <label className="form-label">Image:</label>
-              {/* <input
-                type="text"
-                className="form-control"
-                name="addr.line2"
-                value={formData.addr.country}
-                onChange={handleChange}
-                required
-              /> */}
-              <input
-                type="file"
-                className="form-control"
-                accept="image/*"
-                name="img"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="align-items-center">
-              {formData.img && (
-                <img
-                  src={
-                    typeof formData.img == "string"
-                      ? `${apiUrl()}/uploads/${formData.img}`
-                      : URL.createObjectURL(formData.img)
-                  }
-                  style={{
-                    width: 100,
-                    height: 100,
-                    borderRadius: 50,
-                  }}
-                />
-              )}
             </div>
           </div>
           <div className="col-12">
@@ -479,7 +422,7 @@ const DoctorsAddView = ({
                 </button>
               ) : (
                 <button type="submit" className="btn btn-primary">
-                  {selectedDoctor ? "Update Doctor" : "Create Account"}
+                  {selectedPharmacy ? "Update Pharmacy" : "Create Account"}
                 </button>
               )}
             </div>
@@ -492,4 +435,4 @@ const DoctorsAddView = ({
   );
 };
 
-export default DoctorsAddView;
+export default PharmacyAddView;
