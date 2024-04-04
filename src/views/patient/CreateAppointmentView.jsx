@@ -10,6 +10,7 @@ import { apiUrl } from "../../config/appConfig";
 import AppCalendar from "../../components/Calendar";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
+import moment from "moment";
 
 const CreateAppointmentView = ({ onCloseModal, doctor }) => {
   //
@@ -52,7 +53,9 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
     setIsLoading(true);
     e.preventDefault();
     try {
-        
+      if (validateForm()) {
+        await createAppointment();
+      }
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -78,15 +81,19 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
   //
   const createAppointment = async () => {
     try {
-      // pt_id: "",
-      // doc_id: "",
-      // apt_date: "Date",
-      // status: "Pending",
-      // createdAt: "Date",
-      // dept: "",
-      // org: "",
-      // timeslot: "",
-      const resp = await Post(`${apiUrl()}/admin/registerDoctor`, formData);
+      const params = {
+        doc_id: doctor._id,
+        apt_date: moment(formData.apt_date),
+        dept: doctor.dept._id,
+        org: doctor.organization._id,
+        timeslot: formData.timeslot,
+      };
+      console.log("params", params)
+      const resp = await Post(
+        `${apiUrl()}/patient/create-appointment`,
+        params,
+        "application/json"
+      );
       console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -190,12 +197,14 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
             <AppCalendar
               onCloseModal={() => setShowCalendar(false)}
               value={formData.apt_date}
-              onChange={(val) =>
+              onChange={(val) => {
+                console.log("val:", val)
                 setFormData({
                   ...formData,
-                  ["apt_date"]: val,
-                })
-              }
+                  ["apt_date"]: new Date(val),
+                });
+                setShowCalendar(false);
+              }}
               minDate={new Date()}
             />
           )}
@@ -207,7 +216,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
   );
 };
 //
-const TimeSlotsComponent = ({ timeSlotsData, setTimeSlot , val }) => {
+const TimeSlotsComponent = ({ timeSlotsData, setTimeSlot, val }) => {
   return (
     <div className="mb-4">
       <div className="row row-cols-2 row-cols-md-4 g-3">

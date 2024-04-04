@@ -137,9 +137,9 @@ const TimeSlotsComponent = ({ timeSlotsData }) => {
                   {/* <button type="button" className="btn-close bg-danger" aria-label="Close" style={{ position: 'absolute', top: '15px', right: '10px' }} /> */}
                   <div className="card-body">
                     <h5 className="card-title">{slot.startTime}</h5>
-                    <p className="card-text">
+                    {/* <p className="card-text">
                       Booked: {slot.active ? "No" : "Yes"}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </div>
