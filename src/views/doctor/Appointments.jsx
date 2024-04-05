@@ -8,10 +8,39 @@ import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import { formatDateToString } from "../../utils";
 import Modal from "../../components/Modal";
+import moment from "moment";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import AppCalendar from "../../components/Calendar";
-import moment from "moment";
-
+// const DoctorAppointments = () => {
+//   const [selType, setSelType] = useState("Pending");
+//   //
+//   return (
+//     <div className="container-fluid">
+//       <div className="row">
+//         <div className="col">
+//           <div className="d-flex justify-content-between align-items-center mb-3" style={{ borderBottom: "1px solid #ccc", paddingBottom: "10px" }}>
+//             <TabButton title="Pending" selType={selType} setSelType={setSelType} />
+//             <TabButton title="Accepted" selType={selType} setSelType={setSelType} />
+//             <TabButton title="History" selType={selType} setSelType={setSelType} />
+//           </div>
+//         </div>
+//       </div>
+//       <>
+//         {selType === "Pending" && <PendingView />}
+//         {selType === "Accepted" && <AcceptedView />}
+//         {selType === "History" && <HistoryView />}
+//       </>
+//     </div>
+//   );
+// };
+// //
+// const TabButton = ({ title, selType, setSelType }) => (
+//   <div className="button-container">
+//     <button className={`tab-button ${selType === title ? "active" : ""}`} onClick={() => setSelType(title)}>
+//       {title}
+//     </button>
+//   </div>
+// );
 //
 const DoctorAppointments = () => {
   const [selType, setSelType] = useState("Pending");
@@ -292,7 +321,7 @@ const PendingView = ({ aptType }) => {
       </div>
       {showAcceptModal && (
         <Modal
-          title={"Logout"}
+          title={"Appointment"}
           body={"Do you want to accept this appointment?"}
           btm_btn_1_txt={"No"}
           btm_btn_2_txt={"Yes"}
@@ -309,8 +338,8 @@ const PendingView = ({ aptType }) => {
       )}
       {showDeclineModal && (
         <Modal
-          title={"Logout"}
-          body={"Do you want to decline this appointment?"}
+          title={"Appointment"}
+          body={"Do you want to cancel this appointment?"}
           btm_btn_1_txt={"No"}
           btm_btn_2_txt={"Yes"}
           btn1Click={() => {
@@ -599,8 +628,8 @@ const AcceptedView = ({ aptType }) => {
       {/* Decline view */}
       {showDeclineModal && (
         <Modal
-          title={"Logout"}
-          body={"Do you want to decline this appointment?"}
+          title={"Appointment"}
+          body={"Do you want to cancel this appointment?"}
           btm_btn_1_txt={"No"}
           btm_btn_2_txt={"Yes"}
           btn1Click={() => {
