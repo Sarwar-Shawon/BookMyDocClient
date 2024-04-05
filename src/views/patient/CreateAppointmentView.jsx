@@ -4,33 +4,28 @@
 import React, { useState, useEffect } from "react";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
-import { formatDateToString } from "../../utils";
 import { Post, Get } from "../../api";
 import { apiUrl } from "../../config/appConfig";
-import AppCalendar from "../../components/Calendar";
-import noData from "../../assets/images/no-data.jpg";
-import LoadingView from "../../components/Loading";
 import moment from "moment";
 import TimeSlotView from '../common/TimeSlotView'
-
+//
 const CreateAppointmentView = ({ onCloseModal, doctor }) => {
   //
   const [errors, setError] = useState({});
   const [timeSlots, setTimeSlots] = useState([]);
   const [showResp, setShowResp] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [formData, setFormData] = useState({
     apt_date: new Date(),
     timeslot: "",
   });
   //
-  //
   useEffect(() => {
     console.log("assasa");
     fetchTimeSlots();
   }, [formData.apt_date]);
-  //
+  //fetch TimeSlots
   const fetchTimeSlots = async () => {
     try {
       setIsLoading(true);
@@ -39,7 +34,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
           formData.apt_date
         }&doc_email=${doctor.doc_email}`
       );
-      console.log("resp:::", JSON.stringify(resp));
+      console.log("resp:::", resp);
       if (resp.success) {
         setTimeSlots(resp?.data);
       }
@@ -49,9 +44,9 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
       setIsLoading(false);
     }
   };
-  //
+  //handle submit
   const handleSubmit = async (e) => {
-    setIsLoading(true);
+    setIsBtnLoading(true);
     e.preventDefault();
     try {
       if (validateForm()) {
@@ -60,7 +55,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
     } catch (error) {
       console.error("Error:", error);
     } finally {
-      setIsLoading(false);
+      setIsBtnLoading(false);
     }
   };
   //Validate Form
@@ -124,6 +119,13 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
               msg={showResp?.success ? showResp?.msg : ""}
               hideMsg={() => setShowResp({})}
             />
+            {isLoading && (
+              <div className="wrapper d-grid place-items: center">
+                <div className="loading-container">
+                  <div className="spinner"></div>
+                </div>
+              </div>
+            )}
             <TimeSlotView
               timeSlots={timeSlots}
               formData={formData}
@@ -132,7 +134,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
             />
             <div className="col-12">
               <div className="d-grid">
-                {isLoading ? (
+                {isBtnLoading ? (
                   <button className="btn btn-primary" disabled>
                     <div
                       className="spinner-border spinner-border-sm"
