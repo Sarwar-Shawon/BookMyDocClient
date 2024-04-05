@@ -10,12 +10,14 @@ const ErrorAlert = ({ msg, hideMsg }) => {
           role="alert"
         >
           <span>{msg}</span>
-          <button
-            type="button"
-            className="btn-close"
-            onClick={hideMsg}
-            aria-label="Close"
-          ></button>
+          {hideMsg && (
+            <button
+              type="button"
+              className="btn-close"
+              onClick={hideMsg}
+              aria-label="Close"
+            ></button>
+          )}
         </div>
       )}
     </>
@@ -32,16 +34,18 @@ const SuccessAlert = ({ msg, hideMsg }) => {
           role="alert"
         >
           <span>{msg}</span>
-          <button
-            type="button"
-            className="btn-close"
-            onClick={hideMsg}
-            aria-label="Close"
-          ></button>
+          {hideMsg && (
+            <button
+              type="button"
+              className="btn-close"
+              onClick={hideMsg}
+              aria-label="Close"
+            ></button>
+          )}
         </div>
       )}
     </>
   );
 };
 
-export {ErrorAlert, SuccessAlert}
+export { ErrorAlert, SuccessAlert };

@@ -8,6 +8,9 @@ import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import { formatDateToString } from "../../utils";
 import Modal from "../../components/Modal";
+import { ErrorAlert, SuccessAlert } from "../../components/Alert";
+import AppCalendar from "../../components/Calendar";
+import moment from "moment";
 
 //
 const DoctorAppointments = () => {
@@ -21,74 +24,32 @@ const DoctorAppointments = () => {
             className="d-flex justify-content-between align-items-center mb-3"
             style={{ borderBottom: "1px solid #ccc", paddingBottom: "10px" }}
           >
-            <div className="mb-3">
+            <div className="button-container">
               <button
-                style={{
-                  width: "100px",
-                  marginRight: 10,
-                  backgroundColor: "#0B2447",
-                  borderColor: "#0B2447",
-                  transition: "background-color 0.3s, border-color 0.3s",
-                  color: "#fff",
-                }}
-                className="btn btn-primary"
+                className={`tab-button ${
+                  selType === "Pending" ? "active" : ""
+                }`}
                 onClick={() => setSelType("Pending")}
-                onMouseOver={(e) => {
-                  e.target.style.backgroundColor = "#1a4a8a";
-                  e.target.style.borderColor = "#1a4a8a";
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.backgroundColor = "#0B2447";
-                  e.target.style.borderColor = "#0B2447";
-                }}
               >
                 Pending
               </button>
             </div>
-            <div className="mb-3">
+            <div className="button-container">
               <button
-                style={{
-                  width: "100px",
-                  marginRight: 10,
-                  backgroundColor: "#0B2447",
-                  borderColor: "#0B2447",
-                  transition: "background-color 0.3s, border-color 0.3s",
-                  color: "#fff",
-                }}
-                className="btn btn-primary"
+                className={`tab-button ${
+                  selType === "Accepted" ? "active" : ""
+                }`}
                 onClick={() => setSelType("Accepted")}
-                onMouseOver={(e) => {
-                  e.target.style.backgroundColor = "#1a4a8a";
-                  e.target.style.borderColor = "#1a4a8a";
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.backgroundColor = "#0B2447";
-                  e.target.style.borderColor = "#0B2447";
-                }}
               >
                 Accepted
               </button>
             </div>
-            <div className="mb-3">
+            <div className="button-container">
               <button
-                style={{
-                  width: "100px",
-                  marginRight: 10,
-                  backgroundColor: "#0B2447",
-                  borderColor: "#0B2447",
-                  transition: "background-color 0.3s, border-color 0.3s",
-                  color: "#fff",
-                }}
-                className="btn btn-primary"
+                className={`tab-button ${
+                  selType === "History" ? "active" : ""
+                }`}
                 onClick={() => setSelType("History")}
-                onMouseOver={(e) => {
-                  e.target.style.backgroundColor = "#1a4a8a";
-                  e.target.style.borderColor = "#1a4a8a";
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.backgroundColor = "#0B2447";
-                  e.target.style.borderColor = "#0B2447";
-                }}
               >
                 History
               </button>
@@ -97,18 +58,19 @@ const DoctorAppointments = () => {
         </div>
       </div>
       <>
-        { 
-          selType == "Pending" ?  <PendingView aptType={selType} /> :
-          selType == "Accepted" ?  <AcceptedView aptType={selType} /> :
-          selType == "Hostory" ?  <HistoryView aptType={selType} /> :
-          null
-        }
+        {selType == "Pending" ? (
+          <PendingView aptType={selType} />
+        ) : selType == "Accepted" ? (
+          <AcceptedView aptType={selType} />
+        ) : selType == "Hostory" ? (
+          <HistoryView aptType={selType} />
+        ) : null}
       </>
     </div>
   );
 };
 //
-const PendingView = ({aptType}) => {
+const PendingView = ({ aptType }) => {
   const [selApt, setSelApt] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [error, setError] = useState([]);
@@ -117,7 +79,7 @@ const PendingView = ({aptType}) => {
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [showDeclineModal, setShowDeclineModal] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [respMsg, setRespMsg] = useState({});
+  const [showResp, setShowResp] = useState({});
 
   //
   useEffect(() => {
@@ -163,43 +125,74 @@ const PendingView = ({aptType}) => {
   //
   const handleOnclick = async ({ apt, type }) => {
     try {
-      console.log("apt:::::::", apt)
+      console.log("apt:::::::", apt);
       setSelApt(apt);
-      if(type == 'accept'){
-        setShowAcceptModal(true)
+      if (type == "accept") {
+        setShowAcceptModal(true);
       }
-      if(type == 'decline'){
-        setShowDeclineModal(true)
+      if (type == "decline") {
+        setShowDeclineModal(true);
       }
     } catch (err) {}
   };
-  //update appointments
-  const updateAppointments = async ({type}) => {
+  //accept appointments
+  const acceptAppointments = async () => {
     try {
       setLoading(true);
-      setRespMsg({});
-      const aptStatus = type == "accept" ? "Accepted" : type == "decline" ? "Canceled" : ""
+      setShowResp({});
       const params = {
         apt_id: selApt._id,
-        status: aptStatus,
       };
-      console.log("apt_idapt_idapt_idapt_id",params)
       const resp = await Put(
-        `${apiUrl()}/doctor/update-appointments`,
+        `${apiUrl()}/doctor/accept-appointments`,
         params,
         "application/json"
       );
       console.log("resp:::", resp);
       if (resp.success) {
-        setRespMsg({ success: true, msg: "successful" });
-      setSelApt("")
-
+        const updatedAppointments = appointments.filter(
+          (apt) => apt._id !== selApt._id
+        );
+        setAppointments(updatedAppointments);
+        setShowResp({ success: true, msg: "Appointment has accepted" });
+        setSelApt("");
       } else {
-        setRespMsg({ success: false, msg: resp?.error });
+        setShowResp({ success: false, msg: resp?.error });
       }
     } catch (err) {
     } finally {
       setLoading(false);
+      setShowAcceptModal(false);
+    }
+  };
+  //cancel appointments
+  const cancelAppointments = async () => {
+    try {
+      setLoading(true);
+      setShowResp({});
+      const params = {
+        apt_id: selApt._id,
+      };
+      const resp = await Put(
+        `${apiUrl()}/doctor/cancel-appointments`,
+        params,
+        "application/json"
+      );
+      console.log("resp:::", resp);
+      if (resp.success) {
+        const updatedAppointments = appointments.filter(
+          (apt) => apt._id !== selApt._id
+        );
+        setAppointments(updatedAppointments);
+        setShowResp({ success: true, msg: "Appointment has canceled" });
+        setSelApt("");
+      } else {
+        setShowResp({ success: false, msg: resp?.error });
+      }
+    } catch (err) {
+    } finally {
+      setLoading(false);
+      setShowDeclineModal(false);
     }
   };
   //
@@ -244,7 +237,6 @@ const PendingView = ({aptType}) => {
                     <p className="card-text">{"Nhs: " + apt?.pt?.nhs}</p>
                     <p className="card-text">{"Status: " + apt.status}</p>
                   </div>
-
                   <button
                     style={{
                       width: "200px",
@@ -268,6 +260,7 @@ const PendingView = ({aptType}) => {
                   >
                     Accept
                   </button>
+
                   <button
                     style={{
                       width: "200px",
@@ -286,11 +279,10 @@ const PendingView = ({aptType}) => {
                       e.target.style.borderColor = "#F05454";
                     }}
                     onClick={() => {
-                      handleOnclick({ apt: apt, type: "accept" });
-
+                      handleOnclick({ apt: apt, type: "decline" });
                     }}
                   >
-                    Decline
+                    Cancel
                   </button>
                 </div>
               );
@@ -299,52 +291,102 @@ const PendingView = ({aptType}) => {
         )}
       </div>
       {showAcceptModal && (
-          <Modal
-            title={"Logout"}
-            body={"Do you want to accept this appointment?"}
-            btm_btn_1_txt={"No"}
-            btm_btn_2_txt={"Yes"}
-            btn1Click={() => {
-              setShowAcceptModal(false);
-            }}
-            btn2Click={() => {updateAppointments({type: 'accept'})} }
-            showFooter={true}
-            onCloseModal={() => setShowAcceptModal(false)}
-          />
-        )}
+        <Modal
+          title={"Logout"}
+          body={"Do you want to accept this appointment?"}
+          btm_btn_1_txt={"No"}
+          btm_btn_2_txt={"Yes"}
+          btn1Click={() => {
+            setShowAcceptModal(false);
+          }}
+          btn2Click={() => {
+            acceptAppointments();
+            setShowAcceptModal(false);
+          }}
+          showFooter={true}
+          onCloseModal={() => setShowAcceptModal(false)}
+        />
+      )}
       {showDeclineModal && (
-          <Modal
-            title={"Logout"}
-            body={"Do you want to decline this appointment?"}
-            btm_btn_1_txt={"No"}
-            btm_btn_2_txt={"Yes"}
-            btn1Click={() => {
-              setShowDeclineModal(false);
-            }}
-            btn2Click={() => {updateAppointments({type: 'decline'})} }
-            showFooter={true}
-            onCloseModal={() => setShowDeclineModal(false)}
-          />
-        )}
+        <Modal
+          title={"Logout"}
+          body={"Do you want to decline this appointment?"}
+          btm_btn_1_txt={"No"}
+          btm_btn_2_txt={"Yes"}
+          btn1Click={() => {
+            setShowDeclineModal(false);
+          }}
+          btn2Click={() => {
+            cancelAppointments();
+            setShowDeclineModal(false);
+          }}
+          showFooter={true}
+          onCloseModal={() => setShowDeclineModal(false)}
+        />
+      )}
+      {showResp?.msg && (
+        <Modal
+          title={"Response"}
+          body={
+            <div>
+              <ErrorAlert msg={!showResp?.success ? showResp?.msg : ""} />
+              <SuccessAlert msg={showResp?.success ? showResp?.msg : ""} />
+            </div>
+          }
+          btm_btn_2_txt={"Ok"}
+          btn2Click={() => {
+            setShowResp({});
+          }}
+          showFooter={true}
+          onCloseModal={() => setShowResp({})}
+        />
+      )}
     </div>
   );
 };
 //
-const AcceptedView = ({aptType}) => {
-  const [selType, setSelType] = useState("Pending");
+const AcceptedView = ({ aptType }) => {
   const [selApt, setSelApt] = useState("");
   const [appointments, setAppointments] = useState([]);
-  const [error, setError] = useState([]);
+  const [errors, setError] = useState({});
   const [isLoading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [showDeclineModal, setShowDeclineModal] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
-  const [respMsg, setRespMsg] = useState({});
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showResp, setShowResp] = useState({});
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [formData, setFormData] = useState({
+    apt_date: new Date(),
+    timeslot: "",
+  });
+  const [isBtnLoading, setBtnLoading] = useState(false);
 
   //
   useEffect(() => {
     fetchAppointments();
   }, []);
+  //
+  useEffect(() => {
+    fetchTimeSlots();
+  }, [formData.apt_date]);
+  //
+  const fetchTimeSlots = async () => {
+    try {
+      // setLoading(true);
+      const resp = await Get(
+        `${apiUrl()}/doctor/get-time-slots-by-date?date=${formData.apt_date}`
+      );
+      console.log("resp:::", JSON.stringify(resp));
+      if (resp.success) {
+        setTimeSlots(resp?.data);
+      }
+    } catch (err) {
+      // setError(err?.message);
+    } finally {
+      // setLoading(false);
+    }
+  };
   //
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -385,24 +427,61 @@ const AcceptedView = ({aptType}) => {
   //
   const handleOnclick = async ({ apt, type }) => {
     try {
-      console.log("apt:::::::", apt)
       setSelApt(apt);
-      if(type == 'decline'){
-        setShowDeclineModal(true)
+      if (type == "cancel") {
+        setShowDeclineModal(true);
+      }
+      if (type == "update") {
+        setFormData({
+          ...formData,
+          apt_date: new Date(apt.apt_date),
+          timeslot: apt.timeslot,
+        });
+        setShowUpdateModal(true);
       }
     } catch (err) {}
   };
-  //update appointments
-  const updateAppointments = async ({type}) => {
+  //cancel appointments
+  const cancelAppointments = async () => {
     try {
       setLoading(true);
-      setRespMsg({});
-      const aptStatus = type == "accept" ? "Accepted" : type == "decline" ? "Canceled" : ""
+      setShowResp({});
       const params = {
         apt_id: selApt._id,
-        status: aptStatus,
       };
-      console.log("apt_idapt_idapt_idapt_id",params)
+      const resp = await Put(
+        `${apiUrl()}/doctor/cancel-appointments`,
+        params,
+        "application/json"
+      );
+      console.log("resp:::", resp);
+      if (resp.success) {
+        const updatedAppointments = appointments.filter(
+          (apt) => apt._id !== selApt._id
+        );
+        setAppointments(updatedAppointments);
+        setShowResp({ success: true, msg: "Appointment has canceled" });
+        setSelApt("");
+
+      } else {
+        setShowResp({ success: false, msg: resp?.error });
+      }
+    } catch (err) {
+    } finally {
+      setLoading(false);
+      setShowDeclineModal(false);
+    }
+  };
+  //update appointments
+  const updateAppointments = async () => {
+    try {
+      setBtnLoading(true);
+      setShowResp({});
+      const params = {
+        apt_id: selApt._id,
+        apt_date: moment(formData.apt_date),
+        timeslot: formData.timeslot,
+      };
       const resp = await Put(
         `${apiUrl()}/doctor/update-appointments`,
         params,
@@ -410,15 +489,17 @@ const AcceptedView = ({aptType}) => {
       );
       console.log("resp:::", resp);
       if (resp.success) {
-        setRespMsg({ success: true, msg: "successful" });
-      setSelApt("")
-
+        setShowResp({ success: true, msg: "successful" });
+        const updatedApt = appointments.map((apnt) =>
+          apnt._id == resp?.data._id ? { ...apnt, ...resp?.data } : apnt
+        );
+        setAppointments(updatedApt);
       } else {
-        setRespMsg({ success: false, msg: resp?.error });
+        setShowResp({ success: false, msg: resp?.error });
       }
     } catch (err) {
     } finally {
-      setLoading(false);
+      setBtnLoading(false);
     }
   };
   //
@@ -467,6 +548,29 @@ const AcceptedView = ({aptType}) => {
                     style={{
                       width: "200px",
                       marginBottom: "10px",
+                      backgroundColor: "#0B2447",
+                      borderColor: "#0B2447",
+                      transition: "background-color 0.3s, border-color 0.3s",
+                    }}
+                    className="btn btn-primary"
+                    onMouseOver={(e) => {
+                      e.target.style.backgroundColor = "#1a4a8a";
+                      e.target.style.borderColor = "#1a4a8a";
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.backgroundColor = "#0B2447";
+                      e.target.style.borderColor = "#0B2447";
+                    }}
+                    onClick={() => {
+                      handleOnclick({ apt: apt, type: "update" });
+                    }}
+                  >
+                    Update
+                  </button>
+                  <button
+                    style={{
+                      width: "200px",
+                      marginBottom: "10px",
                       backgroundColor: "#F05454",
                       borderColor: "#F05454",
                       transition: "background-color 0.3s, border-color 0.3s",
@@ -481,11 +585,10 @@ const AcceptedView = ({aptType}) => {
                       e.target.style.borderColor = "#F05454";
                     }}
                     onClick={() => {
-                      handleOnclick({ apt: apt, type: "accept" });
-
+                      handleOnclick({ apt: apt, type: "cancel" });
                     }}
                   >
-                    Decline
+                    Cancel
                   </button>
                 </div>
               );
@@ -493,25 +596,174 @@ const AcceptedView = ({aptType}) => {
           </>
         )}
       </div>
+      {/* Decline view */}
       {showDeclineModal && (
-          <Modal
-            title={"Logout"}
-            body={"Do you want to decline this appointment?"}
-            btm_btn_1_txt={"No"}
-            btm_btn_2_txt={"Yes"}
-            btn1Click={() => {
-              setShowDeclineModal(false);
-            }}
-            btn2Click={() => {updateAppointments({type: 'decline'})} }
-            showFooter={true}
-            onCloseModal={() => setShowDeclineModal(false)}
-          />
-        )}
+        <Modal
+          title={"Logout"}
+          body={"Do you want to decline this appointment?"}
+          btm_btn_1_txt={"No"}
+          btm_btn_2_txt={"Yes"}
+          btn1Click={() => {
+            setShowDeclineModal(false);
+          }}
+          btn2Click={() => {
+            setShowDeclineModal(false);
+            cancelAppointments();
+          }}
+          showFooter={true}
+          onCloseModal={() => setShowDeclineModal(false)}
+        />
+      )}
+      {/* Update view */}
+      {showUpdateModal && (
+        <Modal
+          title={"Update Appointments"}
+          body={
+            <div>
+                <ErrorAlert
+                  msg={!showResp?.success ? showResp?.msg : ""}
+                  hideMsg={() => setShowResp({})}
+                />
+                <SuccessAlert
+                  msg={showResp?.success ? showResp?.msg : ""}
+                  hideMsg={() => setShowResp({})}
+                />
+                <div className="col-md-12">
+                  <div className="mb-3">
+                    <label>Select Date</label>
+                    {errors.date && (
+                      <p
+                        style={{ fontSize: 16, color: "red", marginBottom: 2 }}
+                      >
+                        *{errors.date}
+                      </p>
+                    )}
+                    <label
+                      className="form-control"
+                      style={{
+                        border: "1px solid #ced4da",
+                        borderRadius: "0.25rem",
+                        padding: "0.375rem 0.75rem",
+                        lineHeight: "1.5",
+                      }}
+                      onClick={() => setShowCalendar(true)}
+                    >
+                      {formatDateToString(formData.apt_date) || "dd-mm-yyyy"}
+                    </label>
+                  </div>
+                  <div className="mb-3">
+                    <label>Select Slots</label>
+                    {errors.slot && (
+                      <p
+                        style={{ fontSize: 16, color: "red", marginBottom: 2 }}
+                      >
+                        *{errors.slot}
+                      </p>
+                    )}
+                    {Object.entries(timeSlots).length > 0 ? (
+                      <TimeSlotsComponent
+                        timeSlotsData={timeSlots}
+                        setTimeSlot={(val) => {
+                          setFormData({
+                            ...formData,
+                            ["timeslot"]: val,
+                          });
+                        }}
+                        aptId={selApt._id}
+                        val={formData.timeslot}
+                      />
+                    ) : (
+                      <div className="container-fluid d-flex justify-content-center align-items-center">
+                        <img
+                          src={noData}
+                          className="no-data-img"
+                          alt="No data found"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="col-12">
+                  <div className="d-grid">
+                    {isBtnLoading ? (
+                      <button className="btn btn-primary" disabled>
+                        <div
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                        >
+                          {/* <span className="visually-hidden">Loading...</span> */}
+                        </div>
+                      </button>
+                    ) : (
+                      <button type="button" onClick={updateAppointments} className="btn btn-primary">
+                        {"Update Appointment"}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              {showCalendar && (
+                <AppCalendar
+                  onCloseModal={() => setShowCalendar(false)}
+                  value={formData.apt_date}
+                  onChange={(val) => {
+                    const date1 = new Date(new Date(val).setHours(0, 0, 0, 0));
+                    const date2 = new Date(new Date(selApt.apt_date).setHours(0, 0, 0, 0));
+                    setFormData({
+                      ...formData,
+                      apt_date: new Date(val),
+                      timeslot: date1.getTime() === date2.getTime() ? selApt.timeslot : ""
+                    });
+                    setShowCalendar(false);
+                  }}
+                  minDate={new Date()}
+                />
+              )}
+            </div>
+          }
+          onCloseModal={() => {
+            setShowUpdateModal(false);
+            setShowResp({})
+          }}
+          big={true}
+        />
+      )}
     </div>
   );
 };
 //
-const HistoryView = ({aptType}) => {
+const TimeSlotsComponent = ({ timeSlotsData, setTimeSlot, val, aptId }) => {
+  return (
+    <div className="mb-4">
+      <div className="row row-cols-2 row-cols-md-4 g-3">
+        {Object.entries(timeSlotsData).map(
+          ([time, slot]) =>
+            ((slot?.aptId && slot?.aptId == aptId) || slot.active) && (
+              <div
+                key={time}
+                className="col"
+                onClick={() => {
+                  setTimeSlot(time);
+                }}
+              >
+                <div
+                  className={`card ${slot.active ? "active" : ""}`}
+                  style={{
+                    backgroundColor: val == time ? "#5C8374" : "#818FB4",
+                  }}
+                >
+                  <div className="card-body">
+                    <h5 className="card-title">{time}</h5>
+                  </div>
+                </div>
+              </div>
+            )
+        )}
+      </div>
+    </div>
+  );
+};
+//
+const HistoryView = ({ aptType }) => {
   const [selType, setSelType] = useState("Pending");
   const [selApt, setSelApt] = useState("");
   const [appointments, setAppointments] = useState([]);
@@ -521,7 +773,7 @@ const HistoryView = ({aptType}) => {
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [showDeclineModal, setShowDeclineModal] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [respMsg, setRespMsg] = useState({});
+  const [showResp, setShowResp] = useState({});
 
   //
   useEffect(() => {
@@ -567,27 +819,27 @@ const HistoryView = ({aptType}) => {
   //
   const handleOnclick = async ({ apt, type }) => {
     try {
-      console.log("apt:::::::", apt)
+      console.log("apt:::::::", apt);
       setSelApt(apt);
-      if(type == 'accept'){
-        setShowAcceptModal(true)
+      if (type == "accept") {
+        setShowAcceptModal(true);
       }
-      if(type == 'decline'){
-        setShowDeclineModal(true)
+      if (type == "decline") {
+        setShowDeclineModal(true);
       }
     } catch (err) {}
   };
   //update appointments
-  const updateAppointments = async ({type}) => {
+  const updateAppointments = async ({ type }) => {
     try {
       setLoading(true);
-      setRespMsg({});
-      const aptStatus = type == "accept" ? "Accepted" : type == "decline" ? "Canceled" : ""
+      setShowResp({});
+      const aptStatus =
+        type == "accept" ? "Accepted" : type == "decline" ? "Canceled" : "";
       const params = {
         apt_id: selApt._id,
         status: aptStatus,
       };
-      console.log("apt_idapt_idapt_idapt_id",params)
       const resp = await Put(
         `${apiUrl()}/doctor/update-appointments`,
         params,
@@ -595,11 +847,10 @@ const HistoryView = ({aptType}) => {
       );
       console.log("resp:::", resp);
       if (resp.success) {
-        setRespMsg({ success: true, msg: "successful" });
-      setSelApt("")
-
+        setShowResp({ success: true, msg: "successful" });
+        setSelApt("");
       } else {
-        setRespMsg({ success: false, msg: resp?.error });
+        setShowResp({ success: false, msg: resp?.error });
       }
     } catch (err) {
     } finally {

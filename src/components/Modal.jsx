@@ -41,7 +41,7 @@ const Modal = (props) => {
                   {props?.btm_btn_1_txt}
                 </button>
               )}
-              {props?.btm_btn_1_txt && (
+              {props?.btm_btn_2_txt && (
                 <button
                   type="button"
                   className="btn btn-primary"
