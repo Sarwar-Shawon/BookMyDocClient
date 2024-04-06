@@ -65,6 +65,7 @@ const TimeSlotView = ({
               });
             }}
             aptId={apt?._id}
+            aptTimeslot={apt?.timeslot}
             val={formData.timeslot}
             user_type={user_type}
           />
@@ -103,13 +104,13 @@ const TimeSlotView = ({
   );
 };
 //
-const TimeSlotsComponent = ({ timeSlotsData, setTimeSlot, val, aptId }) => {
+const TimeSlotsComponent = ({ timeSlotsData, setTimeSlot, val, aptId, user_type,aptTimeslot }) => {
   return (
     <div className="mb-4">
       <div className="row row-cols-2 row-cols-md-4 g-3">
         {Object.entries(timeSlotsData).map(
           ([time, slot]) =>
-          ((slot?.aptId && slot?.aptId == aptId) || slot.active) && (
+          ( (user_type=== "doctor" && slot?.aptId && slot?.aptId == aptId) || (user_type === "patient" && aptId && time == aptTimeslot) || slot.active) && (
               <div
                 key={time}
                 className="col"
