@@ -31,7 +31,7 @@ const AppRoutes = {
   Nurse: [
     { name: "Home", path: "/home" },
     { name: "Appointments", path: "/appointments" },
-    { name: "Prescriptions", path: "/prescriptions" },
+    { name: "Doctor Timetables", path: "/timetable" },
     { name: "Profile", path: "/profile" },
   ],
   Pharmacy: [{ name: "Home", path: "/home" }],

@@ -13,7 +13,7 @@ import TimeSlotView from "../common/TimeSlotView";
 import moment from "moment";
 import AppCalendar from "../../components/Calendar";
 
-const DoctorAppointments = () => {
+const NurseAppointments = () => {
   const [selType, setSelType] = useState("Pending");
   //
   return (
@@ -731,4 +731,4 @@ const HistoryView = ({ aptType }) => {
   );
 };
 //
-export default DoctorAppointments;
+export default NurseAppointments;

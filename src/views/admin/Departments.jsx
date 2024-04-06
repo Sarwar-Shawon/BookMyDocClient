@@ -21,6 +21,8 @@ const Departments = () => {
     fetchDepartments();
   }, []);
   //
+
+  //
   const handleScroll = () => {
     if (
       window.innerHeight + window.scrollY >=
@@ -54,6 +56,8 @@ const Departments = () => {
       setLoading(false);
     }
   };
+  //
+
   //
   const addToDepartmentList = async ({ newDept }) => {
     try {

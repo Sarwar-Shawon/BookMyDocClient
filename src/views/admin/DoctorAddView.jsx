@@ -14,7 +14,7 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import { Regex } from "../../utils";
-import { Post, Put } from "../../api";
+import { Post, Put,Get } from "../../api";
 import { apiUrl } from "../../config/appConfig";
 
 const DoctorsAddView = ({
@@ -28,6 +28,7 @@ const DoctorsAddView = ({
 }) => {
   //
   const [errors, setError] = useState({});
+  const [allNurses, setNurses] = useState({});
   const [formData, setFormData] = useState({
     doc_email: "",
     f_name: "",
@@ -49,30 +50,56 @@ const DoctorsAddView = ({
     dept: "",
     active: true,
     organization: "",
+    nurses: []
   });
   const [showResp, setShowResp] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   //
   useEffect(() => {
-    console.log("selectedDoctor",selectedDoctor)
+    setFormData({ ...formData, nurses: selectedDoctor?.nurses.length ? selectedDoctor?.nurses : [] });
+    fetchNurses();
+  }, [formData.dept || formData.organization]);
+  //
+  const fetchNurses = async () => {
+    try {
+      const resp = await Get(`${apiUrl()}/admin/getAllNursesByDeptOrg?dept=${formData.dept}&org=${formData.organization}`);
+      console.log("fetchNurses:: resp:::", resp);
+      if (resp.success) {
+        setNurses(resp?.data);
+      }
+    } catch (err) {
+    } finally {
+    }
+  };
+  //
+  useEffect(() => {
     const mergedFormData = {
       ...formData,
       ...selectedDoctor,
     };
     mergedFormData.dept = selectedDoctor?.dept?._id
     mergedFormData.organization = selectedDoctor?.organization?._id
+    mergedFormData.nurses = selectedDoctor?.nurses
     setFormData(mergedFormData);
   }, [selectedDoctor]);
   //
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name == "active") {
+    const { name, value, options } = e.target;
+    if (name == "nurses") {
+      console.log(options)
+      let selectedNurses = formData.nurses;
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].selected) {
+          selectedNurses.push(options[i].value);
+        }
+      }
+      setFormData({ ...formData, [name]: selectedNurses });
+    } else if (name == "active") {
       setFormData({
         ...formData,
         [name]: value == "true" ? true : false,
       });
-    }
-    else if (name == "img") {
+    } else if (name == "img") {
       setFormData({
         ...formData,
         [name]: e.target.files[0],
@@ -205,7 +232,7 @@ const DoctorsAddView = ({
     } finally {
     }
   };
-  //
+  console.log("formdata", formData)
   //
   return (
     <Modal
@@ -296,8 +323,6 @@ const DoctorsAddView = ({
                 required
               />
             </div>
-
-           
           </div>
           {/* Address View */}
           <div className="col-md-6">
@@ -394,7 +419,9 @@ const DoctorsAddView = ({
                 <>
                   {departments.length &&
                     departments.map((dept) => (
-                      <option value={dept._id} key={dept._id}>{dept.name}</option>
+                      <option value={dept._id} key={dept._id}>
+                        {dept.name}
+                      </option>
                     ))}
                 </>
               </select>
@@ -412,7 +439,9 @@ const DoctorsAddView = ({
                 <>
                   {organizations.length &&
                     organizations.map((org) => (
-                      <option value={org._id} key={org._id}>{org.name}</option>
+                      <option value={org._id} key={org._id}>
+                        {org.name}
+                      </option>
                     ))}
                 </>
               </select>
@@ -430,6 +459,16 @@ const DoctorsAddView = ({
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Attach Nurses With Doctror:</label>
+              <CheckboxSelect
+                options={allNurses}
+                selectedValues={formData.nurses}
+                onChange={(selectedValues) => {
+                  setFormData({ ...formData, nurses: selectedValues });
+                }}
+              />
             </div>
             <div className="mb-3 ">
               <label className="form-label">Image:</label>
@@ -491,5 +530,40 @@ const DoctorsAddView = ({
     />
   );
 };
+//
+const CheckboxSelect = ({ options, selectedValues, onChange }) => {
 
+  const handleChange = (event) => {
+    const { value } = event.target;
+    let updatedSelectedItems = [...selectedValues];
+    if (selectedValues.includes(value)) {
+      updatedSelectedItems = updatedSelectedItems.filter((item) => item !== value);
+    } else {
+      updatedSelectedItems.push(value);
+    }
+    onChange(updatedSelectedItems);
+  };
+
+  return (
+    <div className="checkbox-container">
+      {
+        !options.length && 
+        <div style={{ fontWeight: 'bold' }}>No Nurses are found</div>
+      }
+      {options.length > 0 && options.map((option) => (
+        <label className="checkbox-label" key={option._id}>
+          <input
+            type="checkbox"
+            className="checkbox-input"
+            value={option._id}
+            checked={selectedValues.includes(option._id)}
+            onChange={handleChange}
+          />
+          <span className="checkbox-text">{[option.f_name, option.l_name].join(" ")}</span>
+        </label>
+      ))}
+    </div>
+  );
+};
+//
 export default DoctorsAddView;
