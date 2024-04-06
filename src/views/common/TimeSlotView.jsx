@@ -8,13 +8,16 @@ import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import { formatDateToString } from "../../utils";
 import AppCalendar from "../../components/Calendar";
+import moment from "moment";
+
 //
 const TimeSlotView = ({
   timeSlots,
   formData,
   setFormData,
-  selApt,
+  apt,
   errors,
+  user_type
 }) => {
   const [showCalendar, setShowCalendar] = useState(false);
   //
@@ -53,13 +56,17 @@ const TimeSlotView = ({
           <TimeSlotsComponent
             timeSlotsData={timeSlots}
             setTimeSlot={(val) => {
-              setFormData({
-                ...formData,
-                ["timeslot"]: val,
+              setFormData((prevFormData) => {
+                const newTimeslot = prevFormData.timeslot === val ? "" : val;
+                return {
+                  ...prevFormData,
+                  timeslot: newTimeslot,
+                };
               });
             }}
-            // aptId={selApt._id}
+            aptId={apt?._id}
             val={formData.timeslot}
+            user_type={user_type}
           />
         ) : (
           <div className="container-fluid d-flex justify-content-center align-items-center">
@@ -72,11 +79,21 @@ const TimeSlotView = ({
           onCloseModal={() => setShowCalendar(false)}
           value={formData.apt_date}
           onChange={(val) => {
-            setFormData({
-              ...formData,
-              apt_date: new Date(val),
-              timeslot: "",
-            });
+            if(apt?.apt_date){
+              const date1 = new Date(new Date(val).setHours(0, 0, 0, 0));
+              const date2 = new Date(new Date(apt?.apt_date).setHours(0, 0, 0, 0));
+              setFormData({
+                  ...formData,
+                  apt_date: new Date(val),
+                  timeslot: date1.getTime() === date2.getTime() ? apt.timeslot : ""
+              });
+            }else{
+              setFormData({
+                  ...formData,
+                  apt_date: new Date(val),
+                  timeslot: ""
+              });
+            }
             setShowCalendar(false);
           }}
           minDate={new Date()}
@@ -92,7 +109,7 @@ const TimeSlotsComponent = ({ timeSlotsData, setTimeSlot, val, aptId }) => {
       <div className="row row-cols-2 row-cols-md-4 g-3">
         {Object.entries(timeSlotsData).map(
           ([time, slot]) =>
-            slot.active && (
+          ((slot?.aptId && slot?.aptId == aptId) || slot.active) && (
               <div
                 key={time}
                 className="col"
