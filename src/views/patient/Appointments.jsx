@@ -72,8 +72,12 @@ const AppointmentView = ({ selType }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [showCancelView, setShowCancelView] = useState(false);
   const [showUpdateView, setShowUpdateView] = useState(false);
-  //
   const [isBtnLoading, setIsBtnLoading] = useState(false);
+  //
+  const [formData, setFormData] = useState({
+    apt_date: new Date(),
+    timeslot: "",
+  });
   //
   useEffect(() => {
     setAppointments([]);
@@ -150,7 +154,7 @@ const AppointmentView = ({ selType }) => {
     }
   };
   //update appointments
-  const updateAppointments = async ({ formData }) => {
+  const updateAppointments = async () => {
     try {
       setShowResp({});
       setIsBtnLoading(true);
@@ -217,6 +221,11 @@ const AppointmentView = ({ selType }) => {
                   }}
                   setShowUpdateView={() => {
                     setSelApt(apt);
+                    setFormData({
+                        ...formData,
+                        apt_date: new Date(apt?.apt_date),
+                        timeslot: apt?.timeslot
+                    });
                     setShowUpdateView(true);
                   }}
                   aptType={selType}
@@ -231,13 +240,17 @@ const AppointmentView = ({ selType }) => {
         cancelAppointments={cancelAppointments}
         isLoading={isBtnLoading}
       />
-      <UpdateModal
-        onCloseModal={() => setShowUpdateView(false)}
-        showModal={showUpdateView}
-        updateAppointments={updateAppointments}
-        apt={selApt}
-        isBtnLoading={isBtnLoading}
-      />
+      {showUpdateView && (
+        <UpdateModal
+          onCloseModal={() => setShowUpdateView(false)}
+          updateAppointments={updateAppointments}
+          apt={selApt}
+          formData={formData}
+          setFormData={setFormData}
+          isBtnLoading={isBtnLoading}
+        />
+      )}
+
       {showResp?.msg && (
         <Modal
           title={"Response"}
@@ -412,27 +425,15 @@ const CancelModal = ({
 const UpdateModal = ({
   onCloseModal,
   updateAppointments,
-  showModal,
   apt,
+  formData,
+  setFormData,
   isBtnLoading,
 }) => {
   //
   const [isLoading, setIsLoading] = useState(true);
   const [timeSlots, setTimeSlots] = useState([]);
   const [errors, setError] = useState({});
-  //
-  const [formData, setFormData] = useState({
-    apt_date: new Date(),
-    timeslot: "",
-  });
-  //
-  useEffect(() => {
-    setFormData({
-      ...formData,
-      apt_date: new Date(apt.apt_date),
-      timeslot: apt.timeslot,
-    });
-  }, [apt?.apt_date]);
   //
   useEffect(() => {
     fetchTimeSlots();
@@ -473,7 +474,6 @@ const UpdateModal = ({
   };
   //
   return (
-    showModal && (
       <Modal
         title={"Create New Appointment"}
         body={
@@ -507,7 +507,7 @@ const UpdateModal = ({
                     type="button"
                     onClick={() => {
                       if (validateForm()) {
-                        updateAppointments({ formData });
+                        updateAppointments();
                       }
                     }}
                     className="btn btn-primary"
@@ -522,7 +522,6 @@ const UpdateModal = ({
         onCloseModal={onCloseModal}
         big={true}
       />
-    )
   );
 };
 //

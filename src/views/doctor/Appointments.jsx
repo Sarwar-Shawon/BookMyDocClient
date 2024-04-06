@@ -75,6 +75,11 @@ const AppointmentView = ({ aptType }) => {
   //
   const [isBtnLoading, setIsBtnLoading] = useState(false);
   //
+  const [formData, setFormData] = useState({
+    apt_date: new Date(),
+    timeslot: "",
+  });
+  //
   useEffect(() => {
     setAppointments([]);
     fetchAppointments();
@@ -238,6 +243,11 @@ const AppointmentView = ({ aptType }) => {
                   }}
                   setShowUpdateView={() => {
                     setSelApt(apt);
+                    setFormData({
+                        ...formData,
+                        apt_date: new Date(apt?.apt_date),
+                        timeslot: apt?.timeslot
+                    });
                     setShowUpdateView(true);
                   }}
                   setShowAcceptView={() => {
@@ -264,13 +274,18 @@ const AppointmentView = ({ aptType }) => {
         isLoading={isBtnLoading}
 
       />
-      <UpdateModal
-        onCloseModal={() => setShowUpdateView(false)}
-        showModal={showUpdateView}
-        updateAppointments={updateAppointments}
-        apt={selApt}
-        isBtnLoading={isBtnLoading}
-      />
+      {
+        showUpdateView &&
+        <UpdateModal
+          onCloseModal={() => setShowUpdateView(false)}
+          updateAppointments={updateAppointments}
+          apt={selApt}
+          formData={formData}
+          setFormData={setFormData}
+          isBtnLoading={isBtnLoading}
+        />
+      }
+      
       {showResp?.msg && (
         <Modal
           title={"Response"}
@@ -487,25 +502,11 @@ const AcceptModal = ({ onCloseModal, acceptAppointments, showModal, isLoading })
   );
 };
 // Update Modal
-const UpdateModal = ({ onCloseModal, updateAppointments, showModal, apt , isBtnLoading}) => {
+const UpdateModal = ({ onCloseModal, updateAppointments, apt , isBtnLoading , formData , setFormData}) => {
   //
   const [isLoading, setIsLoading] = useState(true);
   const [timeSlots, setTimeSlots] = useState([]);
   const [errors, setError] = useState({});
-  //
-  const [formData, setFormData] = useState({
-    apt_date: new Date(),
-    timeslot: "",
-  });
-  //
-  useEffect(() => {
-    setFormData({
-      ...formData,
-      apt_date: new Date(apt.apt_date),
-      timeslot: apt.timeslot,
-    });
-  }, [apt?.apt_date]);
-  //
   useEffect(() => {
     fetchTimeSlots();
   }, [formData.apt_date]);
@@ -543,7 +544,6 @@ const UpdateModal = ({ onCloseModal, updateAppointments, showModal, apt , isBtnL
   };
   //
   return (
-    showModal && (
       <Modal
         title={"Create New Appointment"}
         body={
@@ -592,7 +592,6 @@ const UpdateModal = ({ onCloseModal, updateAppointments, showModal, apt , isBtnL
         onCloseModal={onCloseModal}
         big={true}
       />
-    )
   );
 };
 //
