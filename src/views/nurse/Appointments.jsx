@@ -12,14 +12,17 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import TimeSlotView from "../common/TimeSlotView";
 import moment from "moment";
 import AppCalendar from "../../components/Calendar";
-
+import DoctorSelection from './DoctorSelection'
+//
 const NurseAppointments = () => {
+  const [selDoc, setSelDoctor] = useState("");
   const [selType, setSelType] = useState("Pending");
   //
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col">
+          <DoctorSelection selDoc={selDoc} setSelDoctor={setSelDoctor}/>
           <div
             className="d-flex justify-content-between align-items-center mb-3"
             style={{ borderBottom: "1px solid #ccc", paddingBottom: "10px" }}
@@ -43,9 +46,9 @@ const NurseAppointments = () => {
         </div>
       </div>
       <>
-        {selType === "Pending" && <AppointmentView aptType={selType} />}
-        {selType === "Accepted" && <AppointmentView aptType={selType} />}
-        {selType === "History" && <HistoryView aptType={selType} />}
+        {selType === "Pending" && <AppointmentView aptType={selType} selDoc={selDoc}/>}
+        {selType === "Accepted" && <AppointmentView aptType={selType} selDoc={selDoc}/>}
+        {selType === "History" && <HistoryView aptType={selType} selDoc={selDoc}/>}
       </>
     </div>
   );
@@ -62,7 +65,7 @@ const TabButton = ({ title, selType, setSelType }) => (
   </div>
 );
 //
-const AppointmentView = ({ aptType }) => {
+const AppointmentView = ({ aptType,selDoc }) => {
   const [selApt, setSelApt] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [isLoading, setLoading] = useState(true);
@@ -82,9 +85,11 @@ const AppointmentView = ({ aptType }) => {
   });
   //
   useEffect(() => {
-    setAppointments([]);
-    fetchAppointments();
-  }, [aptType]);
+    if(selDoc){
+      setAppointments([]);
+      fetchAppointments();
+    }
+  }, [aptType && selDoc]);
   //
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -108,9 +113,9 @@ const AppointmentView = ({ aptType }) => {
       const skip = appointments.length;
       console.log("skip", skip);
       const resp = await Get(
-        `${apiUrl()}/doctor/get-appointments?skip=${skip}&status=${aptType}`
+        `${apiUrl()}/nurse/get-appointments?skip=${skip}&status=${aptType}&doc_id=${selDoc}`
       );
-      console.log("resp::: doctors", resp);
+      console.log("fetchAppointments resp:::", resp);
       if (resp.success) {
         setAppointments((prevApts) => [...prevApts, ...resp.data]);
         setHasMore(resp.data.length === limit);

@@ -8,11 +8,21 @@ import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import doctorDummy from "../../assets/images/doctor-dummy.jpg";
 import noData from "../../assets/images/no-data.jpg";
+import DoctorSelection from './DoctorSelection'
+//
 const NurseHome = () => {
-
+  const [selDoc, setSelDoctor] = useState("")
+  //
   return (
     <div className="container-fluid">
-      <div>Doctor Home</div>
+      <div className="row">
+        <div className="col">
+        <DoctorSelection selDoc={selDoc} setSelDoctor={setSelDoctor}/>
+        </div>
+      </div>
+      <div className="doctor-list d-flex flex-wrap">
+              
+      </div>
     </div>
   );
 };

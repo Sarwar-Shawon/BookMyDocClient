@@ -9,6 +9,8 @@ import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import TimetableAdd from "./TimeTableAdd";
 import TimetableUpdate from "./TimeTableUpdate";
+import DoctorSelection from "./DoctorSelection";
+
 //
 const _days = {
   monday: false,
@@ -25,6 +27,7 @@ const NurseAppointmentsTimetable = ({ doctorId }) => {
   const [isLoading, setLoading] = useState(true);
   const [showNew, setShowNew] = React.useState(false);
   const [showUpdate, setShowUpdate] = React.useState(false);
+  const [selDoc, setSelDoctor] = useState("");
 
   //
   useEffect(() => {
@@ -36,7 +39,7 @@ const NurseAppointmentsTimetable = ({ doctorId }) => {
       setLoading(true);
       const formattedDate = new Date().toISOString();
       const resp = await Get(
-        `${apiUrl()}/doctor/get-time-slots?date=${formattedDate}`
+        `${apiUrl()}/nurse/get-time-slots?date=${formattedDate}`
       );
       console.log("resp:::", JSON.stringify(resp));
       if (resp.success) {
@@ -55,6 +58,7 @@ const NurseAppointmentsTimetable = ({ doctorId }) => {
   return (
     <>
       <div className="container mt-5">
+        <DoctorSelection selDoc={selDoc} setSelDoctor={setSelDoctor} />
         <div
           style={{
             display: "flex",
