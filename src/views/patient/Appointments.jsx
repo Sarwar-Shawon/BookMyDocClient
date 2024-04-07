@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { Get, Put } from "../../api";
-import { apiUrl } from "../../config/appConfig";
+import { apiUrl, config } from "../../config/appConfig";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import { formatDateToString } from "../../utils";
@@ -11,7 +11,7 @@ import Modal from "../../components/Modal";
 import moment from "moment";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import TimeSlotView from "../common/TimeSlotView";
-
+import InfiniteScroll from "react-infinite-scroll-component";
 //
 const PatientAppointments = () => {
   const [selType, setSelType] = useState("Pending");
@@ -84,34 +84,17 @@ const AppointmentView = ({ selType }) => {
     fetchAppointments();
   }, [selType]);
   //
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-  //
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight &&
-      hasMore
-    ) {
-      fetchAppointments();
-    }
-  };
-  //
   const fetchAppointments = async () => {
     try {
-      setLoading(true);
-      const limit = 5;
       const skip = appointments.length;
-      console.log("skip", skip);
       const resp = await Get(
-        `${apiUrl()}/patient/get-appointments?skip=${skip}&status=${selType}`
+        `${apiUrl()}/patient/get-appointments?skip=${skip}&status=${selType}&limit=${config.FETCH_LIMIT}`
       );
       console.log("resp::: doctors", resp);
       if (resp.success) {
         setAppointments((prevApts) => [...prevApts, ...resp.data]);
-        setHasMore(resp.data.length === limit);
+        setHasMore(resp.data.length > 0 ? true : false);
+
       }
     } catch (err) {
       // console.error('err:', err);
@@ -206,31 +189,43 @@ const AppointmentView = ({ selType }) => {
                 <img src={noData} className="no-data-img" alt="No data found" />
               </div>
             )}
-            {appointments.length > 0 &&
-              appointments.map((apt) => (
-                <AppointmentCard
-                  key={apt._id}
-                  apt={apt}
-                  setShowDetails={() => {
-                    setSelApt(apt);
-                    setShowDetails(true);
-                  }}
-                  setShowCancelView={() => {
-                    setSelApt(apt);
-                    setShowCancelView(true);
-                  }}
-                  setShowUpdateView={() => {
-                    setSelApt(apt);
-                    setFormData({
+            <InfiniteScroll
+              dataLength={appointments.length}
+              next={fetchAppointments}
+              hasMore={hasMore}
+              loader={
+                <div className="d-flex justify-content-center align-items-center">
+                  <div className="spinner"></div>
+                </div>
+              }
+              style={{ display: "flex", flexWrap: "wrap" }}
+            >
+              {appointments.length > 0 &&
+                appointments.map((apt) => (
+                  <AppointmentCard
+                    key={apt._id}
+                    apt={apt}
+                    setShowDetails={() => {
+                      setSelApt(apt);
+                      setShowDetails(true);
+                    }}
+                    setShowCancelView={() => {
+                      setSelApt(apt);
+                      setShowCancelView(true);
+                    }}
+                    setShowUpdateView={() => {
+                      setSelApt(apt);
+                      setFormData({
                         ...formData,
                         apt_date: new Date(apt?.apt_date),
-                        timeslot: apt?.timeslot
-                    });
-                    setShowUpdateView(true);
-                  }}
-                  aptType={selType}
-                />
-              ))}
+                        timeslot: apt?.timeslot,
+                      });
+                      setShowUpdateView(true);
+                    }}
+                    aptType={selType}
+                  />
+                ))}
+            </InfiniteScroll>
           </>
         )}
       </div>

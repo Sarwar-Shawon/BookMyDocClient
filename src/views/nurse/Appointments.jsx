@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { Get, Put } from "../../api";
-import { apiUrl } from "../../config/appConfig";
+import { apiUrl, config } from "../../config/appConfig";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import { formatDateToString } from "../../utils";
@@ -13,6 +13,7 @@ import TimeSlotView from "../common/TimeSlotView";
 import moment from "moment";
 import AppCalendar from "../../components/Calendar";
 import DoctorSelection from "./DoctorSelection";
+import InfiniteScroll from "react-infinite-scroll-component";
 //
 const NurseAppointments = () => {
   const [selDoc, setSelDoctor] = useState("");
@@ -96,35 +97,18 @@ const AppointmentView = ({ aptType, selDoc }) => {
       fetchAppointments();
     }
   }, [aptType && selDoc]);
-  //
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-  //
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight &&
-      hasMore
-    ) {
-      fetchAppointments();
-    }
-  };
   //get appointments
   const fetchAppointments = async () => {
     try {
-      setLoading(true);
-      const limit = 5;
       const skip = appointments.length;
-      console.log("skip", skip);
       const resp = await Get(
-        `${apiUrl()}/nurse/get-appointments?skip=${skip}&status=${aptType}&doc_id=${selDoc}`
+        `${apiUrl()}/nurse/get-appointments?skip=${skip}&status=${aptType}&doc_id=${selDoc}&limit=${config.FETCH_LIMIT}`
       );
       console.log("fetchAppointments resp:::", resp);
       if (resp.success) {
         setAppointments((prevApts) => [...prevApts, ...resp.data]);
-        setHasMore(resp.data.length === limit);
+        setHasMore(resp.data.length > 0 ? true : false);
+
       }
     } catch (err) {
       // console.error('err:', err);
@@ -240,7 +224,18 @@ const AppointmentView = ({ aptType, selDoc }) => {
                 <img src={noData} className="no-data-img" alt="No data found" />
               </div>
             )}
-            {appointments.length > 0 &&
+            <InfiniteScroll
+              dataLength={appointments.length}
+              next={fetchAppointments}
+              hasMore={hasMore}
+              loader={
+                <div className="d-flex justify-content-center align-items-center">
+                  <div className="spinner"></div>
+                </div>
+              }
+              style={{ display: "flex", flexWrap: "wrap" }}
+            >
+              {appointments.length > 0 &&
               appointments.map((apt) => {
                 return (
                   <AppointmentCard
@@ -271,6 +266,8 @@ const AppointmentView = ({ aptType, selDoc }) => {
                   />
                 );
               })}
+            </InfiniteScroll>
+            
           </>
         )}
       </div>
@@ -627,7 +624,7 @@ const UpdateModal = ({
   );
 };
 //
-const HistoryView = ({ aptType, selDoc }) => {
+const HistoryView = ({ aptType,selDoc }) => {
   //
   const [selApt, setSelApt] = useState("");
   const [appointments, setAppointments] = useState([]);
@@ -659,37 +656,18 @@ const HistoryView = ({ aptType, selDoc }) => {
   useEffect(() => {
     fetchAppointments();
   }, [formData.start_date, formData.end_date]);
-  //
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-  //
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight &&
-      hasMore
-    ) {
-      fetchAppointments();
-    }
-  };
   //get appointments
   const fetchAppointments = async () => {
     try {
-      setIsLoading(true);
-      const limit = 5;
       const skip = appointments.length;
-      console.log("skip", skip);
       const resp = await Get(
         `${apiUrl()}/nurse/get-appointments-history?skip=${skip}&doc_id=${selDoc}&startDay=${
           formData.start_date
-        }&endDay=${formData.end_date}`
+        }&endDay=${formData.end_date}&limit=${config.FETCH_LIMIT}`
       );
-      console.log("resp::: doctors", resp);
       if (resp.success) {
         setAppointments((prevApts) => [...prevApts, ...resp.data]);
-        setHasMore(resp.data.length === limit);
+        setHasMore(resp.data.length > 0 ? true : false);
       }
     } catch (err) {
       // console.error('err:', err);
@@ -752,12 +730,28 @@ const HistoryView = ({ aptType, selDoc }) => {
                 <img src={noData} className="no-data-img" alt="No data found" />
               </div>
             )}
-            {appointments.length > 0 &&
-              appointments.map((apt) => {
-                return (
-                  <AppointmentCard key={apt._id} apt={apt} aptType={aptType} />
-                );
-              })}
+            <InfiniteScroll
+              dataLength={appointments.length}
+              next={fetchAppointments}
+              hasMore={hasMore}
+              loader={
+                <div className="d-flex justify-content-center align-items-center">
+                  <div className="spinner"></div>
+                </div>
+              }
+              style={{ display: "flex", flexWrap: "wrap" }}
+            >
+              {appointments.length > 0 &&
+                appointments.map((apt) => {
+                  return (
+                    <AppointmentCard
+                      key={apt._id}
+                      apt={apt}
+                      aptType={aptType}
+                    />
+                  );
+                })}
+            </InfiniteScroll>
           </>
         )}
       </div>
