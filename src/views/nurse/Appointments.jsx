@@ -2,11 +2,14 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
+import { FaCalendarAlt, FaClock, FaHospitalUser,FaClipboard } from 'react-icons/fa';
+
 import { Get, Put } from "../../api";
 import { apiUrl, config } from "../../config/appConfig";
+import { formatDateToString } from "../../utils";
+
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
-import { formatDateToString } from "../../utils";
 import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import TimeSlotView from "../common/TimeSlotView";
@@ -14,6 +17,7 @@ import moment from "moment";
 import AppCalendar from "../../components/Calendar";
 import DoctorSelection from "./DoctorSelection";
 import InfiniteScroll from "react-infinite-scroll-component";
+import AppointmentCard from "../common/AppointmentCard"
 //
 const NurseAppointments = () => {
   const [selDoc, setSelDoctor] = useState("");
@@ -312,137 +316,6 @@ const AppointmentView = ({ aptType, selDoc }) => {
           onCloseModal={() => setShowResp({})}
         />
       )}
-    </div>
-  );
-};
-//appointment card view
-const AppointmentCard = ({
-  apt,
-  setShowDetails,
-  setShowCancelView,
-  setShowUpdateView,
-  setShowAcceptView,
-  aptType,
-}) => {
-  return (
-    <div key={apt._id} className="doctor-card card mb-3 mx-2">
-      <img
-        src={
-          typeof apt?.doc.img == "string"
-            ? `${apiUrl()}/uploads/${apt?.pt.img}`
-            : URL.createObjectURL(apt?.pt.img)
-        }
-        className="card-img-top"
-        alt={apt?.pt.f_name}
-      />
-      <div className="card-body">
-        <h5 className="card-title">
-          {[apt?.pt.f_name, apt?.pt.l_name].join(" ")}
-        </h5>
-        <p className="card-text">
-          {formatDateToString(apt?.apt_date) + " " + apt?.timeslot}
-        </p>
-        <p className="card-text">{"Nhs: " + apt?.pt?.nhs}</p>
-        <p className="card-text">{"Status: " + apt.status}</p>
-      </div>
-      {/* Accept Button */}
-      <button
-        style={{
-          width: "200px",
-          marginBottom: "10px",
-          backgroundColor: "#0B2447",
-          borderColor: "#0B2447",
-          transition: "background-color 0.3s, border-color 0.3s",
-        }}
-        className="btn btn-primary"
-        onMouseOver={(e) => {
-          e.target.style.backgroundColor = "#1a4a8a";
-          e.target.style.borderColor = "#1a4a8a";
-        }}
-        onMouseOut={(e) => {
-          e.target.style.backgroundColor = "#0B2447";
-          e.target.style.borderColor = "#0B2447";
-        }}
-        onClick={() => {}}
-      >
-        See Details
-      </button>
-      {/* Accept Button */}
-      {aptType == "Pending" && (
-        <button
-          style={{
-            width: "200px",
-            marginBottom: "10px",
-            backgroundColor: "#0B2447",
-            borderColor: "#0B2447",
-            transition: "background-color 0.3s, border-color 0.3s",
-          }}
-          className="btn btn-primary"
-          onMouseOver={(e) => {
-            e.target.style.backgroundColor = "#1a4a8a";
-            e.target.style.borderColor = "#1a4a8a";
-          }}
-          onMouseOut={(e) => {
-            e.target.style.backgroundColor = "#0B2447";
-            e.target.style.borderColor = "#0B2447";
-          }}
-          onClick={() => {
-            setShowAcceptView();
-          }}
-        >
-          Accept
-        </button>
-      )}
-      {/* Update Button */}
-      {aptType == "Accepted" && (
-        <button
-          style={{
-            width: "200px",
-            marginBottom: "10px",
-            backgroundColor: "#0B2447",
-            borderColor: "#0B2447",
-            transition: "background-color 0.3s, border-color 0.3s",
-          }}
-          className="btn btn-primary"
-          onMouseOver={(e) => {
-            e.target.style.backgroundColor = "#1a4a8a";
-            e.target.style.borderColor = "#1a4a8a";
-          }}
-          onMouseOut={(e) => {
-            e.target.style.backgroundColor = "#0B2447";
-            e.target.style.borderColor = "#0B2447";
-          }}
-          onClick={() => {
-            setShowUpdateView();
-          }}
-        >
-          Update
-        </button>
-      )}
-      {/* Cancel Button */}
-      <button
-        style={{
-          width: "200px",
-          marginBottom: "10px",
-          backgroundColor: "#F05454",
-          borderColor: "#F05454",
-          transition: "background-color 0.3s, border-color 0.3s",
-        }}
-        className="btn btn-primary"
-        onMouseOver={(e) => {
-          e.target.style.backgroundColor = "#C84B31";
-          e.target.style.borderColor = "#C84B31";
-        }}
-        onMouseOut={(e) => {
-          e.target.style.backgroundColor = "#F05454";
-          e.target.style.borderColor = "#F05454";
-        }}
-        onClick={() => {
-          setShowCancelView();
-        }}
-      >
-        Cancel
-      </button>
     </div>
   );
 };
