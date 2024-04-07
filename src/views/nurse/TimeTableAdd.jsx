@@ -21,7 +21,7 @@ const _days = {
   sunday: false,
 };
 //
-const TimetableAdd = ({ onCloseModal, title, setTimeSlots }) => {
+const TimetableAdd = ({ onCloseModal, title, setTimeSlots,selDoc }) => {
   const initialDaysState = {
     monday: { startTime: "", endTime: "", duration: 15 },
     tuesday: { startTime: "", endTime: "", duration: 15 },
@@ -116,7 +116,7 @@ const TimetableAdd = ({ onCloseModal, title, setTimeSlots }) => {
       //
       if (Object.entries(timeSlotObj).length) {
         const resp = await Post(
-          `${apiUrl()}/doctor/create-time-slots`,
+          `${apiUrl()}/nurse/create-time-slots?doc_id=${selDoc}`,
           {
             timeSlots: timeSlotObj,
           },

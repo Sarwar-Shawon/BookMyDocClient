@@ -12,7 +12,7 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import TimeSlotView from "../common/TimeSlotView";
 import moment from "moment";
 import AppCalendar from "../../components/Calendar";
-import DoctorSelection from './DoctorSelection'
+import DoctorSelection from "./DoctorSelection";
 //
 const NurseAppointments = () => {
   const [selDoc, setSelDoctor] = useState("");
@@ -22,7 +22,7 @@ const NurseAppointments = () => {
     <div className="container-fluid">
       <div className="row">
         <div className="col">
-          <DoctorSelection selDoc={selDoc} setSelDoctor={setSelDoctor}/>
+          <DoctorSelection selDoc={selDoc} setSelDoctor={setSelDoctor} />
           <div
             className="d-flex justify-content-between align-items-center mb-3"
             style={{ borderBottom: "1px solid #ccc", paddingBottom: "10px" }}
@@ -46,9 +46,15 @@ const NurseAppointments = () => {
         </div>
       </div>
       <>
-        {selType === "Pending" && <AppointmentView aptType={selType} selDoc={selDoc}/>}
-        {selType === "Accepted" && <AppointmentView aptType={selType} selDoc={selDoc}/>}
-        {selType === "History" && <HistoryView aptType={selType} selDoc={selDoc}/>}
+        {selType === "Pending" && (
+          <AppointmentView aptType={selType} selDoc={selDoc} />
+        )}
+        {selType === "Accepted" && (
+          <AppointmentView aptType={selType} selDoc={selDoc} />
+        )}
+        {selType === "History" && (
+          <HistoryView aptType={selType} selDoc={selDoc} />
+        )}
       </>
     </div>
   );
@@ -65,7 +71,7 @@ const TabButton = ({ title, selType, setSelType }) => (
   </div>
 );
 //
-const AppointmentView = ({ aptType,selDoc }) => {
+const AppointmentView = ({ aptType, selDoc }) => {
   const [selApt, setSelApt] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [isLoading, setLoading] = useState(true);
@@ -85,7 +91,7 @@ const AppointmentView = ({ aptType,selDoc }) => {
   });
   //
   useEffect(() => {
-    if(selDoc){
+    if (selDoc) {
       setAppointments([]);
       fetchAppointments();
     }
@@ -135,7 +141,7 @@ const AppointmentView = ({ aptType,selDoc }) => {
         apt_id: selApt._id,
       };
       const resp = await Put(
-        `${apiUrl()}/doctor/accept-appointments`,
+        `${apiUrl()}/nurse/accept-appointments?doc_id=${selDoc}`,
         params,
         "application/json"
       );
@@ -166,7 +172,7 @@ const AppointmentView = ({ aptType,selDoc }) => {
         apt_id: selApt._id,
       };
       const resp = await Put(
-        `${apiUrl()}/doctor/cancel-appointments`,
+        `${apiUrl()}/nurse/cancel-appointments?doc_id=${selDoc}`,
         params,
         "application/json"
       );
@@ -199,7 +205,7 @@ const AppointmentView = ({ aptType,selDoc }) => {
         timeslot: formData.timeslot,
       };
       const resp = await Put(
-        `${apiUrl()}/doctor/update-appointments`,
+        `${apiUrl()}/nurse/update-appointments?doc_id=${selDoc}`,
         params,
         "application/json"
       );
@@ -218,7 +224,7 @@ const AppointmentView = ({ aptType,selDoc }) => {
     } finally {
       setIsBtnLoading(false);
       setShowUpdateView(false);
-      setSelApt("")
+      setSelApt("");
     }
   };
   //render
@@ -234,36 +240,37 @@ const AppointmentView = ({ aptType,selDoc }) => {
                 <img src={noData} className="no-data-img" alt="No data found" />
               </div>
             )}
-            {appointments.length > 0 && appointments.map((apt) => {
-              return (
-                <AppointmentCard
-                  key={apt._id}
-                  apt={apt}
-                  setShowDetails={() => {
-                    setSelApt(apt);
-                    setShowDetails(true);
-                  }}
-                  setShowCancelView={() => {
-                    setSelApt(apt);
-                    setShowCancelView(true);
-                  }}
-                  setShowUpdateView={() => {
-                    setSelApt(apt);
-                    setFormData({
+            {appointments.length > 0 &&
+              appointments.map((apt) => {
+                return (
+                  <AppointmentCard
+                    key={apt._id}
+                    apt={apt}
+                    setShowDetails={() => {
+                      setSelApt(apt);
+                      setShowDetails(true);
+                    }}
+                    setShowCancelView={() => {
+                      setSelApt(apt);
+                      setShowCancelView(true);
+                    }}
+                    setShowUpdateView={() => {
+                      setSelApt(apt);
+                      setFormData({
                         ...formData,
                         apt_date: new Date(apt?.apt_date),
-                        timeslot: apt?.timeslot
-                    });
-                    setShowUpdateView(true);
-                  }}
-                  setShowAcceptView={() => {
-                    setSelApt(apt);
-                    setShowAcceptView(true);
-                  }}
-                  aptType={aptType}
-                />
-              );
-            })}
+                        timeslot: apt?.timeslot,
+                      });
+                      setShowUpdateView(true);
+                    }}
+                    setShowAcceptView={() => {
+                      setSelApt(apt);
+                      setShowAcceptView(true);
+                    }}
+                    aptType={aptType}
+                  />
+                );
+              })}
           </>
         )}
       </div>
@@ -278,10 +285,8 @@ const AppointmentView = ({ aptType,selDoc }) => {
         showModal={showAcceptView}
         acceptAppointments={acceptAppointments}
         isLoading={isBtnLoading}
-
       />
-      {
-        showUpdateView &&
+      {showUpdateView && (
         <UpdateModal
           onCloseModal={() => setShowUpdateView(false)}
           updateAppointments={updateAppointments}
@@ -289,9 +294,10 @@ const AppointmentView = ({ aptType,selDoc }) => {
           formData={formData}
           setFormData={setFormData}
           isBtnLoading={isBtnLoading}
+          selDoc={selDoc}
         />
-      }
-      
+      )}
+
       {showResp?.msg && (
         <Modal
           title={"Response"}
@@ -444,7 +450,12 @@ const AppointmentCard = ({
   );
 };
 //Cancel Modal
-const CancelModal = ({ onCloseModal, cancelAppointments, showModal, isLoading }) => {
+const CancelModal = ({
+  onCloseModal,
+  cancelAppointments,
+  showModal,
+  isLoading,
+}) => {
   return (
     showModal && (
       <Modal
@@ -476,7 +487,12 @@ const CancelModal = ({ onCloseModal, cancelAppointments, showModal, isLoading })
   );
 };
 // Accept Modal
-const AcceptModal = ({ onCloseModal, acceptAppointments, showModal, isLoading }) => {
+const AcceptModal = ({
+  onCloseModal,
+  acceptAppointments,
+  showModal,
+  isLoading,
+}) => {
   return (
     showModal && (
       <Modal
@@ -508,7 +524,15 @@ const AcceptModal = ({ onCloseModal, acceptAppointments, showModal, isLoading })
   );
 };
 // Update Modal
-const UpdateModal = ({ onCloseModal, updateAppointments, apt , isBtnLoading , formData , setFormData}) => {
+const UpdateModal = ({
+  onCloseModal,
+  updateAppointments,
+  apt,
+  isBtnLoading,
+  formData,
+  setFormData,
+  selDoc
+}) => {
   //
   const [isLoading, setIsLoading] = useState(true);
   const [timeSlots, setTimeSlots] = useState([]);
@@ -521,7 +545,9 @@ const UpdateModal = ({ onCloseModal, updateAppointments, apt , isBtnLoading , fo
     try {
       setIsLoading(true);
       const resp = await Get(
-        `${apiUrl()}/doctor/get-time-slots-by-date?date=${formData.apt_date}`
+        `${apiUrl()}/nurse/get-time-slots-by-date?date=${
+          formData.apt_date
+        }&doc_id=${selDoc}`
       );
       console.log("resp:::", resp);
       if (resp.success) {
@@ -550,58 +576,58 @@ const UpdateModal = ({ onCloseModal, updateAppointments, apt , isBtnLoading , fo
   };
   //
   return (
-      <Modal
-        title={"Create New Appointment"}
-        body={
-          <div>
-            {isLoading && (
-              <div className="wrapper d-grid place-items: center">
-                <div className="loading-container">
-                  <div className="spinner"></div>
-                </div>
-              </div>
-            )}
-            <TimeSlotView
-              timeSlots={timeSlots}
-              formData={formData}
-              setFormData={setFormData}
-              errors={errors}
-              apt={apt}
-              user_type={"doctor"}
-            />
-            <div className="col-12">
-              <div className="d-grid">
-                {isBtnLoading ? (
-                  <button className="btn btn-primary" disabled>
-                    <div
-                      className="spinner-border spinner-border-sm"
-                      role="status"
-                    ></div>
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (validateForm()) {
-                        updateAppointments({ formData });
-                      }
-                    }}
-                    className="btn btn-primary"
-                  >
-                    {"Update Appointment"}
-                  </button>
-                )}
+    <Modal
+      title={"Create New Appointment"}
+      body={
+        <div>
+          {isLoading && (
+            <div className="wrapper d-grid place-items: center">
+              <div className="loading-container">
+                <div className="spinner"></div>
               </div>
             </div>
+          )}
+          <TimeSlotView
+            timeSlots={timeSlots}
+            formData={formData}
+            setFormData={setFormData}
+            errors={errors}
+            apt={apt}
+            user_type={"doctor"}
+          />
+          <div className="col-12">
+            <div className="d-grid">
+              {isBtnLoading ? (
+                <button className="btn btn-primary" disabled>
+                  <div
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                  ></div>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (validateForm()) {
+                      updateAppointments({ formData });
+                    }
+                  }}
+                  className="btn btn-primary"
+                >
+                  {"Update Appointment"}
+                </button>
+              )}
+            </div>
           </div>
-        }
-        onCloseModal={onCloseModal}
-        big={true}
-      />
+        </div>
+      }
+      onCloseModal={onCloseModal}
+      big={true}
+    />
   );
 };
 //
-const HistoryView = ({ aptType }) => {
+const HistoryView = ({ aptType, selDoc }) => {
   //
   const [selApt, setSelApt] = useState("");
   const [appointments, setAppointments] = useState([]);
@@ -632,7 +658,7 @@ const HistoryView = ({ aptType }) => {
   //
   useEffect(() => {
     fetchAppointments();
-  }, [formData.start_date,formData.end_date]);
+  }, [formData.start_date, formData.end_date]);
   //
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -656,7 +682,9 @@ const HistoryView = ({ aptType }) => {
       const skip = appointments.length;
       console.log("skip", skip);
       const resp = await Get(
-        `${apiUrl()}/doctor/get-appointments-history?skip=${skip}&startDay=${formData.start_date}&endDay=${formData.end_date}`
+        `${apiUrl()}/nurse/get-appointments-history?skip=${skip}&doc_id=${selDoc}&startDay=${
+          formData.start_date
+        }&endDay=${formData.end_date}`
       );
       console.log("resp::: doctors", resp);
       if (resp.success) {
@@ -675,40 +703,44 @@ const HistoryView = ({ aptType }) => {
       <div className="doctor-list d-flex flex-wrap">
         <h1>History</h1>
         <div className="col-md-12">
-      <div className="mb-3">
-        <label>Select Start Date</label>
-        <input
-          type="text"
-          className="form-control"
-          value={formatDateToString(formData.start_date) || "dd-mm-yyyy"}
-          onFocus={() => {
-            setShowCalendar(true);
-            setSelectedField("start_date");
-          }}
-          readOnly
-        />
-      </div>
-      <div className="mb-3">
-        <label>Select End Date</label>
-        <input
-          type="text"
-          className="form-control"
-          value={formatDateToString(formData.end_date) || "dd-mm-yyyy"}
-          onFocus={() => {
-            setShowCalendar(true);
-            setSelectedField("end_date");
-          }}
-          readOnly
-        />
-      </div>
-      {showCalendar && (
-        <AppCalendar
-          onCloseModal={() => setShowCalendar(false)}
-          value={selectedField === "start_date" ? formData.start_date : formData.end_date}
-          onChange={(val) => handleDateChange(new Date(val))}
-        />
-      )}
-    </div>
+          <div className="mb-3">
+            <label>Select Start Date</label>
+            <input
+              type="text"
+              className="form-control"
+              value={formatDateToString(formData.start_date) || "dd-mm-yyyy"}
+              onFocus={() => {
+                setShowCalendar(true);
+                setSelectedField("start_date");
+              }}
+              readOnly
+            />
+          </div>
+          <div className="mb-3">
+            <label>Select End Date</label>
+            <input
+              type="text"
+              className="form-control"
+              value={formatDateToString(formData.end_date) || "dd-mm-yyyy"}
+              onFocus={() => {
+                setShowCalendar(true);
+                setSelectedField("end_date");
+              }}
+              readOnly
+            />
+          </div>
+          {showCalendar && (
+            <AppCalendar
+              onCloseModal={() => setShowCalendar(false)}
+              value={
+                selectedField === "start_date"
+                  ? formData.start_date
+                  : formData.end_date
+              }
+              onChange={(val) => handleDateChange(new Date(val))}
+            />
+          )}
+        </div>
       </div>
       <div className="doctor-list d-flex flex-wrap">
         {isLoading ? (
@@ -720,15 +752,12 @@ const HistoryView = ({ aptType }) => {
                 <img src={noData} className="no-data-img" alt="No data found" />
               </div>
             )}
-            {appointments.length > 0 && appointments.map((apt) => {
-              return (
-                <AppointmentCard
-                  key={apt._id}
-                  apt={apt}
-                  aptType={aptType}
-                />
-              );
-            })}
+            {appointments.length > 0 &&
+              appointments.map((apt) => {
+                return (
+                  <AppointmentCard key={apt._id} apt={apt} aptType={aptType} />
+                );
+              })}
           </>
         )}
       </div>

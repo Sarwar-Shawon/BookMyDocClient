@@ -24,24 +24,26 @@ const _days = {
 //
 const NurseAppointmentsTimetable = ({ doctorId }) => {
   const [timeSlots, setTimeSlots] = useState({});
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [showNew, setShowNew] = React.useState(false);
   const [showUpdate, setShowUpdate] = React.useState(false);
   const [selDoc, setSelDoctor] = useState("");
 
   //
   useEffect(() => {
-    fetchTimeSlots();
-  }, []);
+    if(selDoc){
+      fetchTimeSlots();
+    }
+  }, [selDoc]);
   //
   const fetchTimeSlots = async () => {
     try {
       setLoading(true);
       const formattedDate = new Date().toISOString();
       const resp = await Get(
-        `${apiUrl()}/nurse/get-time-slots?date=${formattedDate}`
+        `${apiUrl()}/nurse/get-time-slots?date=${formattedDate}&doc_id=${selDoc}`
       );
-      console.log("resp:::", JSON.stringify(resp));
+      console.log("resp:::111111", JSON.stringify(resp));
       if (resp.success) {
         setTimeSlots(resp?.data);
       }
@@ -108,6 +110,7 @@ const NurseAppointmentsTimetable = ({ doctorId }) => {
           }}
           title={"Add New TimeTable"}
           setTimeSlots={(val) => setTimeSlots(val)}
+          selDoc={selDoc}
         />
       )}
       {showUpdate && (
@@ -118,6 +121,8 @@ const NurseAppointmentsTimetable = ({ doctorId }) => {
           title={"Update TimeTable"}
           timeSlots={timeSlots}
           setTimeSlots={(val) => setTimeSlots(val)}
+          selDoc={selDoc}
+
         />
       )}
     </>

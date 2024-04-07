@@ -21,7 +21,7 @@ const _days = {
   sunday: false,
 };
 //
-const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
+const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots,selDoc }) => {
   const initialDaysState = {};
   const [showResp, setShowResp] = useState({});
   const [days, setDays] = useState(initialDaysState);
@@ -140,7 +140,7 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
 
       if (Object.entries(timeSlotObj).length) {
         const resp = await Post(
-          `${apiUrl()}/doctor/update-time-slots`,
+          `${apiUrl()}/nurse/update-time-slots?doc_id=${selDoc}`,
           {
             timeSlots: timeSlotObj,
           },
