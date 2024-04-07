@@ -7,6 +7,8 @@ import { apiUrl } from "../../config/appConfig";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import CreateAppointmentView from "./CreateAppointmentView";
+import InfiniteScroll from "react-infinite-scroll-component";
+
 //
 const PatientHome = () => {
   const [departments, setDepartments] = useState([]);
@@ -31,36 +33,18 @@ const PatientHome = () => {
     fetchDoctors({ pSkip: true });
   }, [selDept]);
   //
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-  //
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight &&
-      hasMore
-    ) {
-      fetchDoctors();
-    }
-  };
-  //
   const fetchDoctors = async ({ pSkip }) => {
     try {
-      setLoading(true);
-      const limit = 5;
       const skip = pSkip ? 0 : doctors.length;
-      console.log("skip", skip);
       const resp = await Get(
         selDept
-          ? `${apiUrl()}/patient/get-doctors?skip=${skip}&dept=${selDept}`
-          : `${apiUrl()}/patient/get-all-doctors?skip=${skip}&dept=${selDept}`
+          ? `${apiUrl()}/patient/get-doctors?skip=${skip}&dept=${selDept}&limit=15`
+          : `${apiUrl()}/patient/get-all-doctors?skip=${skip}&dept=${selDept}&limit=15`
       );
       console.log("resp::: doctors", resp);
       if (resp.success) {
         setDoctors((prevDoctors) => [...prevDoctors, ...resp.data]);
-        setHasMore(resp.data.length === limit);
+        setHasMore(resp.data.length > 0 ? true : false);
       }
     } catch (err) {
       // console.error('err:', err);
@@ -161,7 +145,18 @@ const PatientHome = () => {
                 <img src={noData} className="no-data-img" alt="No data found" />
               </div>
             )}
-            {doctors.map((doctor) => {
+            <InfiniteScroll
+              dataLength={doctors.length}
+              next={fetchDoctors}
+              hasMore={hasMore}
+              loader={
+                <div className="d-flex justify-content-center align-items-center">
+                  <div className="spinner"></div>
+                </div>
+              }
+              style={{ display: "flex", flexWrap: "wrap" }}
+            >
+               {doctors.map((doctor) => {
               return (
                 <div
                   key={doctor._id}
@@ -214,6 +209,9 @@ const PatientHome = () => {
                 </div>
               );
             })}
+            </InfiniteScroll>
+
+           
           </>
         )}
       </div>

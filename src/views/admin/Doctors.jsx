@@ -9,6 +9,8 @@ import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import doctorDummy from "../../assets/images/doctor-dummy.jpg";
 import noData from "../../assets/images/no-data.jpg";
+import InfiniteScroll from "react-infinite-scroll-component";
+
 //
 const Doctors = () => {
   const [searchText, setSearchText] = React.useState("");
@@ -27,31 +29,17 @@ const Doctors = () => {
     fetchDoctors();
   }, []);
   //
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight &&
-      hasMore
-    ) {
-      fetchDoctors();
-    }
-  };
-  //
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-  //
   const fetchDoctors = async () => {
     try {
-      setLoading(true);
       const limit = 5;
       const skip = doctors.length;
-      const resp = await Get(`${apiUrl()}/admin/getAllDoctors?skip=${skip}`);
+      const resp = await Get(
+        `${apiUrl()}/admin/getAllDoctors?skip=${skip}&limit=15`
+      );
       console.log("resp:::", resp);
       if (resp.success) {
         setDoctors((prevDoctors) => [...prevDoctors, ...resp.data]);
-        setHasMore(resp.data.length === limit);
+        setHasMore(resp.data.length > 0 ? true : false);
       }
     } catch (err) {
       // console.error('err:', err);
@@ -185,38 +173,49 @@ const Doctors = () => {
             <img src={noData} className="no-data-img" alt="No data found" />
           </div>
         )}
-        {doctors.map((doctor) => {
-          return (
-            <div
-              key={doctor._id}
-              className="doctor-card card mb-3 mx-2"
-              onClick={() => {
-                setSelectedDoctor(doctor);
-                setOpenAddView(true);
-              }}
-            >
-              <img
-                src={
-                  typeof doctor.img == "string"
-                    ? `${apiUrl()}/uploads/${doctor.img}`
-                    : URL.createObjectURL(doctor.img)
-                }
-                className="card-img-top"
-                alt={doctor.f_name}
-
-              />
-              <div className="card-body">
-                <h5 className="card-title">
-                  {[doctor.f_name, doctor.l_name].join(" ")}
-                </h5>
-                <p className="card-text">{doctor?.dept?.name}</p>
-                <p className="card-text">
-                  {doctor.active ? "Active" : "Inactive"}
-                </p>
-              </div>
+        <InfiniteScroll
+          dataLength={doctors.length}
+          next={fetchDoctors}
+          hasMore={hasMore}
+          loader={
+            <div className="d-flex justify-content-center align-items-center">
+              <div className="spinner"></div>
             </div>
-          );
-        })}
+          }
+          style={{ display: "flex", flexWrap: "wrap" }}
+        >
+          {doctors.map((doctor) => {
+            return (
+              <div
+                key={doctor._id}
+                className="doctor-card card mb-3 mx-2"
+                onClick={() => {
+                  setSelectedDoctor(doctor);
+                  setOpenAddView(true);
+                }}
+              >
+                <img
+                  src={
+                    typeof doctor.img == "string"
+                      ? `${apiUrl()}/uploads/${doctor.img}`
+                      : URL.createObjectURL(doctor.img)
+                  }
+                  className="card-img-top"
+                  alt={doctor.f_name}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">
+                    {[doctor.f_name, doctor.l_name].join(" ")}
+                  </h5>
+                  <p className="card-text">{doctor?.dept?.name}</p>
+                  <p className="card-text">
+                    {doctor.active ? "Active" : "Inactive"}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </InfiniteScroll>
       </div>
       {openAddView && (
         <DoctorsAddView

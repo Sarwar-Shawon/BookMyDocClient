@@ -21,33 +21,14 @@ const Departments = () => {
     fetchDepartments();
   }, []);
   //
-
-  //
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight &&
-      hasMore
-    ) {
-      fetchDepartments();
-    }
-  };
-  //
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-  //
   const fetchDepartments = async () => {
     try {
       setLoading(true);
-      const limit = 5;
       const skip = departments.length;
       const resp = await Get(`${apiUrl()}/admin/getAllDepartments?skip=${skip}`);
       console.log("resp:::", resp);
       if (resp.success) {
         setDepartments((prevDepartments) => [...prevDepartments, ...resp.data]);
-        setHasMore(resp.data.length === limit);
       }
     } catch (err) {
       // console.error('err:', err);

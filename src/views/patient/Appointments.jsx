@@ -10,6 +10,7 @@ import { formatDateToString } from "../../utils";
 import Modal from "../../components/Modal";
 import moment from "moment";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
+import AppCalendar from "../../components/Calendar";
 import TimeSlotView from "../common/TimeSlotView";
 import InfiniteScroll from "react-infinite-scroll-component";
 //
@@ -88,13 +89,14 @@ const AppointmentView = ({ selType }) => {
     try {
       const skip = appointments.length;
       const resp = await Get(
-        `${apiUrl()}/patient/get-appointments?skip=${skip}&status=${selType}&limit=${config.FETCH_LIMIT}`
+        `${apiUrl()}/patient/get-appointments?skip=${skip}&status=${selType}&limit=${
+          config.FETCH_LIMIT
+        }`
       );
       console.log("resp::: doctors", resp);
       if (resp.success) {
         setAppointments((prevApts) => [...prevApts, ...resp.data]);
-        setHasMore(resp.data.length > 0 ? true : false);
-
+        setHasMore(resp.data.length > 0 ? true : false);  
       }
     } catch (err) {
       // console.error('err:', err);
@@ -350,7 +352,6 @@ const AppointmentCard = ({
         >
           Update
         </button>
-      
       }
 
       <button
@@ -469,114 +470,150 @@ const UpdateModal = ({
   };
   //
   return (
-      <Modal
-        title={"Create New Appointment"}
-        body={
-          <div>
-            {isLoading && (
-              <div className="wrapper d-grid place-items: center">
-                <div className="loading-container">
-                  <div className="spinner"></div>
-                </div>
-              </div>
-            )}
-            <TimeSlotView
-              timeSlots={timeSlots}
-              formData={formData}
-              setFormData={setFormData}
-              errors={errors}
-              apt={apt}
-              user_type={"patient"}
-            />
-            <div className="col-12">
-              <div className="d-grid">
-                {isBtnLoading ? (
-                  <button className="btn btn-primary" disabled>
-                    <div
-                      className="spinner-border spinner-border-sm"
-                      role="status"
-                    ></div>
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (validateForm()) {
-                        updateAppointments();
-                      }
-                    }}
-                    className="btn btn-primary"
-                  >
-                    {"Update Appointment"}
-                  </button>
-                )}
+    <Modal
+      title={"Create New Appointment"}
+      body={
+        <div>
+          {isLoading && (
+            <div className="wrapper d-grid place-items: center">
+              <div className="loading-container">
+                <div className="spinner"></div>
               </div>
             </div>
+          )}
+          <TimeSlotView
+            timeSlots={timeSlots}
+            formData={formData}
+            setFormData={setFormData}
+            errors={errors}
+            apt={apt}
+            user_type={"patient"}
+          />
+          <div className="col-12">
+            <div className="d-grid">
+              {isBtnLoading ? (
+                <button className="btn btn-primary" disabled>
+                  <div
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                  ></div>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (validateForm()) {
+                      updateAppointments();
+                    }
+                  }}
+                  className="btn btn-primary"
+                >
+                  {"Update Appointment"}
+                </button>
+              )}
+            </div>
           </div>
-        }
-        onCloseModal={onCloseModal}
-        big={true}
-      />
+        </div>
+      }
+      onCloseModal={onCloseModal}
+      big={true}
+    />
   );
 };
 //
-const HistoryView = () => {
+const HistoryView = ({ aptType }) => {
+  //
   const [appointments, setAppointments] = useState([]);
-  const [error, setError] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
-
+  const [formData, setFormData] = useState({
+    start_date: new Date(),
+    end_date: new Date(),
+  });
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedField, setSelectedField] = useState(null);
+  //
+  const handleDateChange = (date) => {
+    if (selectedField === "start_date") {
+      setFormData({
+        ...formData,
+        start_date: date,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        end_date: date,
+      });
+    }
+    setShowCalendar(false);
+  };
   //
   useEffect(() => {
     fetchAppointments();
-  }, []);
-  //
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-  //
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight &&
-      hasMore
-    ) {
-      fetchAppointments();
-    }
-  };
-  //
+  }, [formData.start_date, formData.end_date]);
+  //get appointments
   const fetchAppointments = async () => {
     try {
-      setLoading(true);
-      const limit = 5;
       const skip = appointments.length;
-      console.log("skip", skip);
       const resp = await Get(
-        `${apiUrl()}/patient/get-appointments?skip=${skip}`
+        `${apiUrl()}/doctor/get-appointments-history?skip=${skip}&startDay=${
+          formData.start_date
+        }&endDay=${formData.end_date}&limit=${config.FETCH_LIMIT}`
       );
-      console.log("resp::: doctors", resp);
       if (resp.success) {
         setAppointments((prevApts) => [...prevApts, ...resp.data]);
-        setHasMore(resp.data.length === limit);
+        setHasMore(resp.data.length > 0 ? true : false);
       }
     } catch (err) {
       // console.error('err:', err);
-      setError(err?.message);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
-
   //
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <div className="mb-3">{/*  */}</div>
+    <div>
+      <div className="doctor-list d-flex flex-wrap">
+        <h1>History</h1>
+        <div className="col-md-12">
+          <div className="mb-3">
+            <label>Select Start Date</label>
+            <input
+              type="text"
+              className="form-control"
+              value={formatDateToString(formData.start_date) || "dd-mm-yyyy"}
+              onFocus={() => {
+                setShowCalendar(true);
+                setSelectedField("start_date");
+              }}
+              readOnly
+            />
           </div>
+          <div className="mb-3">
+            <label>Select End Date</label>
+            <input
+              type="text"
+              className="form-control"
+              value={formatDateToString(formData.end_date) || "dd-mm-yyyy"}
+              onFocus={() => {
+                setShowCalendar(true);
+                setSelectedField("end_date");
+              }}
+              readOnly
+            />
+          </div>
+          {showCalendar && (
+            <AppCalendar
+              onCloseModal={() => setShowCalendar(false)}
+              value={
+                selectedField === "start_date"
+                  ? formData.start_date
+                  : formData.end_date
+              }
+              onChange={(val) => handleDateChange(new Date(val))}
+            />
+          )}
         </div>
       </div>
       <div className="doctor-list d-flex flex-wrap">
@@ -589,9 +626,29 @@ const HistoryView = () => {
                 <img src={noData} className="no-data-img" alt="No data found" />
               </div>
             )}
-            {appointments.map((apt) => (
-              <AppointmentCard apt={apt} />
-            ))}
+            {appointments.length > 0 && (
+              <InfiniteScroll
+                dataLength={appointments.length}
+                next={fetchAppointments}
+                hasMore={hasMore}
+                loader={
+                  <div className="d-flex justify-content-center align-items-center">
+                    <div className="spinner"></div>
+                  </div>
+                }
+                style={{ display: "flex", flexWrap: "wrap" }}
+              >
+                {appointments.map((apt) => {
+                  return (
+                    <AppointmentCard
+                      key={apt._id}
+                      apt={apt}
+                      aptType={aptType}
+                    />
+                  );
+                })}
+              </InfiniteScroll>
+            )}
           </>
         )}
       </div>

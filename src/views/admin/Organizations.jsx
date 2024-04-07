@@ -21,31 +21,14 @@ const Organizations = () => {
     fetchOrganizations();
   }, []);
   //
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight &&
-      hasMore
-    ) {
-      fetchOrganizations();
-    }
-  };
-  //
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-  //
   const fetchOrganizations = async () => {
     try {
       setLoading(true);
-      const limit = 5;
       const skip = organizations.length;
       const resp = await Get(`${apiUrl()}/admin/getAllOrganizations?skip=${skip}`);
       console.log("resp:::", resp);
       if (resp.success) {
         setOrganizations((prevOrganizations) => [...prevOrganizations, ...resp.data]);
-        setHasMore(resp.data.length === limit);
       }
     } catch (err) {
       // console.error('err:', err);

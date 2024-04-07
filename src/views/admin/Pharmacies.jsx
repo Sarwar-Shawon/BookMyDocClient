@@ -8,6 +8,8 @@ import { Get } from "../../api";
 import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
+import InfiniteScroll from "react-infinite-scroll-component";
+//
 const Pharmacies = () => {
   const [searchText, setSearchText] = React.useState("");
   const [openAddView, setOpenAddView] = React.useState(false);
@@ -24,31 +26,14 @@ const Pharmacies = () => {
     fetchPharmacies();
   }, []);
   //
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight &&
-      hasMore
-    ) {
-      fetchPharmacies();
-    }
-  };
-  //
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-  //
   const fetchPharmacies = async () => {
     try {
-      setLoading(true);
-      const limit = 5;
       const skip = pharmacies.length;
-      const resp = await Get(`${apiUrl()}/admin/getAllPharmacies?skip=${skip}`);
+      const resp = await Get(`${apiUrl()}/admin/getAllPharmacies?skip=${skip}&limit=15`);
       console.log("resp:::", resp);
       if (resp.success) {
         setPharmacies((prevPharmacies) => [...prevPharmacies, ...resp.data]);
-        setHasMore(resp.data.length === limit);
+        setHasMore(resp.data.length > 0 ? true : false);
       }
     } catch (err) {
       // console.error('err:', err);
@@ -169,7 +154,18 @@ const Pharmacies = () => {
             <img src={noData} className="no-data-img" alt="No data found" />
           </div>
         )}
-        {pharmacies.map((pharmacy) => {
+        <InfiniteScroll
+          dataLength={pharmacies.length}
+          next={fetchPharmacies}
+          hasMore={hasMore}
+          loader={
+            <div className="d-flex justify-content-center align-items-center">
+              <div className="spinner"></div>
+            </div>
+          }
+          style={{ display: "flex", flexWrap: "wrap" }}
+        >
+          {pharmacies.map((pharmacy) => {
           console.log(
             "typeof pharmacy.img",
             typeof pharmacy.img,
@@ -203,6 +199,8 @@ const Pharmacies = () => {
             </div>
           );
         })}
+        </InfiniteScroll>
+        
       </div>
       {openAddView && (
         <PharmacyAddView

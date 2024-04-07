@@ -8,6 +8,8 @@ import { Get } from "../../api";
 import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
+import InfiniteScroll from "react-infinite-scroll-component";
+//
 const Nurses = () => {
   const [searchText, setSearchText] = React.useState("");
   const [openAddView, setOpenAddView] = React.useState(false);
@@ -26,31 +28,18 @@ const Nurses = () => {
     fetchNurses();
   }, []);
   //
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-        document.documentElement.offsetHeight &&
-      hasMore
-    ) {
-      fetchNurses();
-    }
-  };
-  //
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-  //
   const fetchNurses = async () => {
     try {
       setLoading(true);
       const limit = 5;
       const skip = nurses.length;
-      const resp = await Get(`${apiUrl()}/admin/getAllNurses?skip=${skip}`);
+      const resp = await Get(
+        `${apiUrl()}/admin/getAllNurses?skip=${skip}&limit=15`
+      );
       console.log("resp:::", resp);
       if (resp.success) {
         setNurses((prevNurses) => [...prevNurses, ...resp.data]);
-        setHasMore(resp.data.length === limit);
+        setHasMore(resp.data.length > 0 ? true : false);
       }
     } catch (err) {
       // console.error('err:', err);
@@ -60,21 +49,21 @@ const Nurses = () => {
     }
   };
   //
-//
-const fetchOrganizations = async () => {
-  try {
-    const resp = await Get(`${apiUrl()}/admin/getAllOrganizations`);
-    console.log("resp:::", resp);
-    if (resp.success) {
-      setOrganizations(resp.data);
+  //
+  const fetchOrganizations = async () => {
+    try {
+      const resp = await Get(`${apiUrl()}/admin/getAllOrganizations`);
+      console.log("resp:::", resp);
+      if (resp.success) {
+        setOrganizations(resp.data);
+      }
+    } catch (err) {
+      // console.error('err:', err);
+      setError(err?.message);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    // console.error('err:', err);
-    setError(err?.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
   const fetchDepartments = async () => {
     try {
       const resp = await Get(`${apiUrl()}/admin/getAllDepartments`);
@@ -145,12 +134,12 @@ const fetchOrganizations = async () => {
               className="btn btn-primary"
               onClick={() => {}}
               onMouseOver={(e) => {
-                e.target.style.backgroundColor = "#1a4a8a"; 
-                e.target.style.borderColor = "#1a4a8a"; 
+                e.target.style.backgroundColor = "#1a4a8a";
+                e.target.style.borderColor = "#1a4a8a";
               }}
               onMouseOut={(e) => {
-                e.target.style.backgroundColor = "#0B2447"; 
-                e.target.style.borderColor = "#0B2447"; 
+                e.target.style.backgroundColor = "#0B2447";
+                e.target.style.borderColor = "#0B2447";
               }}
             >
               Search
@@ -165,12 +154,12 @@ const fetchOrganizations = async () => {
               }}
               className="btn btn-primary"
               onMouseOver={(e) => {
-                e.target.style.backgroundColor = "#1a4a8a"; 
-                e.target.style.borderColor = "#1a4a8a"; 
+                e.target.style.backgroundColor = "#1a4a8a";
+                e.target.style.borderColor = "#1a4a8a";
               }}
               onMouseOut={(e) => {
-                e.target.style.backgroundColor = "#0B2447"; 
-                e.target.style.borderColor = "#0B2447"; 
+                e.target.style.backgroundColor = "#0B2447";
+                e.target.style.borderColor = "#0B2447";
               }}
               onClick={() => setOpenAddView(true)}
             >
@@ -185,43 +174,55 @@ const fetchOrganizations = async () => {
             <img src={noData} className="no-data-img" alt="No data found" />
           </div>
         )}
-        {nurses.map((nurse) => {
-          console.log(
-            "typeof nurse.img",
-            typeof nurse.img,
-            nurse.img,
-            `${apiUrl()}/uploads/${nurse.img}`
-          );
-          return (
-            <div
-              key={nurse._id}
-              className="doctor-card card mb-3 mx-2"
-              onClick={() => {
-                setSelectedNurse(nurse);
-                setOpenAddView(true);
-              }}
-            >
-              <img
-                src={
-                  typeof nurse.img == "string"
-                    ? `${apiUrl()}/uploads/${nurse.img}`
-                    : URL.createObjectURL(nurse.img)
-                }
-                className="card-img-top"
-                alt={nurse.f_name}
-              />
-              <div className="card-body">
-                <h5 className="card-title">
-                  {[nurse.f_name, nurse.l_name].join(" ")}
-                </h5>
-                <p className="card-text">{nurse?.dept?.name}</p>
-                <p className="card-text">
-                  {nurse.active ? "Active" : "Inactive"}
-                </p>
-              </div>
+        <InfiniteScroll
+          dataLength={nurses.length}
+          next={fetchNurses}
+          hasMore={hasMore}
+          loader={
+            <div className="d-flex justify-content-center align-items-center">
+              <div className="spinner"></div>
             </div>
-          );
-        })}
+          }
+          style={{ display: "flex", flexWrap: "wrap" }}
+        >
+          {nurses.map((nurse) => {
+            console.log(
+              "typeof nurse.img",
+              typeof nurse.img,
+              nurse.img,
+              `${apiUrl()}/uploads/${nurse.img}`
+            );
+            return (
+              <div
+                key={nurse._id}
+                className="doctor-card card mb-3 mx-2"
+                onClick={() => {
+                  setSelectedNurse(nurse);
+                  setOpenAddView(true);
+                }}
+              >
+                <img
+                  src={
+                    typeof nurse.img == "string"
+                      ? `${apiUrl()}/uploads/${nurse.img}`
+                      : URL.createObjectURL(nurse.img)
+                  }
+                  className="card-img-top"
+                  alt={nurse.f_name}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">
+                    {[nurse.f_name, nurse.l_name].join(" ")}
+                  </h5>
+                  <p className="card-text">{nurse?.dept?.name}</p>
+                  <p className="card-text">
+                    {nurse.active ? "Active" : "Inactive"}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </InfiniteScroll>
       </div>
       {openAddView && (
         <NursesAddView
