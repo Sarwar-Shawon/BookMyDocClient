@@ -14,6 +14,7 @@ const DoctorSelection = ({selDoc, setSelDoctor}) => {
   const [isLoading, setIsLoading] = useState(true);
   //
   useEffect(() => {
+    console.log('asd::: called')
     fetchDoctors();
   }, []);
   //get Attatched Doctors

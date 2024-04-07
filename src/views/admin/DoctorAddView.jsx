@@ -28,7 +28,7 @@ const DoctorsAddView = ({
 }) => {
   //
   const [errors, setError] = useState({});
-  const [allNurses, setNurses] = useState({});
+  const [allNurses, setNurses] = useState([]);
   const [formData, setFormData] = useState({
     doc_email: "",
     f_name: "",
@@ -56,12 +56,15 @@ const DoctorsAddView = ({
   const [isLoading, setIsLoading] = useState(false);
   //
   useEffect(() => {
-    setFormData({ ...formData, nurses: selectedDoctor?.nurses.length ? selectedDoctor?.nurses : [] });
+    setFormData({ ...formData, nurses: selectedDoctor?.nurses ? selectedDoctor?.nurses : [] });
     fetchNurses();
-  }, [formData.dept || formData.organization]);
+  }, [formData.dept,formData.organization]);
   //
   const fetchNurses = async () => {
     try {
+      if (!formData.dept || !formData.organization) {
+        return;
+      }
       const resp = await Get(`${apiUrl()}/admin/getAllNursesByDeptOrg?dept=${formData.dept}&org=${formData.organization}`);
       console.log("fetchNurses:: resp:::", resp);
       if (resp.success) {
@@ -232,8 +235,8 @@ const DoctorsAddView = ({
     } finally {
     }
   };
-  console.log("formdata", formData)
   //
+  console.log("formdata", formData)
   return (
     <Modal
       title={selectedDoctor ? "Update Doctor" : "Add New Doctor"}
@@ -417,7 +420,7 @@ const DoctorsAddView = ({
               >
                 <option value="">Select Department</option>
                 <>
-                  {departments.length &&
+                  {departments.length > 0 &&
                     departments.map((dept) => (
                       <option value={dept._id} key={dept._id}>
                         {dept.name}
@@ -437,7 +440,7 @@ const DoctorsAddView = ({
               >
                 <option value="">Select Organization</option>
                 <>
-                  {organizations.length &&
+                  {organizations.length >0 &&
                     organizations.map((org) => (
                       <option value={org._id} key={org._id}>
                         {org.name}
@@ -532,18 +535,16 @@ const DoctorsAddView = ({
 };
 //
 const CheckboxSelect = ({ options, selectedValues, onChange }) => {
-
   const handleChange = (event) => {
     const { value } = event.target;
-    let updatedSelectedItems = [...selectedValues];
-    if (selectedValues.includes(value)) {
+    let updatedSelectedItems = selectedValues ? [...selectedValues] : [];
+    if (selectedValues && selectedValues.includes(value)) {
       updatedSelectedItems = updatedSelectedItems.filter((item) => item !== value);
     } else {
       updatedSelectedItems.push(value);
     }
     onChange(updatedSelectedItems);
   };
-
   return (
     <div className="checkbox-container">
       {
@@ -556,7 +557,7 @@ const CheckboxSelect = ({ options, selectedValues, onChange }) => {
             type="checkbox"
             className="checkbox-input"
             value={option._id}
-            checked={selectedValues.includes(option._id)}
+            checked={selectedValues && selectedValues.includes(option._id)}
             onChange={handleChange}
           />
           <span className="checkbox-text">{[option.f_name, option.l_name].join(" ")}</span>

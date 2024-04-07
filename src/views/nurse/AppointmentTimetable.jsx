@@ -22,16 +22,28 @@ const _days = {
   sunday: false,
 };
 //
-const NurseAppointmentsTimetable = ({ doctorId }) => {
+const NurseAppointmentsTimetable = () => {
+  const [selDoc, setSelDoctor] = useState("");
+  //
+  return (
+    <div className="container mt-5">
+      <DoctorSelection selDoc={selDoc} setSelDoctor={setSelDoctor} />
+
+      <AppointmentsTimetable selDoc={selDoc}/>
+    </div>
+  );
+};
+//
+const AppointmentsTimetable = ({selDoc}) => {
   const [timeSlots, setTimeSlots] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [showNew, setShowNew] = React.useState(false);
   const [showUpdate, setShowUpdate] = React.useState(false);
-  const [selDoc, setSelDoctor] = useState("");
-
   //
   useEffect(() => {
+    console.log("selDocselDoc:::",selDoc)
     if(selDoc){
+      setTimeSlots([]);
       fetchTimeSlots();
     }
   }, [selDoc]);
@@ -59,8 +71,7 @@ const NurseAppointmentsTimetable = ({ doctorId }) => {
   //
   return (
     <>
-      <div className="container mt-5">
-        <DoctorSelection selDoc={selDoc} setSelDoctor={setSelDoctor} />
+      <div>
         <div
           style={{
             display: "flex",
