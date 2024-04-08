@@ -56,7 +56,7 @@ const Home = ({ doctorId }) => {
   return (
     <>
       <div className="container-fluid">
-      <div className="col-md-12">
+        <div className="col-md-12">
           <div className="mb-3">
             <label>Select Date</label>
             <input
@@ -73,7 +73,10 @@ const Home = ({ doctorId }) => {
             <AppCalendar
               onCloseModal={() => setShowCalendar(false)}
               value={selDate}
-              onChange={(val) => setSelDate(new Date(val))}
+              onChange={(val) => {
+                setSelDate(new Date(val));
+                setShowCalendar(false);
+              }}
             />
           )}
         </div>
@@ -100,26 +103,50 @@ const TimeSlotsComponent = ({ timeSlotsData }) => {
           <h3>{day.charAt(0).toUpperCase() + day.slice(1)}</h3>
           <div className="row row-cols-2 row-cols-md-4 g-3">
             {Object.entries(slots).map(([time, slot]) => (
-              <div key={time} className="col" onClick={()=>{console.log("asd")}}>
+              <div
+                key={time}
+                className="col"
+                onClick={() => {
+                  console.log("asd");
+                }}
+              >
                 <div
                   className={`card `}
                   style={{
                     // backgroundColor: slot.active ? "#213555" : "#17594A",
                     backgroundColor: slot.active ? "#0B2447" : "#007400",
-                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
+                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
                   }}
                 >
                   {/* <button type="button" className="btn-close bg-danger" aria-label="Close" style={{ position: 'absolute', top: '15px', right: '10px' }} /> */}
                   <div className="card-body">
-                    <h5 className="card-title" style={{color: '#fff' }}>{slot.startTime }</h5>
-                    {
-                      slot?.apt?.pt && 
-                      <h5 className="card-title" style={{ fontSize: '0.8em', color: '#fff',fontWeight: 'normal' }}>{  [ slot?.apt?.pt.f_name , slot?.apt?.pt.l_name ].join(" ") }</h5>
-                    }
-                    {
-                      slot?.apt?.pt && 
-                      <h5 className="card-title" style={{ fontSize: '0.8em', color: '#fff', fontWeight: 'normal'}}>{ "Nhs:" + slot?.apt?.pt.nhs}</h5>
-                    }
+                    <h5 className="card-title" style={{ color: "#fff" }}>
+                      {slot.startTime}
+                    </h5>
+                    {slot?.apt?.pt && (
+                      <h5
+                        className="card-title"
+                        style={{
+                          fontSize: "0.8em",
+                          color: "#fff",
+                          fontWeight: "normal",
+                        }}
+                      >
+                        {[slot?.apt?.pt.f_name, slot?.apt?.pt.l_name].join(" ")}
+                      </h5>
+                    )}
+                    {slot?.apt?.pt && (
+                      <h5
+                        className="card-title"
+                        style={{
+                          fontSize: "0.8em",
+                          color: "#fff",
+                          fontWeight: "normal",
+                        }}
+                      >
+                        {"Nhs:" + slot?.apt?.pt.nhs}
+                      </h5>
+                    )}
                   </div>
                 </div>
               </div>

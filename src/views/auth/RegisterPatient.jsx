@@ -113,6 +113,13 @@ const SignUp = () => {
     return isValid;
   };
   //
+  const calculateMinDate = () => {
+    const today = new Date();
+    const maxDate = new Date(today.getFullYear() - 16, today.getMonth(), today.getDate());
+    console.log("minDateminDateminDate", maxDate)
+    return maxDate;
+  };
+  //
   const isFormValid = Object.keys(errors).length === 0;
   //
   return (
@@ -165,7 +172,10 @@ const SignUp = () => {
                     type="text"
                     className="form-control"
                     placeholder="Enter First Name"
-                    onChange={(e) => setFirstName(e.target.value)}
+                    value={firstName}
+                    onChange={(e) => {
+                      setFirstName(e.target.value.replace(/[^a-zA-Z]/g, ""));
+                    }}
                   />
                 </div>
                 <div className="mb-2">
@@ -174,7 +184,8 @@ const SignUp = () => {
                     type="text"
                     className="form-control"
                     placeholder="Enter Last Name"
-                    onChange={(e) => setLastName(e.target.value)}
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value.replace(/[^a-zA-Z]/g, ""))}
                   />
                 </div>
                 <div className="mb-2">
@@ -190,7 +201,7 @@ const SignUp = () => {
                         <input
                           type="radio"
                           name="gender"
-                          value="option1"
+                          value={gender}
                           checked={true}
                           onChange={() => setGender("male")}
                         />
@@ -203,7 +214,7 @@ const SignUp = () => {
                         <input
                           type="radio"
                           name="gender"
-                          value="option2"
+                          value={gender}
                           onChange={() => setGender("male")}
                         />
                         <span style={{ marginLeft: "4px" }}>Female</span>
@@ -223,6 +234,7 @@ const SignUp = () => {
                     type="text"
                     className="form-control"
                     placeholder="Enter NHS Id"
+                    value={nhsId}
                     onChange={(e) => setNhsId(e.target.value)}
                   />
                 </div>
@@ -280,6 +292,7 @@ const SignUp = () => {
                   onCloseModal={() => setShowCalendar(false)}
                   value={dob}
                   onChange={(val) => setDob(val)}
+                  maxDate={calculateMinDate()}
                 />
               )}
             </div>

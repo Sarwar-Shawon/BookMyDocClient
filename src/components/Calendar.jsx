@@ -7,6 +7,7 @@ import "react-calendar/dist/Calendar.css";
 import "../css/AppCalendar.css";
 //
 const AppCalendar = (props) => {
+
   return (
     <div
       className="modal fade show"
@@ -36,6 +37,7 @@ const AppCalendar = (props) => {
               onChange={props.onChange}
               value={props.value}
               minDate={props.minDate}
+              maxDate={props.maxDate}
             />
           </div>
           <div className="modal-footer">

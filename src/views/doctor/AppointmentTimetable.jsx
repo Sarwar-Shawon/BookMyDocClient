@@ -68,6 +68,7 @@ const AppointmentsTimetable = ({ doctorId }) => {
                 backgroundColor: "#0B2447",
                 borderColor: "#0B2447",
                 transition: "background-color 0.3s, border-color 0.3s",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
               }}
               className="btn btn-primary"
               onMouseOver={(e) => {

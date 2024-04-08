@@ -27,7 +27,21 @@ const Header = ({ toggleSidebar }) => {
 
         <div className="title">BookMyDoc</div>
         <button
+          style={{
+            width: "200px",
+            backgroundColor: "#0B2447",
+            borderColor: "#0B2447",
+            transition: "background-color 0.3s, border-color 0.3s",
+          }}
           className="btn btn-primary"
+          onMouseOver={(e) => {
+            e.target.style.backgroundColor = "#1a4a8a";
+            e.target.style.borderColor = "#1a4a8a";
+          }}
+          onMouseOut={(e) => {
+            e.target.style.backgroundColor = "#0B2447";
+            e.target.style.borderColor = "#0B2447";
+          }}
           onClick={() => {
             setShowModal(true);
           }}
