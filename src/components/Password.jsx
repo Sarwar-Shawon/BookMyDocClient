@@ -8,7 +8,7 @@ import { FaRegEye, FaRegEyeSlash, FaCheck } from "react-icons/fa";
 import { Regex } from "../utils"
 //
 const PasswordInput = (props) => {
-  const [focused, setFocused] = React.useState(false);
+  const [focused, setFocused] = useState(false);
   const onFocus = () => setFocused(true);
   const onBlur = () => setFocused(false);
   return (

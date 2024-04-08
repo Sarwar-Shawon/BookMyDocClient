@@ -11,8 +11,8 @@ import noData from "../../assets/images/no-data.jpg";
 import InfiniteScroll from "react-infinite-scroll-component";
 //
 const Nurses = () => {
-  const [searchText, setSearchText] = React.useState("");
-  const [openAddView, setOpenAddView] = React.useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [openAddView, setOpenAddView] = useState(false);
   const [nurses, setNurses] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [organizations, setOrganizations] = useState([]);

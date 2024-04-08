@@ -23,8 +23,8 @@ const _days = {
 const AppointmentsTimetable = ({ doctorId }) => {
   const [timeSlots, setTimeSlots] = useState({});
   const [isLoading, setLoading] = useState(true);
-  const [showNew, setShowNew] = React.useState(false);
-  const [showUpdate, setShowUpdate] = React.useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
 
   //
   useEffect(() => {
@@ -54,48 +54,50 @@ const AppointmentsTimetable = ({ doctorId }) => {
   //
   return (
     <>
-      <div className="container mt-5">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <button
+      <div className="container-fluid">
+        <div className="col-md-12">
+          <div
             style={{
-              width: "200px",
-              backgroundColor: "#0B2447",
-              borderColor: "#0B2447",
-              transition: "background-color 0.3s, border-color 0.3s",
-            }}
-            className="btn btn-primary"
-            onMouseOver={(e) => {
-              e.target.style.backgroundColor = "#1a4a8a";
-              e.target.style.borderColor = "#1a4a8a";
-            }}
-            onMouseOut={(e) => {
-              e.target.style.backgroundColor = "#0B2447";
-              e.target.style.borderColor = "#0B2447";
-            }}
-            onClick={() => {
-              Object.entries(timeSlots).length > 0
-                ? setShowUpdate(true)
-                : setShowNew(true);
+              display: "flex",
+              justifyContent: "flex-end",
             }}
           >
-            {Object.entries(timeSlots).length > 0
-              ? "Update TimeTable"
-              : "Add New TimeTable"}
-          </button>
-        </div>
-        {!Object.entries(timeSlots).length && (
-          <div className="container-fluid d-flex justify-content-center align-items-center">
-            <img src={noData} className="no-data-img" alt="No data found" />
+            <button
+              style={{
+                width: "200px",
+                backgroundColor: "#0B2447",
+                borderColor: "#0B2447",
+                transition: "background-color 0.3s, border-color 0.3s",
+              }}
+              className="btn btn-primary"
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = "#1a4a8a";
+                e.target.style.borderColor = "#1a4a8a";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = "#0B2447";
+                e.target.style.borderColor = "#0B2447";
+              }}
+              onClick={() => {
+                Object.entries(timeSlots).length > 0
+                  ? setShowUpdate(true)
+                  : setShowNew(true);
+              }}
+            >
+              {Object.entries(timeSlots).length > 0
+                ? "Update TimeTable"
+                : "Add New TimeTable"}
+            </button>
           </div>
-        )}
-        {Object.entries(timeSlots).length > 0 && (
-          <TimeSlotsComponent timeSlotsData={timeSlots} />
-        )}
+          {!Object.entries(timeSlots).length && (
+            <div className="container-fluid d-flex justify-content-center align-items-center">
+              <img src={noData} className="no-data-img" alt="No data found" />
+            </div>
+          )}
+          {Object.entries(timeSlots).length > 0 && (
+            <TimeSlotsComponent timeSlotsData={timeSlots} />
+          )}
+        </div>
       </div>
       {showNew && (
         <TimetableAdd

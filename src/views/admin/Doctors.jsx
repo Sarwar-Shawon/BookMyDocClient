@@ -13,8 +13,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 //
 const Doctors = () => {
-  const [searchText, setSearchText] = React.useState("");
-  const [openAddView, setOpenAddView] = React.useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [openAddView, setOpenAddView] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [organizations, setOrganizations] = useState([]);
   const [departments, setDepartments] = useState([]);

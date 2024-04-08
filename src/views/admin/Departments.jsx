@@ -9,8 +9,8 @@ import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 const Departments = () => {
-  const [searchText, setSearchText] = React.useState("");
-  const [openAddView, setOpenAddView] = React.useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [openAddView, setOpenAddView] = useState(false);
   const [departments, setDepartments] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [hasMore, setHasMore] = useState(true);

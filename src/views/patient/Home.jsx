@@ -147,7 +147,7 @@ const PatientHome = () => {
             )}
             <InfiniteScroll
               dataLength={doctors.length}
-              next={fetchDoctors}
+              next={()=>fetchDoctors({pSkip: false})}
               hasMore={hasMore}
               loader={
                 <div className="d-flex justify-content-center align-items-center">

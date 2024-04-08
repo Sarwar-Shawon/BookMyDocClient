@@ -9,8 +9,8 @@ import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 const Organizations = () => {
-  const [searchText, setSearchText] = React.useState("");
-  const [openAddView, setOpenAddView] = React.useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [openAddView, setOpenAddView] = useState(false);
   const [organizations, setOrganizations] = useState([]);
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [hasMore, setHasMore] = useState(true);

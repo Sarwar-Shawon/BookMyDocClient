@@ -37,8 +37,8 @@ const NurseAppointmentsTimetable = () => {
 const AppointmentsTimetable = ({selDoc}) => {
   const [timeSlots, setTimeSlots] = useState({});
   const [isLoading, setLoading] = useState(false);
-  const [showNew, setShowNew] = React.useState(false);
-  const [showUpdate, setShowUpdate] = React.useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
   //
   useEffect(() => {
     console.log("selDocselDoc:::",selDoc)
