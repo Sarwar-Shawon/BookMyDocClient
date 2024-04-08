@@ -43,25 +43,38 @@ const AppointmentCard = ({
           style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}
         >
           <FaCalendarAlt style={{ marginRight: "5px" }} />
-          <p className="card-text" style={{ fontWeight: 'bold' }}>{formatDateToString(apt?.apt_date)}</p>
+          <p className="card-text" style={{ fontWeight: "bold" }}>
+            {formatDateToString(apt?.apt_date)}
+          </p>
         </div>
         <div
           style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}
         >
           <FaClock style={{ marginRight: "5px" }} />
-          <p className="card-text" style={{ fontWeight: 'bold' }}>{apt?.timeslot}</p>
+          <p className="card-text" style={{ fontWeight: "bold" }}>
+            {apt?.timeslot}
+          </p>
         </div>
         <div
           style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}
         >
           <FaHospitalUser style={{ marginRight: "5px" }} />
-          <p className="card-text" style={{ fontWeight: 'bold'}}>{apt?.pt?.nhs}</p>
+          <p className="card-text" style={{ fontWeight: "bold" }}>
+            {apt?.pt?.nhs}
+          </p>
         </div>
         <div
           style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}
         >
-          <FaClipboard style={{ marginRight: "5px", color: apt.status == "Pending" ? '#F7C04A' : '#11009E' }} />
-          <p className="card-text" style={{ fontWeight: 'bold'}}>{apt.status}</p>
+          <FaClipboard
+            style={{
+              marginRight: "5px",
+              color: apt.status == "Pending" ? "#F7C04A" : "#11009E",
+            }}
+          />
+          <p className="card-text" style={{ fontWeight: "bold" }}>
+            {apt.status}
+          </p>
         </div>
       </div>
       {/* Accept Button */}
@@ -139,29 +152,31 @@ const AppointmentCard = ({
         </button>
       )}
       {/* Cancel Button */}
-      <button
-        style={{
-          width: "200px",
-          marginBottom: "10px",
-          backgroundColor: "#F05454",
-          borderColor: "#F05454",
-          transition: "background-color 0.3s, border-color 0.3s",
-        }}
-        className="btn btn-primary"
-        onMouseOver={(e) => {
-          e.target.style.backgroundColor = "#C84B31";
-          e.target.style.borderColor = "#C84B31";
-        }}
-        onMouseOut={(e) => {
-          e.target.style.backgroundColor = "#F05454";
-          e.target.style.borderColor = "#F05454";
-        }}
-        onClick={() => {
-          setShowCancelView();
-        }}
-      >
-        Cancel
-      </button>
+      {aptType != "History" && (
+        <button
+          style={{
+            width: "200px",
+            marginBottom: "10px",
+            backgroundColor: "#F05454",
+            borderColor: "#F05454",
+            transition: "background-color 0.3s, border-color 0.3s",
+          }}
+          className="btn btn-primary"
+          onMouseOver={(e) => {
+            e.target.style.backgroundColor = "#C84B31";
+            e.target.style.borderColor = "#C84B31";
+          }}
+          onMouseOut={(e) => {
+            e.target.style.backgroundColor = "#F05454";
+            e.target.style.borderColor = "#F05454";
+          }}
+          onClick={() => {
+            setShowCancelView();
+          }}
+        >
+          Cancel
+        </button>
+      )}
     </div>
   );
 };

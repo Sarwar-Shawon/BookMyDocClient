@@ -18,6 +18,7 @@ const PasswordInput = (props) => {
         <input
           type={props.showPass ? "text" : "password"}
           className="form-control"
+          value={props.password}
           placeholder={props.placeholder || "Enter password"}
           onChange={(e) => props.setPassword(e.target.value)}
           onFocus={props.onFocusDisable ? null : onFocus}

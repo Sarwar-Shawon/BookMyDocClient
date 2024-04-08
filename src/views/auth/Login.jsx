@@ -78,6 +78,7 @@ const Login = () => {
                     type="email"
                     className="form-control"
                     placeholder="Enter email"
+                    value={username}
                     onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
@@ -92,6 +93,7 @@ const Login = () => {
                     type="password"
                     className="form-control"
                     placeholder="Enter password"
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>

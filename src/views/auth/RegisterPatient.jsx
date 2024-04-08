@@ -116,7 +116,6 @@ const SignUp = () => {
   const calculateMinDate = () => {
     const today = new Date();
     const maxDate = new Date(today.getFullYear() - 16, today.getMonth(), today.getDate());
-    console.log("minDateminDateminDate", maxDate)
     return maxDate;
   };
   //
@@ -142,7 +141,9 @@ const SignUp = () => {
                     type="email"
                     className="form-control"
                     placeholder="Enter email"
+                    value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    required
                   />
                 </div>
                 <div className="mb-2">
@@ -236,6 +237,7 @@ const SignUp = () => {
                     placeholder="Enter NHS Id"
                     value={nhsId}
                     onChange={(e) => setNhsId(e.target.value)}
+                    required
                   />
                 </div>
                 <div className="mb-2">
