@@ -175,7 +175,7 @@ const SignUp = () => {
                     placeholder="Enter First Name"
                     value={firstName}
                     onChange={(e) => {
-                      setFirstName(e.target.value.replace(/[^a-zA-Z]/g, ""));
+                      setFirstName(e.target.value.replace(/[^a-zA-Z\s]/g, ""));
                     }}
                   />
                 </div>
@@ -186,7 +186,7 @@ const SignUp = () => {
                     className="form-control"
                     placeholder="Enter Last Name"
                     value={lastName}
-                    onChange={(e) => setLastName(e.target.value.replace(/[^a-zA-Z]/g, ""))}
+                    onChange={(e) => setLastName(e.target.value.replace(/[^a-zA-Z\s]/g, ""))}
                   />
                 </div>
                 <div className="mb-2">
