@@ -18,6 +18,8 @@ import AppCalendar from "../../components/Calendar";
 import DoctorSelection from "./DoctorSelection";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AppointmentCard from "../common/AppointmentCard"
+import AppointmentDetails from "../common/AppointmentDetails";
+
 //
 const NurseAppointments = () => {
   const [selDoc, setSelDoctor] = useState("");
@@ -316,6 +318,16 @@ const AppointmentView = ({ aptType, selDoc }) => {
           onCloseModal={() => setShowResp({})}
         />
       )}
+      {
+        showDetails && 
+        <AppointmentDetails
+          onCloseModal={() => {
+            setShowDetails(false);
+            setSelApt("");
+          }}
+          apt={selApt}
+        />
+      }
     </div>
   );
 };

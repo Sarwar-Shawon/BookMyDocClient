@@ -95,7 +95,7 @@ const AppointmentCard = ({
           e.target.style.backgroundColor = "#279EFF";
           e.target.style.borderColor = "#279EFF";
         }}
-        onClick={() => {}}
+        onClick={() => setShowDetails() }
       >
         See Details
       </button>

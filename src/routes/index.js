@@ -63,7 +63,7 @@ const AppRoutes = () => {
       { path: "/home", element: <NurseHome /> },
       { path: "/appointments", element: <NurseAppointments /> },
       { path: "/timetable", element: <NurseAppointmentsTimetable /> },
-      { path: "/profile", element: <NurseAppointments /> },
+      { path: "/profile", element: <NurseProfile /> },
 
     ],
     Pharmacy: [

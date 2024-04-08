@@ -2,7 +2,7 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { Get, Put } from "../../api";
+import { Get, Put ,searchMedicineByName } from "../../api";
 import { apiUrl, config } from "../../config/appConfig";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
@@ -15,6 +15,7 @@ import AppCalendar from "../../components/Calendar";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AppointmentTabButton from "../common/AppointmentTabButton";
 import AppointmentCard from "../common/AppointmentCard"
+import AppointmentDetails from "../common/AppointmentDetails";
 
 //
 const DoctorAppointments = () => {
@@ -62,6 +63,7 @@ const AppointmentView = ({ aptType }) => {
   const fetchAppointments = async () => {
     try {
       const skip = appointments.length;
+      const asd = await searchMedicineByName('ibuprofen');
       const resp = await Get(
         `${apiUrl()}/doctor/get-appointments?skip=${skip}&status=${aptType}&limit=${
           config.FETCH_LIMIT
@@ -272,6 +274,18 @@ const AppointmentView = ({ aptType }) => {
           onCloseModal={() => setShowResp({})}
         />
       )}
+      
+      {
+        showDetails && 
+        <AppointmentDetails
+          onCloseModal={() => {
+            setShowDetails(false);
+            setSelApt("");
+          }}
+          apt={selApt}
+        />
+      }
+
     </div>
   );
 };

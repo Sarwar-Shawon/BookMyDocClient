@@ -9,23 +9,15 @@ import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import { formatDateToString } from "../../utils";
 import AppCalendar from "../../components/Calendar";
-
-//
-const _days = {
-  monday: false,
-  tuesday: false,
-  wednesday: false,
-  thursday: false,
-  friday: false,
-  saturday: false,
-  sunday: false,
-};
+import AppointmentDetails from "../common/AppointmentDetails";
 //
 const Home = ({ doctorId }) => {
   const [timeSlots, setTimeSlots] = useState({});
   const [isLoading, setLoading] = useState(true);
   const [selDate, setSelDate] = useState(new Date());
+  const [selApt, setSelApt] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   //
   useEffect(() => {
@@ -87,15 +79,31 @@ const Home = ({ doctorId }) => {
             </div>
           )}
           {Object.entries(timeSlots).length > 0 && (
-            <TimeSlotsComponent timeSlotsData={timeSlots} />
+            <TimeSlotsComponent
+              timeSlotsData={timeSlots}
+              setSelApt={(apt) => {
+                setSelApt(apt);
+                setShowDetails(true);
+              }}
+            />
           )}
         </div>
       </div>
+      {
+        showDetails && 
+        <AppointmentDetails
+          onCloseModal={() => {
+            setShowDetails(false);
+            setSelApt("");
+          }}
+          apt={selApt}
+        />
+      }
     </>
   );
 };
 //
-const TimeSlotsComponent = ({ timeSlotsData }) => {
+const TimeSlotsComponent = ({ timeSlotsData,setSelApt }) => {
   return (
     <>
       {Object.entries(timeSlotsData).map(([day, slots]) => (
@@ -107,7 +115,7 @@ const TimeSlotsComponent = ({ timeSlotsData }) => {
                 key={time}
                 className="col"
                 onClick={() => {
-                  console.log("asd");
+                  setSelApt(slot?.apt)
                 }}
               >
                 <div
