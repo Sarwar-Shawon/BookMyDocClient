@@ -7,7 +7,6 @@ import "react-calendar/dist/Calendar.css";
 import "../css/AppCalendar.css";
 //
 const AppCalendar = (props) => {
-
   return (
     <div
       className="modal fade show"

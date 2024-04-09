@@ -8,7 +8,7 @@ import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
-
+import ChnagePasswordView from "../common/ChangePasswordView"
 //
 const DoctorProfile = () => {
   //
@@ -247,7 +247,7 @@ const DoctorProfile = () => {
               e.target.style.backgroundColor = "#0B2447";
               e.target.style.borderColor = "#0B2447";
             }}
-            onClick={() => {}}
+            onClick={() => setShowCngPassModal(true)}
           >
             Chnage Password
           </button>
@@ -265,6 +265,10 @@ const DoctorProfile = () => {
           onCloseModal={() => setShowUpdateModal(false)}
         />
       )}
+      {
+        showCngPassModal &&
+        <ChnagePasswordView onCloseModal={()=> setShowCngPassModal(false)}/>
+      }
     </div>
   );
 };

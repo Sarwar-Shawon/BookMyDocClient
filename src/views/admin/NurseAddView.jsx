@@ -1,7 +1,7 @@
 /*
  * @copyRight by md sarwar hoshen.
  */
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import {
   FaAlignJustify,
@@ -13,13 +13,22 @@ import {
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
-import { Regex } from "../../utils";
+import { Regex, formatDateToString } from "../../utils";
 import { Post, Put } from "../../api";
 import { apiUrl } from "../../config/appConfig";
+import AppCalendar from "../../components/Calendar";
 
-const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNurseList, departments, organizations }) => {
+const NursesAddView = ({
+  onCloseModal,
+  addToNurseList,
+  selectedNurse,
+  updateNurseList,
+  departments,
+  organizations,
+}) => {
   //
   const [errors, setError] = useState({});
+  const [showCalendar, setShowCalendar] = useState(false);
   const [formData, setFormData] = useState({
     nur_email: "",
     f_name: "",
@@ -48,10 +57,10 @@ const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNur
   useEffect(() => {
     const mergedFormData = {
       ...formData,
-      ...selectedNurse, 
+      ...selectedNurse,
     };
-    mergedFormData.dept = selectedNurse?.dept?._id
-    mergedFormData.organization = selectedNurse?.organization?._id
+    mergedFormData.dept = selectedNurse?.dept?._id;
+    mergedFormData.organization = selectedNurse?.organization?._id;
 
     setFormData(mergedFormData);
   }, [selectedNurse]);
@@ -63,8 +72,7 @@ const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNur
         ...formData,
         [name]: value == "true" ? true : false,
       });
-    }
-    else if (name == "img") {
+    } else if (name == "img") {
       setFormData({
         ...formData,
         [name]: e.target.files[0],
@@ -90,9 +98,9 @@ const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNur
     setIsLoading(true);
     e.preventDefault();
     try {
-      if(selectedNurse && selectedNurse._id){
+      if (selectedNurse && selectedNurse._id) {
         await updateNurse();
-      }else{
+      } else {
         await addNewNurse();
       }
     } catch (error) {
@@ -166,7 +174,6 @@ const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNur
         respObj.success = true;
         respObj.msg = resp?.message;
         setShowResp(respObj);
-
       } else {
         respObj.success = false;
         respObj.msg = resp?.error;
@@ -198,19 +205,28 @@ const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNur
     } finally {
     }
   };
-  console.log('fr', formData)
+  //
+  const calculateMaxDate = () => {
+    const today = new Date();
+    const maxDate = new Date(
+      today.getFullYear() - 16,
+      today.getMonth(),
+      today.getDate()
+    );
+    return maxDate;
+  };
+  console.log("fr", formData);
   return (
     <Modal
-      title={selectedNurse ? "Update Nurse": "Add New Nurse"}
+      title={selectedNurse ? "Update Nurse" : "Add New Nurse"}
       body={
         <form onSubmit={handleSubmit} className="row">
-
           <ErrorAlert
-            msg={ !showResp?.success ? showResp?.msg : "" }
+            msg={!showResp?.success ? showResp?.msg : ""}
             hideMsg={() => setShowResp({})}
           />
           <SuccessAlert
-            msg={ showResp?.success ? showResp?.msg : "" }
+            msg={showResp?.success ? showResp?.msg : ""}
             hideMsg={() => setShowResp({})}
           />
 
@@ -253,13 +269,25 @@ const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNur
             </div>
             <div className="mb-3">
               <label className="form-label">Date Of Birth:</label>
-              <input
+              {/* <input
                 type="text"
                 className="form-control"
                 name="dob"
                 value={formData.dob}
                 onChange={handleChange}
-              />
+              /> */}
+              <label
+                className="form-control"
+                style={{
+                  border: "1px solid #ced4da",
+                  borderRadius: "0.25rem",
+                  padding: "0.375rem 0.75rem",
+                  lineHeight: "1.5",
+                }}
+                onClick={() => setShowCalendar(true)}
+              >
+                {formatDateToString(formData.dob) || "dd-mm-yyyy"}
+              </label>
             </div>
             <div className="mb-3">
               <label className="form-label">Phone:</label>
@@ -385,7 +413,9 @@ const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNur
                 <>
                   {departments.length &&
                     departments.map((dept) => (
-                      <option value={dept._id} key={dept._id}>{dept.name}</option>
+                      <option value={dept._id} key={dept._id}>
+                        {dept.name}
+                      </option>
                     ))}
                 </>
               </select>
@@ -403,7 +433,9 @@ const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNur
                 <>
                   {organizations.length &&
                     organizations.map((org) => (
-                      <option value={org._id} key={org._id}>{org.name}</option>
+                      <option value={org._id} key={org._id}>
+                        {org.name}
+                      </option>
                     ))}
                 </>
               </select>
@@ -470,10 +502,23 @@ const NursesAddView = ({ onCloseModal, addToNurseList , selectedNurse, updateNur
                 </button>
               ) : (
                 <button type="submit" className="btn btn-primary">
-                  { selectedNurse ? "Update Nurse" : "Create Account" }
+                  {selectedNurse ? "Update Nurse" : "Create Account"}
                 </button>
               )}
             </div>
+            {showCalendar && (
+              <AppCalendar
+                onCloseModal={() => setShowCalendar(false)}
+                value={formData.dob}
+                onChange={(val) => {
+                  setFormData({
+                    ...formData,
+                    dob: val,
+                  });
+                }}
+                maxDate={calculateMaxDate()}
+              />
+            )}
           </div>
         </form>
       }

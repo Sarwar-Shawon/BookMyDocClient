@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "../../css/login.css";
 import { FaMale, FaFemale, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { PasswordInput } from "../../components/Password";
-import AppCalendar from "../../components/Calendar";
+import AppCalendar from "../../components/Calendar";  
 import moment from "moment";
 import { formatDateToString, setItem, Regex } from "../../utils";
 import { PublicPost } from "../../api";

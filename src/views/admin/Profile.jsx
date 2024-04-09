@@ -8,7 +8,6 @@ import { PasswordInput } from "../../components/Password";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 
 const Profile = () => {
-  const [name, setName] = useState("John Doe"); // Example name
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);

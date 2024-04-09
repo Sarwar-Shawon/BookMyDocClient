@@ -12,10 +12,10 @@ import {
 } from "react-icons/fa";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
-import PLaceAutoComplete from "../../components/PlaceAutoComplete";
-import { Regex } from "../../utils";
-import { Post, Put,Get } from "../../api";
+import { Regex, formatDateToString } from "../../utils";
+import { Post, Put, Get } from "../../api";
 import { apiUrl } from "../../config/appConfig";
+import AppCalendar from "../../components/Calendar";
 
 const DoctorsAddView = ({
   onCloseModal,
@@ -23,10 +23,10 @@ const DoctorsAddView = ({
   selectedDoctor,
   updateDoctorList,
   departments,
-  organizations
-
+  organizations,
 }) => {
   //
+  const [showCalendar, setShowCalendar] = useState(false);
   const [errors, setError] = useState({});
   const [allNurses, setNurses] = useState([]);
   const [formData, setFormData] = useState({
@@ -50,22 +50,29 @@ const DoctorsAddView = ({
     dept: "",
     active: true,
     organization: "",
-    nurses: []
+    nurses: [],
   });
   const [showResp, setShowResp] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   //
   useEffect(() => {
-    setFormData({ ...formData, nurses: selectedDoctor?.nurses ? selectedDoctor?.nurses : [] });
+    setFormData({
+      ...formData,
+      nurses: selectedDoctor?.nurses ? selectedDoctor?.nurses : [],
+    });
     fetchNurses();
-  }, [formData.dept,formData.organization]);
+  }, [formData.dept, formData.organization]);
   //
   const fetchNurses = async () => {
     try {
       if (!formData.dept || !formData.organization) {
         return;
       }
-      const resp = await Get(`${apiUrl()}/admin/getAllNursesByDeptOrg?dept=${formData.dept}&org=${formData.organization}`);
+      const resp = await Get(
+        `${apiUrl()}/admin/getAllNursesByDeptOrg?dept=${formData.dept}&org=${
+          formData.organization
+        }`
+      );
       console.log("fetchNurses:: resp:::", resp);
       if (resp.success) {
         setNurses(resp?.data);
@@ -80,16 +87,16 @@ const DoctorsAddView = ({
       ...formData,
       ...selectedDoctor,
     };
-    mergedFormData.dept = selectedDoctor?.dept?._id
-    mergedFormData.organization = selectedDoctor?.organization?._id
-    mergedFormData.nurses = selectedDoctor?.nurses
+    mergedFormData.dept = selectedDoctor?.dept?._id;
+    mergedFormData.organization = selectedDoctor?.organization?._id;
+    mergedFormData.nurses = selectedDoctor?.nurses;
     setFormData(mergedFormData);
   }, [selectedDoctor]);
   //
   const handleChange = (e) => {
     const { name, value, options } = e.target;
     if (name == "nurses") {
-      console.log(options)
+      console.log(options);
       let selectedNurses = formData.nurses;
       for (let i = 0; i < options.length; i++) {
         if (options[i].selected) {
@@ -214,6 +221,16 @@ const DoctorsAddView = ({
     }
   };
   //
+  const calculateMaxDate = () => {
+    const today = new Date();
+    const maxDate = new Date(
+      today.getFullYear() - 16,
+      today.getMonth(),
+      today.getDate()
+    );
+    return maxDate;
+  };
+  //
   const updateDoctor = async () => {
     try {
       //
@@ -236,7 +253,7 @@ const DoctorsAddView = ({
     }
   };
   //
-  console.log("formdata", formData)
+  console.log("formdata", formData);
   return (
     <Modal
       title={selectedDoctor ? "Update Doctor" : "Add New Doctor"}
@@ -290,13 +307,25 @@ const DoctorsAddView = ({
             </div>
             <div className="mb-3">
               <label className="form-label">Date Of Birth:</label>
-              <input
+              {/* <input
                 type="text"
                 className="form-control"
                 name="dob"
                 value={formData.dob}
                 onChange={handleChange}
-              />
+              /> */}
+              <label
+                className="form-control"
+                style={{
+                  border: "1px solid #ced4da",
+                  borderRadius: "0.25rem",
+                  padding: "0.375rem 0.75rem",
+                  lineHeight: "1.5",
+                }}
+                onClick={() => setShowCalendar(true)}
+              >
+                {formatDateToString(formData.dob) || "dd-mm-yyyy"}
+              </label>
             </div>
             <div className="mb-3">
               <label className="form-label">Phone:</label>
@@ -440,7 +469,7 @@ const DoctorsAddView = ({
               >
                 <option value="">Select Organization</option>
                 <>
-                  {organizations.length >0 &&
+                  {organizations.length > 0 &&
                     organizations.map((org) => (
                       <option value={org._id} key={org._id}>
                         {org.name}
@@ -526,6 +555,19 @@ const DoctorsAddView = ({
               )}
             </div>
           </div>
+          {showCalendar && (
+            <AppCalendar
+              onCloseModal={() => setShowCalendar(false)}
+              value={formData.dob}
+              onChange={(val) => {
+                setFormData({
+                  ...formData,
+                  dob: val,
+                });
+              }}
+              maxDate={calculateMaxDate()}
+            />
+          )}
         </form>
       }
       onCloseModal={onCloseModal}
@@ -539,7 +581,9 @@ const CheckboxSelect = ({ options, selectedValues, onChange }) => {
     const { value } = event.target;
     let updatedSelectedItems = selectedValues ? [...selectedValues] : [];
     if (selectedValues && selectedValues.includes(value)) {
-      updatedSelectedItems = updatedSelectedItems.filter((item) => item !== value);
+      updatedSelectedItems = updatedSelectedItems.filter(
+        (item) => item !== value
+      );
     } else {
       updatedSelectedItems.push(value);
     }
@@ -547,22 +591,24 @@ const CheckboxSelect = ({ options, selectedValues, onChange }) => {
   };
   return (
     <div className="checkbox-container">
-      {
-        !options.length && 
-        <div style={{ fontWeight: 'bold' }}>No Nurses are found</div>
-      }
-      {options.length > 0 && options.map((option) => (
-        <label className="checkbox-label" key={option._id}>
-          <input
-            type="checkbox"
-            className="checkbox-input"
-            value={option._id}
-            checked={selectedValues && selectedValues.includes(option._id)}
-            onChange={handleChange}
-          />
-          <span className="checkbox-text">{[option.f_name, option.l_name].join(" ")}</span>
-        </label>
-      ))}
+      {!options.length && (
+        <div style={{ fontWeight: "bold" }}>No Nurses are found</div>
+      )}
+      {options.length > 0 &&
+        options.map((option) => (
+          <label className="checkbox-label" key={option._id}>
+            <input
+              type="checkbox"
+              className="checkbox-input"
+              value={option._id}
+              checked={selectedValues && selectedValues.includes(option._id)}
+              onChange={handleChange}
+            />
+            <span className="checkbox-text">
+              {[option.f_name, option.l_name].join(" ")}
+            </span>
+          </label>
+        ))}
     </div>
   );
 };
