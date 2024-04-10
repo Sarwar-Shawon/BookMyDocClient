@@ -19,7 +19,7 @@ import AppointmentDetails from "../common/AppointmentDetails";
 
 //
 const DoctorAppointments = () => {
-  const [selType, setSelType] = useState("Pending");
+  const [selType, setSelType] = useState("Accepted");
   //
   return (
     <AppointmentTabButton
@@ -27,7 +27,7 @@ const DoctorAppointments = () => {
       setSelType={setSelType}
       body={
         <>
-          {selType === "Pending" && <AppointmentView aptType={selType} />}
+          {/* {selType === "Pending" && <AppointmentView aptType={selType} />} */}
           {selType === "Accepted" && <AppointmentView aptType={selType} />}
           {selType === "History" && <HistoryView aptType={selType} />}
         </>

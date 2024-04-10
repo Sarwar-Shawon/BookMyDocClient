@@ -18,19 +18,21 @@ const AppointmentTabButton = ({ selType, setSelType , body }) => {
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
             }}
           >
-            <TabButton
+            {/* <TabButton
               title="Pending"
               selType={selType}
               style={{ borderBottomLeftRadius: "5px" }}
               setSelType={setSelType}
-            />
+            /> */}
             <TabButton
-              title="Accepted"
+              title="Upcoming Appointmetns"
+              val="Accepted"
               selType={selType}
               setSelType={setSelType}
             />
             <TabButton
               title="History"
+              val="History"
               selType={selType}
               setSelType={setSelType}
               style={{ borderBottomRightRadius: "5px" }}
@@ -45,11 +47,11 @@ const AppointmentTabButton = ({ selType, setSelType , body }) => {
   );
 };
 //
-const TabButton = ({ title, selType, setSelType, style }) => (
+const TabButton = ({ title, selType, setSelType, style,val }) => (
   <div className="button-container">
     <button
-      className={`tab-button ${selType === title ? "active" : ""}`}
-      onClick={() => setSelType(title)}
+      className={`tab-button ${selType === val ? "active" : ""}`}
+      onClick={() => setSelType(val)}
       style={style}
     >
       {title}

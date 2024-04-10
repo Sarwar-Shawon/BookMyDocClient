@@ -9,6 +9,7 @@ import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import TimetableAdd from "./TimeTableAdd";
 import TimetableUpdate from "./TimeTableUpdate";
+import DoctorHolidayView from "../common/DoctorHolidayView";
 //
 const _days = {
   monday: false,
@@ -25,6 +26,7 @@ const AppointmentsTimetable = ({ doctorId }) => {
   const [isLoading, setLoading] = useState(true);
   const [showNew, setShowNew] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
+  const [showHoliday, setShowHoliday] = useState(false);
 
   //
   useEffect(() => {
@@ -62,6 +64,30 @@ const AppointmentsTimetable = ({ doctorId }) => {
               justifyContent: "flex-end",
             }}
           >
+           <button
+              style={{
+                width: "200px",
+                backgroundColor: "#0B2447",
+                borderColor: "#0B2447",
+                transition: "background-color 0.3s, border-color 0.3s",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                marginRight: '5px'
+              }}
+              className="btn btn-primary"
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = "#1a4a8a";
+                e.target.style.borderColor = "#1a4a8a";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = "#0B2447";
+                e.target.style.borderColor = "#0B2447";
+              }}
+              onClick={() => {
+                setShowHoliday(true)
+              }}
+            >
+              Manage Holidays
+            </button>
             <button
               style={{
                 width: "200px",
@@ -119,6 +145,16 @@ const AppointmentsTimetable = ({ doctorId }) => {
           setTimeSlots={(val) => setTimeSlots(val)}
         />
       )}
+      {showHoliday && (
+        <DoctorHolidayView
+          onCloseModal={() => {
+            setShowHoliday(false);
+          }}
+          title={"Manage Holiday"}
+          timeSlots={timeSlots}
+          setTimeSlots={(val) => setTimeSlots(val)}
+        />
+      )}
     </>
   );
 };
@@ -153,5 +189,4 @@ const TimeSlotsComponent = ({ timeSlotsData }) => {
     </>
   );
 };
-//
 export default AppointmentsTimetable;

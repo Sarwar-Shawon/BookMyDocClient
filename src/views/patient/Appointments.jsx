@@ -15,7 +15,7 @@ import TimeSlotView from "../common/TimeSlotView";
 import InfiniteScroll from "react-infinite-scroll-component";
 //
 const PatientAppointments = () => {
-  const [selType, setSelType] = useState("Pending");
+  const [selType, setSelType] = useState("Accepted");
   //
   return (
     <div className="container-fluid">
@@ -25,17 +25,20 @@ const PatientAppointments = () => {
             className="d-flex justify-content-between align-items-center mb-3"
             style={{ borderBottom: "1px solid #ccc", paddingBottom: "10px" }}
           >
-            <TabButton
+           {/*  <TabButton
               title="Pending"
+              val="Pending"
+              selType={selType}
+              setSelType={setSelType}
+            /> */}
+            <TabButton
+              title="Upcoming Appointments"
+              val="Accepted"
               selType={selType}
               setSelType={setSelType}
             />
             <TabButton
-              title="Accepted"
-              selType={selType}
-              setSelType={setSelType}
-            />
-            <TabButton
+              val="History"
               title="History"
               selType={selType}
               setSelType={setSelType}
@@ -44,7 +47,7 @@ const PatientAppointments = () => {
         </div>
       </div>
       <>
-        {selType === "Pending" && <AppointmentView selType={selType} />}
+        {/* {selType === "Pending" && <AppointmentView selType={selType} />} */}
         {selType === "Accepted" && <AppointmentView selType={selType} />}
         {selType === "History" && <HistoryView selType={selType} />}
       </>
@@ -52,11 +55,11 @@ const PatientAppointments = () => {
   );
 };
 //
-const TabButton = ({ title, selType, setSelType }) => (
+const TabButton = ({ title, selType, setSelType,val }) => (
   <div className="button-container">
     <button
-      className={`tab-button ${selType === title ? "active" : ""}`}
-      onClick={() => setSelType(title)}
+      className={`tab-button ${selType === val ? "active" : ""}`}
+      onClick={() => setSelType(val)}
     >
       {title}
     </button>
@@ -302,7 +305,7 @@ const AppointmentCard = ({
         <p className="card-text">
           {formatDateToString(apt?.apt_date) + " " + apt?.timeslot}
         </p>
-        <p className="card-text">{"Status: " + apt.status}</p>
+        {/* <p className="card-text">{"Status: " + apt.status}</p> */}
         <p className="card-text">{apt?.org?.name}</p>
         <p className="card-text">{apt?.org?.addr.formatted_address}</p>
       </div>

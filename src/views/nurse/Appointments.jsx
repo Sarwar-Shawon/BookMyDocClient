@@ -23,7 +23,7 @@ import AppointmentDetails from "../common/AppointmentDetails";
 //
 const NurseAppointments = () => {
   const [selDoc, setSelDoctor] = useState("");
-  const [selType, setSelType] = useState("Pending");
+  const [selType, setSelType] = useState("Accepted");
   //
   return (
     <div className="container-fluid">
@@ -34,17 +34,20 @@ const NurseAppointments = () => {
             className="d-flex justify-content-between align-items-center mb-3"
             style={{ borderBottom: "1px solid #ccc", paddingBottom: "10px" }}
           >
-            <TabButton
+            {/* <TabButton
+              val="Pending"
               title="Pending"
               selType={selType}
               setSelType={setSelType}
-            />
+            /> */}
             <TabButton
-              title="Accepted"
+              val="Accepted"
+              title="Upcoming Appointments"
               selType={selType}
               setSelType={setSelType}
             />
             <TabButton
+              val="History"
               title="History"
               selType={selType}
               setSelType={setSelType}
@@ -53,9 +56,9 @@ const NurseAppointments = () => {
         </div>
       </div>
       <>
-        {selType === "Pending" && (
+        {/* {selType === "Pending" && (
           <AppointmentView aptType={selType} selDoc={selDoc} />
-        )}
+        )} */}
         {selType === "Accepted" && (
           <AppointmentView aptType={selType} selDoc={selDoc} />
         )}
@@ -67,11 +70,11 @@ const NurseAppointments = () => {
   );
 };
 //
-const TabButton = ({ title, selType, setSelType }) => (
+const TabButton = ({ title, selType, setSelType, val }) => (
   <div className="button-container">
     <button
-      className={`tab-button ${selType === title ? "active" : ""}`}
-      onClick={() => setSelType(title)}
+      className={`tab-button ${selType === val ? "active" : ""}`}
+      onClick={() => setSelType(val)}
     >
       {title}
     </button>

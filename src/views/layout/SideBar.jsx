@@ -20,6 +20,7 @@ const AppRoutes = {
     { name: "Appointments", path: "/appointments" },
     { name: "Prescriptions", path: "/prescriptions" },
     { name: "Timetable", path: "/timetable" },
+    { name: "Holidays", path: "/holidays" },
     { name: "Profile", path: "/profile" },
   ],
   Patient: [
