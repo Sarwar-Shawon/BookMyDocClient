@@ -61,7 +61,7 @@ const Holidays = ({ doctorId }) => {
         newHolidays.push({
           start_date: formatDateToString(formData.start_date),
           end_date: formatDateToString(formData.end_date),
-          _id: new Date().getTime(),
+          _id: [formData.start_date.getTime() , formData.end_date.getTime() ].join(":"),
         });
       }
     //   if (type == "update") {
@@ -97,6 +97,7 @@ const Holidays = ({ doctorId }) => {
     } catch (err) {
     } finally {
       setBtnLoading(false);
+      setShowHoliday(false);
     }
   };
   //
@@ -166,8 +167,8 @@ const Holidays = ({ doctorId }) => {
               <tbody>
                 {holidays.map((item) => (
                   <tr key={item._id}>
-                    <td className="align-middle">{item?.start_date}</td>
-                    <td className="align-middle">{item?.end_date}</td>
+                    <td className="align-middle">{formattedDate(item?.start_date)}</td>
+                    <td className="align-middle">{formattedDate(item?.end_date)}</td>
                     <td className="align-middle">{calculateTotalDays(item?.start_date , item?.end_date)}</td>
                     <td className="align-middle">
                       {/* <button
@@ -223,6 +224,7 @@ const Holidays = ({ doctorId }) => {
               formData: {},
               selHoliday: selHoliday,
             });
+            sethowCancelModal(false);
           }}
           showFooter={true}
           onCloseModal={() => sethowCancelModal(false)}
