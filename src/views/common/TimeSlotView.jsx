@@ -17,7 +17,7 @@ const TimeSlotView = ({
   setFormData,
   apt,
   errors,
-  user_type
+  user_type,
 }) => {
   const [showCalendar, setShowCalendar] = useState(false);
   //
@@ -53,22 +53,31 @@ const TimeSlotView = ({
           </p>
         )}
         {Object.entries(timeSlots).length > 0 ? (
-          <TimeSlotsComponent
-            timeSlotsData={timeSlots}
-            setTimeSlot={(val) => {
-              setFormData((prevFormData) => {
-                const newTimeslot = prevFormData.timeslot === val ? "" : val;
-                return {
-                  ...prevFormData,
-                  timeslot: newTimeslot,
-                };
-              });
-            }}
-            aptId={apt?._id}
-            aptTimeslot={apt?.timeslot}
-            val={formData.timeslot}
-            user_type={user_type}
-          />
+          <div className="row mt-4">
+            <div className="col-lg-12">
+              <div className="card">
+                <div className="card-body time-table-list">
+                  <TimeSlotsComponent
+                    timeSlotsData={timeSlots}
+                    setTimeSlot={(val) => {
+                      setFormData((prevFormData) => {
+                        const newTimeslot =
+                          prevFormData.timeslot === val ? "" : val;
+                        return {
+                          ...prevFormData,
+                          timeslot: newTimeslot,
+                        };
+                      });
+                    }}
+                    aptId={apt?._id}
+                    aptTimeslot={apt?.timeslot}
+                    val={formData.timeslot}
+                    user_type={user_type}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
           <div className="container-fluid d-flex justify-content-center align-items-center">
             <img src={noData} className="no-data-img" alt="No data found" />
@@ -80,19 +89,22 @@ const TimeSlotView = ({
           onCloseModal={() => setShowCalendar(false)}
           value={formData.apt_date}
           onChange={(val) => {
-            if(apt?.apt_date){
+            if (apt?.apt_date) {
               const date1 = new Date(new Date(val).setHours(0, 0, 0, 0));
-              const date2 = new Date(new Date(apt?.apt_date).setHours(0, 0, 0, 0));
+              const date2 = new Date(
+                new Date(apt?.apt_date).setHours(0, 0, 0, 0)
+              );
               setFormData({
-                  ...formData,
-                  apt_date: new Date(val),
-                  timeslot: date1.getTime() === date2.getTime() ? apt.timeslot : ""
+                ...formData,
+                apt_date: new Date(val),
+                timeslot:
+                  date1.getTime() === date2.getTime() ? apt.timeslot : "",
               });
-            }else{
+            } else {
               setFormData({
-                  ...formData,
-                  apt_date: new Date(val),
-                  timeslot: ""
+                ...formData,
+                apt_date: new Date(val),
+                timeslot: "",
               });
             }
             setShowCalendar(false);
@@ -104,13 +116,22 @@ const TimeSlotView = ({
   );
 };
 //
-const TimeSlotsComponent = ({ timeSlotsData, setTimeSlot, val, aptId, user_type,aptTimeslot }) => {
+const TimeSlotsComponent = ({
+  timeSlotsData,
+  setTimeSlot,
+  val,
+  aptId,
+  user_type,
+  aptTimeslot,
+}) => {
   return (
     <div className="mb-4">
       <div className="row row-cols-2 row-cols-md-4 g-3">
         {Object.entries(timeSlotsData).map(
           ([time, slot]) =>
-          ( (user_type=== "doctor" && slot?.aptId && slot?.aptId == aptId) || (user_type === "patient" && aptId && time == aptTimeslot) || slot.active) && (
+            ((user_type === "doctor" && slot?.aptId && slot?.aptId == aptId) ||
+              (user_type === "patient" && aptId && time == aptTimeslot) ||
+              slot.active) && (
               <div
                 key={time}
                 className="col"
@@ -119,9 +140,10 @@ const TimeSlotsComponent = ({ timeSlotsData, setTimeSlot, val, aptId, user_type,
                 }}
               >
                 <div
-                  className={`card ${slot.active ? "active" : ""}`}
+                  className={`card justify-content-center align-items-center ${slot.active ? "active" : ""}`}
                   style={{
-                    backgroundColor: val == time ? "#5C8374" : "#818FB4",
+                    backgroundColor: val == time ? "#4FB783" : "#404B69",
+                    color: '#ffffff'
                   }}
                 >
                   <div className="card-body">

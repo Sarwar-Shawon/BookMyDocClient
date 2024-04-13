@@ -249,3 +249,13 @@ button.btn-primary:hover {
     font-size: 18px;
     color: #000;
 }
+
+.time-table-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.medicine-list {
+    max-height: 300px;
+    overflow-y: auto;
+}

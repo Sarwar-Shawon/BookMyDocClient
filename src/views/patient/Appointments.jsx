@@ -478,8 +478,8 @@ const UpdateModal = ({
       body={
         <div>
           {isLoading && (
-            <div className="wrapper d-grid place-items: center">
-              <div className="loading-container">
+            <div className="wrapper-wo-bg d-grid place-items: center">
+              <div className="loading-container-wo-bg">
                 <div className="spinner"></div>
               </div>
             </div>

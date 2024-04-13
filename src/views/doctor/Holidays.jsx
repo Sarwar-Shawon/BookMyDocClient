@@ -13,16 +13,6 @@ import moment from "moment";
 import Modal from "../../components/Modal";
 
 //
-const _days = {
-  monday: false,
-  tuesday: false,
-  wednesday: false,
-  thursday: false,
-  friday: false,
-  saturday: false,
-  sunday: false,
-};
-//
 const Holidays = ({ doctorId }) => {
   const [holidays, setHolidays] = useState([]);
   const [showHoliday, setShowHoliday] = useState(false);

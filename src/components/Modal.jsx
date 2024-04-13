@@ -14,7 +14,7 @@ const Modal = (props) => {
       aria-hidden="true"
       style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
     >
-      <div className={`modal-dialog modal-dialog-centered ${props.big ? "modal-lg" : ""}`} role="document">
+      <div className={`modal-dialog modal-dialog-centered ${props.big ? "modal-lg" : ""} ${props.bigger ? "modal-xl" : ""}`} role="document">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLongTitle">

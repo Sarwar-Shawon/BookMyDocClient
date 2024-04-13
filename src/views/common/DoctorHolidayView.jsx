@@ -95,7 +95,7 @@ const DoctorHolidayView = ({ onCloseModal, title , updateHolidays , selHoliday})
                         updateHolidays({type: 'add' , formData })
                     }}
                   >
-                    {"Add Holiday"}
+                    {selHoliday ? "Update Holiday" : "Add Holiday"}
                   </button>
                 </div>
               </div>

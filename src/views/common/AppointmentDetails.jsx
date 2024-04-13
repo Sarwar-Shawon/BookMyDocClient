@@ -79,7 +79,7 @@ const AppointmentDetails = ({ apt, onCloseModal }) => {
                 {apt?.timeslot}
               </label>
             </div>
-            <div className="mb-3">
+            {/* <div className="mb-3">
               <label className="form-label">Appointment Status:</label>
               <label
                 className="form-control"
@@ -93,7 +93,7 @@ const AppointmentDetails = ({ apt, onCloseModal }) => {
                 />
                 {apt?.status}
               </label>
-            </div>
+            </div> */}
             <div className="mb-3">
               <label className="form-label">Department:</label>
               <label
