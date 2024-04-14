@@ -289,6 +289,9 @@ const Doctors = () => {
                   </h5>
                   <p className="card-text">{doctor?.dept?.name}</p>
                   <p className="card-text">
+                    {doctor?.organization?.name}
+                  </p>
+                  <p className="card-text">
                     {doctor.active ? "Active" : "Inactive"}
                   </p>
                 </div>

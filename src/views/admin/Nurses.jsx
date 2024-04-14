@@ -295,6 +295,9 @@ const Nurses = () => {
                   </h5>
                   <p className="card-text">{nurse?.dept?.name}</p>
                   <p className="card-text">
+                    {nurse?.organization?.name}
+                  </p>
+                  <p className="card-text">
                     {nurse.active ? "Active" : "Inactive"}
                   </p>
                 </div>
