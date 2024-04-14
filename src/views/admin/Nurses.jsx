@@ -21,20 +21,29 @@ const Nurses = () => {
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [selDept, setSelDept] = useState("");
+  const [selOrg, setSelOrg] = useState("");
   //
   useEffect(() => {
     fetchOrganizations();
     fetchDepartments();
-    fetchNurses();
   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setNurses([]);
+      await fetchNurses(true);
+    };
+    fetchData();
+  }, [selDept, selOrg]);
   //
-  const fetchNurses = async () => {
+  const fetchNurses = async (pSkip) => {
     try {
       setLoading(true);
       const limit = 5;
-      const skip = nurses.length;
+      const skip = pSkip ? 0 : nurses.length;
       const resp = await Get(
-        `${apiUrl()}/admin/getAllNurses?skip=${skip}&limit=15`
+        `${apiUrl()}/admin/getAllNurses?skip=${skip}&limit=15&dept=${selDept}&org=${selOrg}`
       );
       console.log("resp:::", resp);
       if (resp.success) {
@@ -108,7 +117,7 @@ const Nurses = () => {
   //
   return (
     <div className="container-fluid">
-      <div className="row">
+      {/* <div className="row">
         <div className="col">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <div
@@ -118,7 +127,7 @@ const Nurses = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Search Doctor"
+                placeholder="Search Nurse"
                 onChange={handleSearchChange}
                 style={{ height: "38px" }}
               />
@@ -166,6 +175,76 @@ const Nurses = () => {
               Add New Nurse
             </button>
           </div>
+        </div>
+      </div> */}
+      <div className="row">
+        <div className="col">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div className="mb-3">
+              <label className="form-label">Organization:</label>
+              <select
+                className="form-select"
+                name="selOrg"
+                value={selOrg}
+                onChange={(e) => setSelOrg(e.target.value)}
+                required
+              >
+                <option value="">All Organizations</option>
+                <>
+                  {organizations.length &&
+                    organizations.map((org) => (
+                      <option value={org._id} key={org._id}>
+                        {org.name}
+                      </option>
+                    ))}
+                </>
+              </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Department:</label>
+              <select
+                className="form-select"
+                name="selDept"
+                value={selDept}
+                onChange={(e) => setSelDept(e.target.value)}
+                required
+              >
+                <option value="">All Departments</option>
+                <>
+                  {departments.length &&
+                    departments.map((dept) => (
+                      <option value={dept._id} key={dept._id}>
+                        {dept.name}
+                      </option>
+                    ))}
+                </>
+              </select>
+            </div>
+            <div className="mb-3">
+            <button
+              style={{
+                width: "200px",
+                marginRight: 10,
+                backgroundColor: "#0B2447",
+                borderColor: "#0B2447",
+                transition: "background-color 0.3s, border-color 0.3s",
+              }}
+              className="btn btn-primary"
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = "#1a4a8a";
+                e.target.style.borderColor = "#1a4a8a";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = "#0B2447";
+                e.target.style.borderColor = "#0B2447";
+              }}
+              onClick={() => setOpenAddView(true)}
+            >
+              Add New Nurse
+            </button>
+            </div>
+          </div>
+          
         </div>
       </div>
       <div className="doctor-list d-flex flex-wrap">

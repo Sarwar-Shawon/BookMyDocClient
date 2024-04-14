@@ -98,7 +98,7 @@ const Pharmacies = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Search Doctor"
+                placeholder="Search Pharmacy"
                 onChange={handleSearchChange}
                 style={{ height: "38px" }}
               />

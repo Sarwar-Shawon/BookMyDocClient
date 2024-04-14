@@ -16,7 +16,6 @@ import { Regex, formatDateToString } from "../../utils";
 import { Post, Put, Get } from "../../api";
 import { apiUrl } from "../../config/appConfig";
 import AppCalendar from "../../components/Calendar";
-
 const DoctorsAddView = ({
   onCloseModal,
   addToDoctorList,

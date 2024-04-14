@@ -14,6 +14,32 @@ import "react-calendar/dist/Calendar.css";
 import "./medicine-suggestions.css";
 import { formatDateToString } from "../../utils";
 import Autosuggest from "react-autosuggest";
+const dose = ["150ml", "250ml"];
+const prescriptionInstructions = [
+    "Before meals",
+    "Use as much as desired",
+    "Twice a day",
+    "With food",
+    "Every other day",
+    "After meals",
+    "Every other day",
+    "Every day",
+    "Every hour",
+    "Every night at bedtime",
+    "Every three hours",
+    "Four times a day",
+    "Every week",
+    "Three times a day",
+    "Times",
+    "Daily",
+    "Morning",
+    "Twice daily, 12-hrly",
+    "Three times daily, 8-hrly",
+    "Four times daily, 6-hrly",
+    "Six times daily, 4-hrly",
+    "As required",
+    "With/after food",
+];
 
 //
 const PrescriptionCreateView = ({
@@ -29,14 +55,14 @@ const PrescriptionCreateView = ({
   };
   //
   const [medicineList, setMedicineList] = useState([
-    { name: "Medicine 1", dose: "10mg", timing: "Morning", quantity: 0 },
-    { name: "Medicine 2", dose: "20mg", timing: "Evening", quantity: 0 },
+    { name: "Medicine 1", dose: "10mg", timing: "Morning", supply: 0 }
   ]);
+  const [suggestions, setSuggestions] = useState([]);
   //
   const handleAddMedicine = () => {
     setMedicineList([
       ...medicineList,
-      { name: "", dose: "", timing: "", quantity: "" },
+      { name: "", dose: "", timing: "", supply: "" },
     ]);
   };
   //
@@ -58,23 +84,40 @@ const PrescriptionCreateView = ({
     clinic: "ABC Clinic",
   };
   //
-  const getSuggestions = (value) => {
+  const getSuggestions = async (value) => {
     try {
       //
+      const resp = await Get(
+        `${apiUrl()}/doctor/get-medicine-suggestions?search_text=${value}`
+      );
+      console.log("resp:::", resp?.data);
+      if (resp.success) {
+        return resp?.data;
+      }
       const suggestions = [
-        { name: "Medicine 1", dose: "10mg", timing: "Morning", quantity: "1" },
-        { name: "Medicine 2", dose: "20mg", timing: "Evening", quantity: "2" },
+        {
+          genericName: "Medicine 1",
+          dose: "10mg",
+          timing: "Morning",
+          quantity: "1",
+        },
+        {
+          genericName: "Medicine 2",
+          dose: "20mg",
+          timing: "Evening",
+          quantity: "2",
+        },
       ];
       return suggestions.filter((medicine) =>
-        medicine.name.toLowerCase().includes(value.toLowerCase())
+        medicine.genericName.toLowerCase().includes(value.toLowerCase())
       );
     } catch (err) {
     } finally {
     }
   };
-
-  const renderSuggestion = (suggestion) => <div>{suggestion.name}</div>;
-
+  //
+  const renderSuggestion = (suggestion) => <div>{suggestion.genericName}</div>;
+  //
   const handleSuggestionSelected = (event, { suggestion, method }) => {
     if (method === "click" || method === "enter") {
       handleMedicineChange(medicineList.length - 1, "name", suggestion.name);
@@ -97,9 +140,8 @@ const PrescriptionCreateView = ({
       title={title}
       body={
         <div className="container">
-          <div className="row">
+          {/* <div className="row">
             <div className="col-lg-4">
-              {/* Patient Details */}
               <div className="card">
                 <div className="card-header">Patient</div>
                 <div className="card-body">
@@ -110,7 +152,6 @@ const PrescriptionCreateView = ({
               </div>
             </div>
             <div className="col-lg-4">
-              {/* Doctor Details */}
               <div className="card">
                 <div className="card-header">Doctor</div>
                 <div className="card-body">
@@ -121,7 +162,6 @@ const PrescriptionCreateView = ({
               </div>
             </div>
             <div className="col-lg-4">
-              {/* Pharmacy Details */}
               <div className="card">
                 <div className="card-header">Pharmacy</div>
                 <div className="card-body">
@@ -131,7 +171,7 @@ const PrescriptionCreateView = ({
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           {/* Medicine List */}
           <div className="row mt-4">
             <div className="col-lg-12">
@@ -152,7 +192,7 @@ const PrescriptionCreateView = ({
                         <th>Name</th>
                         <th>Dose</th>
                         <th>Timing</th>
-                        <th>Quantity</th>
+                        <th>Supply</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -161,11 +201,26 @@ const PrescriptionCreateView = ({
                         <tr key={index}>
                           <td>
                             <Autosuggest
-                              suggestions={getSuggestions(medicine.name)}
-                              onSuggestionsFetchRequested={({ value }) => {}}
-                              onSuggestionsClearRequested={() => {}}
+                              suggestions={suggestions}
+                              onSuggestionsFetchRequested={({ value }) => {
+                                getSuggestions(value)
+                                  .then((suggestions) => {
+                                    console.log("suggestions", suggestions);
+                                    setSuggestions(suggestions);
+                                  })
+                                  .catch((error) => {
+                                    console.error(
+                                      "Error fetching suggestions:",
+                                      error
+                                    );
+                                    // Handle error
+                                  });
+                              }}
+                              onSuggestionsClearRequested={() =>
+                                setSuggestions([])
+                              }
                               getSuggestionValue={(suggestion) =>
-                                suggestion.name
+                                suggestion.genericName
                               }
                               renderSuggestion={renderSuggestion}
                               inputProps={{
@@ -188,7 +243,28 @@ const PrescriptionCreateView = ({
                             /> */}
                           </td>
                           <td>
-                            <input
+                            <select
+                              className="form-select"
+                              name="dose"
+                              value={medicine.dose}
+                              onChange={(e) =>
+                                handleMedicineChange(
+                                  index,
+                                  "dose",
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <>
+                                {dose.length > 0 &&
+                                  dose.map((_dose) => (
+                                    <option value={_dose} key={_dose}>
+                                      {_dose}
+                                    </option>
+                                  ))}
+                              </>
+                            </select>
+                            {/* <input
                               type="text"
                               value={medicine.dose}
                               onChange={(e) =>
@@ -199,10 +275,31 @@ const PrescriptionCreateView = ({
                                 )
                               }
                               style={{ width: "80px" }}
-                            />
+                            /> */}
                           </td>
                           <td>
-                            <input
+                            <select
+                              className="form-select"
+                              name="dose"
+                              value={medicine.timing}
+                              onChange={(e) =>
+                                handleMedicineChange(
+                                  index,
+                                  "timing",
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <>
+                                {prescriptionInstructions.length > 0 &&
+                                    prescriptionInstructions.map((item) => (
+                                    <option value={item} key={item}>
+                                      {item}
+                                    </option>
+                                  ))}
+                              </>
+                            </select>
+                            {/* <input
                               type="text"
                               value={medicine.timing}
                               onChange={(e) =>
@@ -212,17 +309,18 @@ const PrescriptionCreateView = ({
                                   e.target.value
                                 )
                               }
-                            />
+                            /> */}
                           </td>
                           <td>
                             <input
+                              className="form-control"
                               type="text"
-                              value={medicine.quantity}
+                              value={medicine.supply}
                               style={{ width: "50px" }}
                               onChange={(e) =>
                                 handleMedicineChange(
                                   index,
-                                  "quantity",
+                                  "supply",
                                   e.target.value
                                 )
                               }
@@ -244,7 +342,7 @@ const PrescriptionCreateView = ({
               </div>
             </div>
           </div>
-          <div className="row mt-4">
+          {/* <div className="row mt-4">
             <div className="col-lg-12">
               <div className="card">
                 <div className="card-header">
@@ -252,7 +350,7 @@ const PrescriptionCreateView = ({
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="row mt-4">
             <div className="col-lg-12">
               <div className="d-grid">

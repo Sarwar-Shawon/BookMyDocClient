@@ -68,43 +68,10 @@ const Organizations = () => {
     <div className="container-fluid">
       <div className="row">
       <div className="col">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <div
-              className="input-group flex-grow-1"
-              style={{ marginRight: "10px" }}
-            >
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search Doctor"
-                onChange={handleSearchChange}
-                style={{ height: "38px" }}
-              />
-            </div>
+          <div className="d-flex justify-content-end align-items-center mb-3">
             <button
               style={{
-                width: "100px",
-                marginRight: 10,
-                backgroundColor: "#0B2447",
-                borderColor: "#0B2447",
-                transition: "background-color 0.3s, border-color 0.3s",
-              }}
-              className="btn btn-primary"
-              onClick={() => {}}
-              onMouseOver={(e) => {
-                e.target.style.backgroundColor = "#1a4a8a";
-                e.target.style.borderColor = "#1a4a8a";
-              }}
-              onMouseOut={(e) => {
-                e.target.style.backgroundColor = "#0B2447";
-                e.target.style.borderColor = "#0B2447";
-              }}
-            >
-              Search
-            </button>
-            <button
-              style={{
-                width: "250px",
+                width: "200px",
                 marginRight: 10,
                 backgroundColor: "#0B2447",
                 borderColor: "#0B2447",

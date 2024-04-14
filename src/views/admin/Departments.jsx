@@ -38,8 +38,6 @@ const Departments = () => {
     }
   };
   //
-
-  //
   const addToDepartmentList = async ({ newDept }) => {
     try {
       setDepartments((prevDepartments) => [...prevDepartments, ...newDept]);
@@ -70,8 +68,8 @@ const Departments = () => {
     <div className="container-fluid">
       <div className="row">
       <div className="col">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <div
+          <div className="d-flex justify-content-end align-items-center mb-3">
+            {/* <div
               className="input-group flex-grow-1"
               style={{ marginRight: "10px" }}
             >
@@ -103,10 +101,10 @@ const Departments = () => {
               }}
             >
               Search
-            </button>
+            </button> */}
             <button
               style={{
-                width: "250px",
+                width: "200px",
                 marginRight: 10,
                 backgroundColor: "#0B2447",
                 borderColor: "#0B2447",
