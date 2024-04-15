@@ -63,7 +63,7 @@ const AppointmentCard = ({
             {apt?.pt?.nhs}
           </p>
         </div>
-        <div
+        {/* <div
           style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}
         >
           <FaClipboard
@@ -75,7 +75,7 @@ const AppointmentCard = ({
           <p className="card-text" style={{ fontWeight: "bold" }}>
             {apt.status}
           </p>
-        </div>
+        </div> */}
       </div>
       {/* Accept Button */}
       <button

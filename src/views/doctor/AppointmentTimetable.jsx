@@ -135,7 +135,7 @@ const TimeSlotsComponent = ({ timeSlotsData }) => {
                 <div
                   className={`card `}
                   style={{
-                    backgroundColor: slot.active ? "#1874C3" : "#404B69",
+                    backgroundColor: slot.active ? "#818FB4" : "#5C8374",
                   }}
                 >
                   {/* <button type="button" className="btn-close bg-danger" aria-label="Close" style={{ position: 'absolute', top: '15px', right: '10px' }} /> */}
