@@ -109,6 +109,22 @@ const PrescriptionCreateView = ({
   //
   const renderSuggestion = (suggestion) => <div>{suggestion.genericName}</div>;
   //
+  const createNewPrescription = async () => {
+    try {
+      //
+      const resp = await Post(`${apiUrl()}/doctor/create-prescription`, {});
+      console.log("resp:::", resp);
+      const respObj = {};
+      if (resp.success) {
+        
+      } else {
+        
+      }
+    } catch (err) {
+    } finally {
+    }
+  };
+  //
   return (
     <Modal
       title={title}
@@ -176,6 +192,7 @@ const PrescriptionCreateView = ({
                                 value: medicine.name,
                                 onChange: (e, { newValue }) =>
                                   handleMedicineChange(index, "name", newValue),
+                                className: "form-control"
                               }}
                             />
                         
@@ -262,6 +279,7 @@ const PrescriptionCreateView = ({
                               <input
                                 className="form-control"
                                 type="text"
+                                placeholder="Type Instruction"
                                 value={medicine.extra_instruction}
                                 onChange={(e) =>
                                   handleMedicineChange(
@@ -406,13 +424,17 @@ const PrescriptionPreview = ({onCloseModal , medicineList}) => {
                           </p>
                           {item.instruction && (
                             <p>
-                              <strong>Instruction:</strong> {item.instruction} {item.extra_instruction ? item.extra_instruction : ""}
-
+                              <strong>Instruction:</strong> {item.instruction}{" "}
+                              {item.extra_instruction
+                                ? item.extra_instruction
+                                : ""}
                             </p>
                           )}
-                          <p>
-                            <strong>Supply:</strong> {item.supply}
-                          </p>
+                          {item.supply && (
+                            <p>
+                              <strong>Supply:</strong> {item.supply}
+                            </p>
+                          )}
                         </div>
                       ))
                     ) : (

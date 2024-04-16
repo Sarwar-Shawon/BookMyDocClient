@@ -588,6 +588,10 @@ const HistoryView = ({ aptType }) => {
                       key={apt._id}
                       apt={apt}
                       aptType={aptType}
+                      setShowDetails={() => {
+                        setSelApt(apt);
+                        setShowDetails(true);
+                      }}
                     />
                   );
                 })}
@@ -595,6 +599,16 @@ const HistoryView = ({ aptType }) => {
           </>
         )}
       </div>
+      {
+        showDetails && 
+        <AppointmentDetails
+          onCloseModal={() => {
+            setShowDetails(false);
+            setSelApt("");
+          }}
+          apt={selApt}
+        />
+      }
     </div>
   );
 };

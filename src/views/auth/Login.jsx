@@ -8,6 +8,8 @@ import "../../css/login.css";
 import { useAuthContext } from "../../context";
 import { Regex } from "../../utils";
 import {ErrorAlert} from "../../components/Alert"
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+
 //
 const Login = () => {
   //
@@ -17,6 +19,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState("");
   const [showAuthError, setShowAuthError] = useState("");
+  const [showPass, setShowPass] = useState(false);
+
   //
   //
   useEffect(() => {
@@ -66,7 +70,10 @@ const Login = () => {
             <div className="auth-inner">
               <form onSubmit={handleSubmit}>
                 <h3>Sign In</h3>
-                <ErrorAlert msg={showAuthError} hideMsg={()=>setShowAuthError("")} />
+                <ErrorAlert
+                  msg={showAuthError}
+                  hideMsg={() => setShowAuthError("")}
+                />
                 <div className="mb-2">
                   <label>Email address</label>
                   {errors.email && (
@@ -89,13 +96,32 @@ const Login = () => {
                       *{errors.password}
                     </p>
                   )}
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+                  <div style={{ position: "relative" }}>
+                    <input
+                      type={showPass ? "text" : "password"}
+                      className="form-control"
+                      value={password}
+                      placeholder={"Enter password"}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: "20%",
+                        right: "15px",
+                      }}
+                      onClick={() => {
+                        setShowPass(!showPass);
+                      }}
+                    >
+                      {showPass ? (
+                        <FaRegEyeSlash style={{ fontSize: "24px" }} />
+                      ) : (
+                        <FaRegEye style={{ fontSize: "24px" }} />
+                      )}
+                    </span>
+                  </div>
                 </div>
                 <div className="d-grid">
                   <button type="submit" className="btn btn-primary">

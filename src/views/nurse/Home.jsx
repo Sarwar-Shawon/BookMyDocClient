@@ -123,9 +123,7 @@ const TimeSlotsComponent = ({ timeSlotsData,setSelApt }) => {
               <div
                 key={time}
                 className="col"
-                onClick={() => {
-                  setSelApt(slot?.apt)
-                }}
+                onClick={() => slot?.apt ? setSelApt(slot?.apt) : {} }
               >
                 <div
                   className={`card `}
