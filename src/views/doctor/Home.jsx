@@ -120,7 +120,7 @@ const TimeSlotsComponent = ({ timeSlotsData,setSelApt }) => {
                   className={`card `}
                   style={{
                     // backgroundColor: slot.active ? "#213555" : "#17594A",
-                    backgroundColor: slot.active ? "#0B2447" : "#007400",
+                    backgroundColor: (slot?.apt && !slot.active) ? "#007400" : !slot.active ? "#BF3131" : "#0B2447",
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
                   }}
                 >

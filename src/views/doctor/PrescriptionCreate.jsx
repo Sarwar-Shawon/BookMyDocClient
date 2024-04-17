@@ -12,8 +12,9 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./medicine-suggestions.css";
-import { formatDateToString,calculateAge } from "../../utils";
+import { formatDateToString, calculateAge } from "../../utils";
 import Autosuggest from "react-autosuggest";
+import PrescriptionPreview from '../common/PrescriptionPreview'
 //
 const dose = ["150ml", "250ml"];
 //
@@ -42,13 +43,7 @@ const prescriptionInstructions = [
   "With/after food",
 ];
 //
-const PrescriptionCreateView = ({
-  onCloseModal,
-  title,
-  apt
-}) => {
-  console.log("apt",apt)
-
+const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
   //
   const [medicineList, setMedicineList] = useState([
     {
@@ -58,11 +53,14 @@ const PrescriptionCreateView = ({
       instruction: "",
       supply: 0,
       extra_instruction: "",
-      suggestions: {}
+      suggestions: {},
     },
   ]);
   const [suggestions, setSuggestions] = useState([]);
   const [showPreview, setShowPreview] = useState(false);
+  const [showBtnLoader, setShowBtnLoader] = useState(false);
+  const [showResp, setShowResp] = useState({});
+
   //
   const handleAddMedicine = () => {
     setMedicineList([
@@ -74,7 +72,7 @@ const PrescriptionCreateView = ({
         instruction: "",
         supply: 0,
         extra_instruction: "",
-        suggestions: {}
+        suggestions: {},
       },
     ]);
   };
@@ -113,12 +111,14 @@ const PrescriptionCreateView = ({
   const createNewPrescription = async () => {
     try {
       //
-      console.log("apt",apt)
-      const userMedicineList = medicineList.map(({ suggestions, ...rest }) => rest);
+      setShowBtnLoader(true)
+      const userMedicineList = medicineList.map(
+        ({ suggestions, ...rest }) => rest
+      );
 
       const params = {
         apt_id: apt?._id,
-        phr_id: '',
+        phr_id: "",
         medications: userMedicineList,
         validDt: new Date(),
       };
@@ -131,12 +131,17 @@ const PrescriptionCreateView = ({
       console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
-        
+        setShowPreview(false)
+        respObj.success = true;
+        respObj.msg = resp?.message;
       } else {
-        
+        respObj.success = false;
+        respObj.msg = resp?.error;
       }
+      setShowResp(respObj)
     } catch (err) {
     } finally {
+      setShowBtnLoader(false)
     }
   };
   //
@@ -192,12 +197,12 @@ const PrescriptionCreateView = ({
                               onSuggestionsClearRequested={() =>
                                 setSuggestions([])
                               }
-                              onSuggestionSelected={(event, { suggestion })=> {
+                              onSuggestionSelected={(event, { suggestion }) => {
                                 handleMedicineChange(
                                   index,
                                   "suggestions",
                                   suggestion
-                                )
+                                );
                               }}
                               getSuggestionValue={(suggestion) =>
                                 suggestion.genericName
@@ -207,10 +212,9 @@ const PrescriptionCreateView = ({
                                 value: medicine.name,
                                 onChange: (e, { newValue }) =>
                                   handleMedicineChange(index, "name", newValue),
-                                className: "form-control"
+                                className: "form-control",
                               }}
                             />
-                        
                           </td>
                           <td>
                             <select
@@ -254,17 +258,18 @@ const PrescriptionCreateView = ({
 
                               <>
                                 {medicine.suggestions?.strength &&
-                                  medicine.suggestions?.strength[medicine.type] &&
-                                  medicine.suggestions?.strength[medicine.type].map(
-                                    (_dose) => (
-                                      <option value={_dose} key={_dose}>
-                                        {_dose}
-                                      </option>
-                                    )
-                                  )}
+                                  medicine.suggestions?.strength[
+                                    medicine.type
+                                  ] &&
+                                  medicine.suggestions?.strength[
+                                    medicine.type
+                                  ].map((_dose) => (
+                                    <option value={_dose} key={_dose}>
+                                      {_dose}
+                                    </option>
+                                  ))}
                               </>
                             </select>
-                           
                           </td>
                           <td>
                             <select
@@ -348,20 +353,41 @@ const PrescriptionCreateView = ({
                     ></div>
                   </button>
                 ) : (
-                  <button type="submit" className="btn btn-primary" onClick={()=> setShowPreview(true)}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={() => setShowPreview(true)}
+                  >
                     View Prescription
                   </button>
                 )}
               </div>
             </div>
           </div>
-          {
-            showPreview && 
-            <PrescriptionPreview 
-            medicineList={medicineList}
-            createNewPrescription={createNewPrescription}
-            onCloseModal={()=> setShowPreview(false)}/>
-          }
+          {showPreview && (
+            <PrescriptionPreview
+              medicineList={medicineList}
+              createNewPrescription={createNewPrescription}
+              onCloseModal={() => setShowPreview(false)}
+            />
+          )}
+          {showResp?.msg && (
+            <Modal
+              title={"Response"}
+              body={
+                <div>
+                  <ErrorAlert msg={!showResp?.success ? showResp?.msg : ""} />
+                  <SuccessAlert msg={showResp?.success ? showResp?.msg : ""} />
+                </div>
+              }
+              btm_btn_2_txt={"Ok"}
+              btn2Click={() => {
+                setShowResp({});
+              }}
+              showFooter={true}
+              onCloseModal={() => setShowResp({})}
+            />
+          )}
         </div>
       }
       onCloseModal={onCloseModal}
@@ -369,130 +395,6 @@ const PrescriptionCreateView = ({
     />
   );
 };
-//
-const PrescriptionPreview = ({onCloseModal , medicineList , createNewPrescription}) => {
-    console.log("medicineList",medicineList)
-    const patientDetails = {
-        name: "Md Sarwar Hoshen",
-        age: 29,
-        dob: "01-01-1995",
-      };
-      //
-      const doctorDetails = {
-        name: "Dr. Md Deloar",
-        specialization: "Internal Medicine",
-        clinic: "Clinic",
-      };
-    return (
-      <Modal
-        title={"Prescription Preview"}
-        body={
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-4">
-                <div className="card">
-                  <div className="card-header">Patient</div>
-                  <div className="card-body">
-                    <p>Name: {patientDetails.name}</p>
-                    <p>Age: {patientDetails.age}</p>
-                    <p>DOB: {patientDetails.dob}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-4">
-                <div className="card">
-                  <div className="card-header">Doctor</div>
-                  <div className="card-body">
-                    <p>Doctor: {doctorDetails.name}</p>
-                    <p>Dept: {doctorDetails.specialization}</p>
-                    <p>Clinic: {doctorDetails.clinic}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-4">
-                <div className="card">
-                  <div className="card-header">Pharmacy</div>
-                  <div className="card-body">
-                    <p>Doctor: {doctorDetails.name}</p>
-                    <p>Dept: {doctorDetails.specialization}</p>
-                    <p>Clinic: {doctorDetails.clinic}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Medicine List */}
-            <div className="row mt-4">
-              <div className="col-lg-12">
-                <div className="card">
-                  <div className="card-header d-flex justify-content-between align-items-center">
-                    <span>Medicine List</span>
-                  </div>
-                  <div className="card-body medicine-list">
-                    {medicineList && medicineList.length > 0 ? (
-                      medicineList.map((item, index) => (
-                        <div className="medicine" key={index}>
-                          <h3>{item.name}</h3>
-                          <p>
-                            <strong>Type:</strong> {item.type}
-                          </p>
-                          <p>
-                            <strong>Dose:</strong> {item.dose}
-                          </p>
-                          {item.instruction && (
-                            <p>
-                              <strong>Instruction:</strong> {item.instruction}{" "}
-                              {item.extra_instruction
-                                ? item.extra_instruction
-                                : ""}
-                            </p>
-                          )}
-                          {item.supply && (
-                            <p>
-                              <strong>Supply:</strong> {item.supply}
-                            </p>
-                          )}
-                        </div>
-                      ))
-                    ) : (
-                      <p>No medicines prescribed.</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-lg-12">
-                <div className="card">
-                  <div className="card-header">
-                    Date: {formatDateToString(new Date())}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-lg-12">
-                <div className="d-grid">
-                  {false ? (
-                    <button className="btn btn-primary" disabled>
-                      <div
-                        className="spinner-border spinner-border-sm"
-                        role="status"
-                      ></div>
-                    </button>
-                  ) : (
-                    <button type="button" className="btn btn-primary" onClick={createNewPrescription}>
-                      Create Prescription
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-        onCloseModal={onCloseModal}
-        bigger={true}
-      />
-    );
-}
+
 //
 export default PrescriptionCreateView;

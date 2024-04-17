@@ -164,7 +164,6 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
     } finally {
     }
   };
-  console.log("showRespshowRespshowResp::",showResp)
   //
   return (
     <Modal

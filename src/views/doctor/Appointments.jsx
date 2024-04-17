@@ -64,7 +64,6 @@ const AppointmentView = ({ aptType }) => {
   const fetchAppointments = async () => {
     try {
       const skip = appointments.length;
-      const asd = await searchMedicineByName('ibuprofen');
       const resp = await Get(
         `${apiUrl()}/doctor/get-appointments?skip=${skip}&status=${aptType}&limit=${
           config.FETCH_LIMIT
