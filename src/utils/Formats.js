@@ -15,3 +15,9 @@ export const formatStringToStringDate = (val) => {
   const formattedDate = moment(val).format('DD-MM-YYYY');
   return formattedDate;
 };
+//
+export const calculateAge = (val) => {
+  const dob = moment(val);
+  const age = moment().diff(dob, "years");
+  return age;
+};

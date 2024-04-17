@@ -11,12 +11,17 @@ import PrescriptionCreateView from "./PrescriptionCreate";
 import { formatDateToString } from "../../utils";
 import moment from "moment";
 import Modal from "../../components/Modal";
-
+import {
+  FaCalendarAlt,
+  FaHospitalUser,
+} from "react-icons/fa";
 //
 const DoctorPrescriptions = ({ doctorId }) => {
   const [prescriptions, setPrescriptions] = useState([]);
   const [showNewPView, setShowNewPView] = useState(false);
   const [isLoading, setLoading] = useState(true);
+  const [selType, setSelType] = useState("Accepted");
+
   //
   useEffect(() => {
     fetchPrescriptions();
@@ -24,8 +29,8 @@ const DoctorPrescriptions = ({ doctorId }) => {
   //
   const fetchPrescriptions = async () => {
     try {
-      const resp = await Get(`${apiUrl()}/doctor/get-holidays`);
-      console.log("resp:::", JSON.stringify(resp));
+      const resp = await Get(`${apiUrl()}/doctor/get-prescriptions`);
+      console.log("resp:::", resp);
       if (resp.success) {
         setPrescriptions(resp?.data);
       }
@@ -43,43 +48,98 @@ const DoctorPrescriptions = ({ doctorId }) => {
   return (
     <>
       <div className="container-fluid">
-        <div className="col-md-12">
+      <div className="row">
+        <div className="col">
           <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginBottom: "20px",
-            }}
+            className="d-flex justify-content-between align-items-center mb-3"
+            style={{ borderBottom: "1px solid #ccc", paddingBottom: "10px" }}
           >
-            <button
-              style={{
-                width: "200px",
-                backgroundColor: "#0B2447",
-                borderColor: "#0B2447",
-                transition: "background-color 0.3s, border-color 0.3s",
-                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                marginRight: "5px",
-              }}
-              className="btn btn-primary"
-              onMouseOver={(e) => {
-                e.target.style.backgroundColor = "#1a4a8a";
-                e.target.style.borderColor = "#1a4a8a";
-              }}
-              onMouseOut={(e) => {
-                e.target.style.backgroundColor = "#0B2447";
-                e.target.style.borderColor = "#0B2447";
-              }}
-              onClick={() => {
-                setShowNewPView(true);
-              }}
-            >
-              Create a Prescription
-            </button>
+            <TabButton
+              title="Prescriptions"
+              val="Accepted"
+              selType={selType}
+              setSelType={setSelType}
+            />
+            <TabButton
+              val="Prescriptions Request"
+              title="History"
+              selType={selType}
+              setSelType={setSelType}
+            />
           </div>
         </div>
-        {prescriptions.length > 0 ? (
-          <></>
-        ) : (
+      </div>
+      <>
+        {/* {selType === "Pending" && <AppointmentView selType={selType} />} */}
+        {/* {selType === "Accepted" && <AppointmentView selType={selType} />}
+        {selType === "History" && <HistoryView selType={selType} />} */}
+      </>
+        {
+          prescriptions.length > 0 ? 
+          prescriptions.map((pr,index)=>(
+
+            <div
+      key={pr._id}
+      className="doctor-card card mb-3 mx-2"
+      style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" }}
+    >
+      <img
+        src={
+          typeof pr?.pt.img == "string"
+            ? `${apiUrl()}/uploads/${pr?.pt.img}`
+            : URL.createObjectURL(pr?.pt.img)
+        }
+        className="card-img-top"
+        alt={pr?.pt.f_name}
+      />
+      <div className="card-body">
+        <h5 className="card-title">
+          {[pr?.pt.f_name, pr?.pt.l_name].join(" ")}
+        </h5>
+        <div
+          style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}
+        >
+          <FaCalendarAlt style={{ marginRight: "5px" }} />
+          <p className="card-text" style={{ fontWeight: "bold" }}>
+            {formatDateToString(pr?.createdAt)}
+          </p>
+        </div>
+        <div
+          style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}
+        >
+          <FaHospitalUser style={{ marginRight: "5px" }} />
+          <p className="card-text" style={{ fontWeight: "bold" }}>
+            {pr?.pt?.nhs}
+          </p>
+        </div>
+      </div>
+      <button
+        style={{
+          width: "200px",
+          marginBottom: "10px",
+          backgroundColor: "#0B2447",
+          borderColor: "#0B2447",
+          transition: "background-color 0.3s, border-color 0.3s",
+        }}
+        className="btn btn-primary"
+        onMouseOver={(e) => {
+          e.target.style.backgroundColor = "#1a4a8a";
+          e.target.style.borderColor = "#1a4a8a";
+        }}
+        onMouseOut={(e) => {
+          e.target.style.backgroundColor = "#0B2447";
+          e.target.style.borderColor = "#0B2447";
+        }}
+        onClick={() => {
+          // setShowCreatePresView()
+        }}
+      >
+        View Prescription
+      </button>
+    </div>
+
+          ))
+         : (
           <div className="container-fluid d-flex justify-content-center align-items-center">
             <img src={noData} className="no-data-img" alt="No data found" />
           </div>
@@ -97,5 +157,16 @@ const DoctorPrescriptions = ({ doctorId }) => {
     </>
   );
 };
+//
+const TabButton = ({ title, selType, setSelType,val }) => (
+  <div className="button-container">
+    <button
+      className={`tab-button ${selType === val ? "active" : ""}`}
+      onClick={() => setSelType(val)}
+    >
+      {title}
+    </button>
+  </div>
+);
 //
 export default DoctorPrescriptions;

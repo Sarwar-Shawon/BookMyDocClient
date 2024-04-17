@@ -18,6 +18,7 @@ const AppointmentCard = ({
   setShowCancelView,
   setShowUpdateView,
   setShowAcceptView,
+  setShowCreatePresView,
   aptType,
 }) => {
   return (
@@ -28,7 +29,7 @@ const AppointmentCard = ({
     >
       <img
         src={
-          typeof apt?.doc.img == "string"
+          typeof apt?.pt.img == "string"
             ? `${apiUrl()}/uploads/${apt?.pt.img}`
             : URL.createObjectURL(apt?.pt.img)
         }
@@ -95,7 +96,7 @@ const AppointmentCard = ({
           e.target.style.backgroundColor = "#279EFF";
           e.target.style.borderColor = "#279EFF";
         }}
-        onClick={() => setShowDetails() }
+        onClick={() => setShowDetails()}
       >
         See Details
       </button>
@@ -125,6 +126,30 @@ const AppointmentCard = ({
           Accept
         </button>
       )}
+      {/* Update Button */}
+      <button
+        style={{
+          width: "200px",
+          marginBottom: "10px",
+          backgroundColor: "#0B2447",
+          borderColor: "#0B2447",
+          transition: "background-color 0.3s, border-color 0.3s",
+        }}
+        className="btn btn-primary"
+        onMouseOver={(e) => {
+          e.target.style.backgroundColor = "#1a4a8a";
+          e.target.style.borderColor = "#1a4a8a";
+        }}
+        onMouseOut={(e) => {
+          e.target.style.backgroundColor = "#0B2447";
+          e.target.style.borderColor = "#0B2447";
+        }}
+        onClick={() => {
+          setShowCreatePresView()
+        }}
+      >
+        Create Prescription
+      </button>
       {/* Update Button */}
       {aptType == "Accepted" && (
         <button

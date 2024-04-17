@@ -12,7 +12,7 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./medicine-suggestions.css";
-import { formatDateToString } from "../../utils";
+import { formatDateToString,calculateAge } from "../../utils";
 import Autosuggest from "react-autosuggest";
 //
 const dose = ["150ml", "250ml"];
@@ -45,9 +45,10 @@ const prescriptionInstructions = [
 const PrescriptionCreateView = ({
   onCloseModal,
   title,
-  updateHolidays,
-  selHoliday,
+  apt
 }) => {
+  console.log("apt",apt)
+
   //
   const [medicineList, setMedicineList] = useState([
     {
@@ -112,7 +113,21 @@ const PrescriptionCreateView = ({
   const createNewPrescription = async () => {
     try {
       //
-      const resp = await Post(`${apiUrl()}/doctor/create-prescription`, {});
+      console.log("apt",apt)
+      const userMedicineList = medicineList.map(({ suggestions, ...rest }) => rest);
+
+      const params = {
+        apt_id: apt?._id,
+        phr_id: '',
+        medications: userMedicineList,
+        validDt: new Date(),
+      };
+      //
+      const resp = await Post(
+        `${apiUrl()}/doctor/create-prescription`,
+        params,
+        "application/json"
+      );
       console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -344,6 +359,7 @@ const PrescriptionCreateView = ({
             showPreview && 
             <PrescriptionPreview 
             medicineList={medicineList}
+            createNewPrescription={createNewPrescription}
             onCloseModal={()=> setShowPreview(false)}/>
           }
         </div>
@@ -354,7 +370,7 @@ const PrescriptionCreateView = ({
   );
 };
 //
-const PrescriptionPreview = ({onCloseModal , medicineList}) => {
+const PrescriptionPreview = ({onCloseModal , medicineList , createNewPrescription}) => {
     console.log("medicineList",medicineList)
     const patientDetails = {
         name: "Md Sarwar Hoshen",
@@ -464,7 +480,7 @@ const PrescriptionPreview = ({onCloseModal , medicineList}) => {
                       ></div>
                     </button>
                   ) : (
-                    <button type="submit" className="btn btn-primary">
+                    <button type="button" className="btn btn-primary" onClick={createNewPrescription}>
                       Create Prescription
                     </button>
                   )}

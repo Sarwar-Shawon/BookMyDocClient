@@ -16,7 +16,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import AppointmentTabButton from "../common/AppointmentTabButton";
 import AppointmentCard from "../common/AppointmentCard"
 import AppointmentDetails from "../common/AppointmentDetails";
-
+import PrescriptionCreateView from './PrescriptionCreate'
 //
 const DoctorAppointments = () => {
   const [selType, setSelType] = useState("Accepted");
@@ -44,6 +44,7 @@ const AppointmentView = ({ aptType }) => {
   const [showResp, setShowResp] = useState({});
   //
   const [showDetails, setShowDetails] = useState(false);
+  const [showCreatePresView, setShowCreatePresView] = useState(false);
   const [showCancelView, setShowCancelView] = useState(false);
   const [showUpdateView, setShowUpdateView] = useState(false);
   const [showAcceptView, setShowAcceptView] = useState(false);
@@ -213,6 +214,10 @@ const AppointmentView = ({ aptType }) => {
                         setSelApt(apt);
                         setShowCancelView(true);
                       }}
+                      setShowCreatePresView={() => {
+                        setSelApt(apt);
+                        setShowCreatePresView(true);
+                      }}
                       setShowUpdateView={() => {
                         setSelApt(apt);
                         setFormData({
@@ -285,7 +290,10 @@ const AppointmentView = ({ aptType }) => {
           apt={selApt}
         />
       }
-
+      {
+        showCreatePresView && 
+        <PrescriptionCreateView onCloseModal={()=> setShowCreatePresView(false)} apt={selApt}/>
+      }
     </div>
   );
 };
@@ -519,33 +527,42 @@ const HistoryView = ({ aptType }) => {
   return (
     <div>
       <div className="doctor-list d-flex flex-wrap">
-        <h1>History</h1>
         <div className="col-md-12">
-          <div className="mb-3">
-            <label>Select Start Date</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formatDateToString(formData.start_date) || "dd-mm-yyyy"}
-              onFocus={() => {
-                setShowCalendar(true);
-                setSelectedField("start_date");
-              }}
-              readOnly
-            />
-          </div>
-          <div className="mb-3">
-            <label>Select End Date</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formatDateToString(formData.end_date) || "dd-mm-yyyy"}
-              onFocus={() => {
-                setShowCalendar(true);
-                setSelectedField("end_date");
-              }}
-              readOnly
-            />
+          <div className="row">
+            <div className="col">
+              <div className="d-flex justify-content-center align-items-center mb-3">
+                <div className="button-container" style={{marginRight: '10px'}}>
+                  <label>Select Start Date</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={
+                      formatDateToString(formData.start_date) || "dd-mm-yyyy"
+                    }
+                    onFocus={() => {
+                      setShowCalendar(true);
+                      setSelectedField("start_date");
+                    }}
+                    readOnly
+                  />
+                </div>
+                <div className="button-container">
+                  <label>Select End Date</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={
+                      formatDateToString(formData.end_date) || "dd-mm-yyyy"
+                    }
+                    onFocus={() => {
+                      setShowCalendar(true);
+                      setSelectedField("end_date");
+                    }}
+                    readOnly
+                  />
+                </div>
+              </div>
+            </div>
           </div>
           {showCalendar && (
             <AppCalendar
@@ -599,8 +616,7 @@ const HistoryView = ({ aptType }) => {
           </>
         )}
       </div>
-      {
-        showDetails && 
+      {showDetails && (
         <AppointmentDetails
           onCloseModal={() => {
             setShowDetails(false);
@@ -608,7 +624,7 @@ const HistoryView = ({ aptType }) => {
           }}
           apt={selApt}
         />
-      }
+      )}
     </div>
   );
 };
