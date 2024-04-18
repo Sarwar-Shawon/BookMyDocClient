@@ -140,6 +140,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
         medications: userMedicineList,
         validDt: new Date(),
       };
+      console.log("params",params)
       //
       const resp = await Post(
         `${apiUrl()}/doctor/create-prescription`,

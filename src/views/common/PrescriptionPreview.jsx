@@ -87,9 +87,8 @@ const PrescriptionPreview = ({
                       </>
                     ) : (
                       <>
-                        <p>Doctor: {doctorDetails.name}</p>
-                        <p>Dept: {doctorDetails.specialization}</p>
-                        <p>Clinic: {doctorDetails.clinic}</p>
+                        <p>Name: {apt?.phar?.name}</p>
+                        <p>Address: {apt?.phar?.addr?.formatted_address}</p>
                       </>
                     )}
                   </div>
@@ -145,7 +144,7 @@ const PrescriptionPreview = ({
               <div className="col-lg-12">
                 <div className="card">
                   <div className="card-header">
-                    Date: {formatDateToString(new Date())}
+                    Date: {formatDateToString(apt?.createdAt || new Date())}
                   </div>
                 </div>
               </div>

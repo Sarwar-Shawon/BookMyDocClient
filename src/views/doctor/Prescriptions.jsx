@@ -34,8 +34,8 @@ const DoctorPrescriptions = ({ doctorId }) => {
                 setSelType={setSelType}
               />
               <TabButton
-                val="Prescriptions Request"
-                title="requested"
+                title="Prescriptions Request"
+                val="requested"
                 selType={selType}
                 setSelType={setSelType}
               />
@@ -277,23 +277,31 @@ const RequestPrescription = () => {
   const [selType, setSelType] = useState("Accepted");
   const [hasMore, setHasMore] = useState(true);
   const [selPC, setSelPC] = useState({});
-
+  const [formData, setFormData] = useState({
+    start_date: new Date(),
+    end_date: new Date(),
+  });
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedField, setSelectedField] = useState(null);
+  console.log("prescriptions",prescriptions)
   //
   useEffect(() => {
-    fetchPrescriptions();
-  }, []);
+    setPrescriptions([])
+    fetchPrescriptions({pSkip: true});
+  }, [formData.start_date, formData.end_date]);
   //
-  const fetchPrescriptions = async () => {
+  const fetchPrescriptions = async ({pSkip}) => {
     try {
-      const skip = prescriptions.length;
+      const skip = pSkip ? 0 : prescriptions.length;
       const resp = await Get(
         `${apiUrl()}/doctor/get-prescriptions?skip=${skip}&limit=${
           config.FETCH_LIMIT
-        }`
+        }&startDay=${formData.start_date}&endDay=${formData.end_date}`
       );
       console.log("resp", resp);
       if (resp.success) {
-        setPrescriptions(resp?.data);
+        setPrescriptions((prevPres) => [...prevPres, ...resp.data]);
+        setHasMore(resp.data.length > 0 ? true : false);
       }
     } catch (err) {
       // setError(err?.message);
@@ -302,39 +310,83 @@ const RequestPrescription = () => {
     }
   };
   //
+  const handleDateChange = (date) => {
+    if (selectedField === "start_date") {
+      setFormData({
+        ...formData,
+        start_date: date,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        end_date: date,
+      });
+    }
+    setShowCalendar(false);
+  };
+  //
   if (isLoading) {
     return <LoadingView />;
   }
   //
   return (
     <>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col">
-            <div
-              className="d-flex justify-content-between align-items-center mb-3"
-              style={{ borderBottom: "1px solid #ccc", paddingBottom: "10px" }}
-            >
-              <TabButton
-                title="Prescriptions"
-                val="Accepted"
-                selType={selType}
-                setSelType={setSelType}
-              />
-              <TabButton
-                val="Prescriptions Request"
-                title="History"
-                selType={selType}
-                setSelType={setSelType}
-              />
+      <div>
+        <div className="doctor-list d-flex flex-wrap">
+          <div className="col-md-12">
+            <div className="row">
+              <div className="col">
+                <div className="d-flex justify-content-center align-items-center mb-3">
+                  <div
+                    className="button-container"
+                    style={{ marginRight: "10px" }}
+                  >
+                    <label>Select Start Date</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={
+                        formatDateToString(formData.start_date) || "dd-mm-yyyy"
+                      }
+                      onFocus={() => {
+                        setShowCalendar(true);
+                        setSelectedField("start_date");
+                      }}
+                      readOnly
+                    />
+                  </div>
+                  <div className="button-container">
+                    <label>Select End Date</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={
+                        formatDateToString(formData.end_date) || "dd-mm-yyyy"
+                      }
+                      onFocus={() => {
+                        setShowCalendar(true);
+                        setSelectedField("end_date");
+                      }}
+                      readOnly
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
+            {showCalendar && (
+              <AppCalendar
+                onCloseModal={() => setShowCalendar(false)}
+                value={
+                  selectedField === "start_date"
+                    ? formData.start_date
+                    : formData.end_date
+                }
+                minDate={ selectedField === "start_date" ? null : formData.start_date}
+                onChange={(val) => handleDateChange(new Date(val))}
+              />
+            )}
           </div>
         </div>
-        <>
-          {/* {selType === "Pending" && <AppointmentView selType={selType} />} */}
-          {/* {selType === "Accepted" && <AppointmentView selType={selType} />}
-        {selType === "History" && <HistoryView selType={selType} />} */}
-        </>
         <InfiniteScroll
           dataLength={prescriptions.length}
           next={fetchPrescriptions}
@@ -429,7 +481,8 @@ const RequestPrescription = () => {
           onCloseModal={() => {
             setShowPresView(false);
           }}
-          selPC={selPC}
+          apt={selPC}
+          medicineList={selPC?.medications}
           title={"Prescription View"}
         />
       )}
