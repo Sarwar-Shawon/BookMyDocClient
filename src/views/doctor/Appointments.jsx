@@ -19,7 +19,7 @@ import AppointmentDetails from "../common/AppointmentDetails";
 import PrescriptionCreateView from './PrescriptionCreate'
 //
 const DoctorAppointments = () => {
-  const [selType, setSelType] = useState("Accepted");
+  const [selType, setSelType] = useState("Accepted"); 
   //
   return (
     <AppointmentTabButton

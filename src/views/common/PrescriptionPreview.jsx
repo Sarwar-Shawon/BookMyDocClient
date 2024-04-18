@@ -9,6 +9,10 @@ import Modal from "../../components/Modal";
 const PrescriptionPreview = ({
     onCloseModal,
     medicineList,
+    apt,
+    pharmacies,
+    selPhr,
+    setSelPhar,
     // patientDetails,
     // doctorDetails,
     // pharmacyDetails,
@@ -36,9 +40,9 @@ const PrescriptionPreview = ({
                 <div className="card">
                   <div className="card-header">Patient</div>
                   <div className="card-body">
-                    <p>Name: {patientDetails.name}</p>
-                    <p>Age: {patientDetails.age}</p>
-                    <p>DOB: {patientDetails.dob}</p>
+                    <p>Name: {[apt?.pt.f_name, apt?.pt.l_name]}</p>
+                    <p>Age: {calculateAge(apt?.pt.dob)}</p>
+                    <p>DOB: {apt?.pt.dob}</p>
                   </div>
                 </div>
               </div>
@@ -46,9 +50,14 @@ const PrescriptionPreview = ({
                 <div className="card">
                   <div className="card-header">Doctor</div>
                   <div className="card-body">
-                    <p>Doctor: {doctorDetails.name}</p>
-                    <p>Dept: {doctorDetails.specialization}</p>
-                    <p>Clinic: {doctorDetails.clinic}</p>
+                    <p>Doctor: {[apt?.doc.f_name, apt?.doc.l_name]}</p>
+                    <p>
+                      Dept: {apt?.dept ? apt?.dept?.name : apt?.doc?.dept?.name}
+                    </p>
+                    <p>
+                      Org:{" "}
+                      {apt?.org ? apt?.org?.name : apt?.doc?.organization?.name}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -56,9 +65,33 @@ const PrescriptionPreview = ({
                 <div className="card">
                   <div className="card-header">Pharmacy</div>
                   <div className="card-body">
-                    <p>Doctor: {doctorDetails.name}</p>
-                    <p>Dept: {doctorDetails.specialization}</p>
-                    <p>Clinic: {doctorDetails.clinic}</p>
+                    {createNewPrescription ? (
+                      <>
+                        <select
+                          className="form-select"
+                          name="type"
+                          value={selPhr}
+                          onChange={(e) => setSelPhar(e.target.value)}
+                        >
+                          <option value="">Select Pharmacy</option>
+
+                          <>
+                            {pharmacies &&
+                              pharmacies.map((phr) => (
+                                <option value={phr._id} key={phr._id}>
+                                  {phr.name}
+                                </option>
+                              ))}
+                          </>
+                        </select>
+                      </>
+                    ) : (
+                      <>
+                        <p>Doctor: {doctorDetails.name}</p>
+                        <p>Dept: {doctorDetails.specialization}</p>
+                        <p>Clinic: {doctorDetails.clinic}</p>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -85,7 +118,7 @@ const PrescriptionPreview = ({
                               <strong>Dose:</strong> {item.dose}
                             </p>
                           )}
-  
+
                           {item.instruction && (
                             <p>
                               <strong>Instruction:</strong> {item.instruction}{" "}
@@ -98,7 +131,7 @@ const PrescriptionPreview = ({
                             <p>
                               <strong>Supply:</strong> {item.supply}
                             </p>
-                          ): null}
+                          ) : null}
                         </div>
                       ))
                     ) : (

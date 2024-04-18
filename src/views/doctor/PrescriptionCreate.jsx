@@ -57,10 +57,28 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
     },
   ]);
   const [suggestions, setSuggestions] = useState([]);
+  const [pharmacies, setPharmacies] = useState([]);
+  const [selPhr, setSelPhar] = useState("");
   const [showPreview, setShowPreview] = useState(false);
   const [showBtnLoader, setShowBtnLoader] = useState(false);
   const [showResp, setShowResp] = useState({});
+  useEffect(()=>{
+    fetchPharmacies()
+  },[])
+  //
+  const fetchPharmacies = async () =>{
+    try{
+      const resp = await Get(`${apiUrl()}/doctor/get-org-pharmacy`);
+      console.log("resp:::", resp);
+      if (resp.success) {
+        setPharmacies(resp?.data)
+      }
+    }catch(err){
 
+    }finally{
+
+    }
+  }
   //
   const handleAddMedicine = () => {
     setMedicineList([
@@ -118,7 +136,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
 
       const params = {
         apt_id: apt?._id,
-        phr_id: "",
+        phr_id: selPhr,
         medications: userMedicineList,
         validDt: new Date(),
       };
@@ -369,6 +387,10 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
               medicineList={medicineList}
               createNewPrescription={createNewPrescription}
               onCloseModal={() => setShowPreview(false)}
+              pharmacies={pharmacies}
+              apt={apt}
+              selPhr={selPhr}
+              setSelPhar={setSelPhar}
             />
           )}
           {showResp?.msg && (
