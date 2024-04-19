@@ -17,7 +17,7 @@ import { formatDateToString } from "../../utils";
 import Modal from "../../components/Modal";
 
 //appointment details view
-const AppointmentDetails = ({ apt, onCloseModal }) => {
+const AppointmentDetails = ({ apt, onCloseModal , doctor , setShowCreatePresView}) => {
   return (
     <Modal
       title={"Appointment Details"}
@@ -117,7 +117,34 @@ const AppointmentDetails = ({ apt, onCloseModal }) => {
               </label>
             </div>
           </div>
-          <div className="col-12"></div>
+          <div className="col-12">
+            {
+              doctor && 
+              <button
+              style={{
+                marginBottom: "10px",
+                backgroundColor: "#0B2447",
+                borderColor: "#0B2447",
+                transition: "background-color 0.3s, border-color 0.3s",
+              }}
+              className="btn btn-primary"
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = "#1a4a8a";
+                e.target.style.borderColor = "#1a4a8a";
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = "#0B2447";
+                e.target.style.borderColor = "#0B2447";
+              }}
+              onClick={() => {
+                setShowCreatePresView();
+              }}
+            >
+              Create Prescription
+            </button>
+            }
+            
+          </div>
         </div>
       }
       onCloseModal={onCloseModal}

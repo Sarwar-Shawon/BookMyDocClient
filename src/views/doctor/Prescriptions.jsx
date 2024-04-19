@@ -61,6 +61,7 @@ const PrescriptionViews = () => {
     start_date: new Date(),
     end_date: new Date(),
   });
+  const [ptnhs, setPtnhs] = useState("")
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
   console.log("prescriptions",prescriptions)
@@ -152,6 +153,49 @@ const PrescriptionViews = () => {
                   </div>
                 </div>
               </div>
+              <div className="col">
+                <div className="d-flex">
+                  <div
+                    className="button-container"
+                    style={{ marginRight: "10px"}}
+                  >
+                    <label>Enter Nhs Id:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={ptnhs}
+                      onChange={(e) => setPtnhs(e.target.value)}
+                    />
+                  </div>
+                  <div className="button-container" >
+                  
+                    <button
+                      style={{
+                        width: "200px",
+                        marginTop: "24px",
+                        marginBottom: "10px",
+                        backgroundColor: "#0B2447",
+                        borderColor: "#0B2447",
+                        transition: "background-color 0.3s, border-color 0.3s",
+                      }}
+                      className="btn btn-primary"
+                      onMouseOver={(e) => {
+                        e.target.style.backgroundColor = "#1a4a8a";
+                        e.target.style.borderColor = "#1a4a8a";
+                      }}
+                      onMouseOut={(e) => {
+                        e.target.style.backgroundColor = "#0B2447";
+                        e.target.style.borderColor = "#0B2447";
+                      }}
+                      onClick={() => {
+                        
+                      }}
+                    >
+                      Find Prescription
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
             {showCalendar && (
               <AppCalendar
@@ -161,7 +205,9 @@ const PrescriptionViews = () => {
                     ? formData.start_date
                     : formData.end_date
                 }
-                minDate={ selectedField === "start_date" ? null : formData.start_date}
+                minDate={
+                  selectedField === "start_date" ? null : formData.start_date
+                }
                 onChange={(val) => handleDateChange(new Date(val))}
               />
             )}
@@ -247,7 +293,7 @@ const PrescriptionViews = () => {
                 >
                   View Prescription
                 </button>
-                <button
+                {/* <button
                   style={{
                     width: "200px",
                     marginBottom: "10px",
@@ -270,7 +316,7 @@ const PrescriptionViews = () => {
                   }}
                 >
                   Update Prescription
-                </button>
+                </button> */}
               </div>
             ))
           ) : (
@@ -320,7 +366,7 @@ const RequestPrescription = () => {
       const resp = await Get(
         `${apiUrl()}/doctor/get-prescriptions?skip=${skip}&limit=${
           config.FETCH_LIMIT
-        }&startDay=${formData.start_date}&endDay=${formData.end_date}`
+        }&startDay=${formData.start_date}&endDay=${formData.end_date}&repeated=${true}`
       );
       console.log("resp", resp);
       if (resp.success) {
@@ -489,7 +535,7 @@ const RequestPrescription = () => {
                     setShowPresView(true);
                   }}
                 >
-                  View Prescription
+                  View Old Prescription
                 </button>
               </div>
             ))

@@ -10,6 +10,8 @@ import noData from "../../assets/images/no-data.jpg";
 import { formatDateToString } from "../../utils";
 import AppCalendar from "../../components/Calendar";
 import AppointmentDetails from "../common/AppointmentDetails";
+import PrescriptionCreateView from './PrescriptionCreate'
+
 //
 const Home = ({ doctorId }) => {
   const [timeSlots, setTimeSlots] = useState({});
@@ -18,6 +20,7 @@ const Home = ({ doctorId }) => {
   const [selApt, setSelApt] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [showCreatePresView, setShowCreatePresView] = useState(false);
 
   //
   useEffect(() => {
@@ -89,15 +92,23 @@ const Home = ({ doctorId }) => {
           )}
         </div>
       </div>
-      {
-        showDetails && 
+      {showDetails && (
         <AppointmentDetails
           onCloseModal={() => {
             setShowDetails(false);
             setSelApt("");
           }}
           apt={selApt}
+          doctor={true}
+          setShowCreatePresView={() => {
+            setShowDetails(false);
+            setShowCreatePresView(true);
+          }}
         />
+      )}
+      {
+        showCreatePresView && 
+        <PrescriptionCreateView onCloseModal={()=> setShowCreatePresView(false)} apt={selApt}/>
       }
     </>
   );

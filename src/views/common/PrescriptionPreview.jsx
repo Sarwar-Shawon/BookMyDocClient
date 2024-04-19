@@ -2,9 +2,16 @@
  * @copyRight by md sarwar hoshen.
  */
 import React from "react";
-import { formatDateToString, calculateAge } from "../../utils";
+import { formatDateToString, calculateAge, calculateValidDt } from "../../utils";
 import Modal from "../../components/Modal";
-
+const validSel = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6'
+]
 //
 const PrescriptionPreview = ({
     onCloseModal,
@@ -13,24 +20,12 @@ const PrescriptionPreview = ({
     pharmacies,
     selPhr,
     setSelPhar,
-    // patientDetails,
-    // doctorDetails,
-    // pharmacyDetails,
     createNewPrescription,
-    doctor
+    doctor,
+    setVdt,
+    validDt
   }) => {
-    console.log("medicineList", medicineList);
-    const patientDetails = {
-      name: "Md Sarwar Hoshen",
-      age: 29,
-      dob: "01-01-1995",
-    };
-    //
-    const doctorDetails = {
-      name: "Dr. Md Deloar",
-      specialization: "Internal Medicine",
-      clinic: "Clinic",
-    };
+    const filItem = doctor ? pharmacies.filter((item)=> item._id == selPhr) : [];
     return (
       <Modal
         title={"Prescription Preview"}
@@ -95,7 +90,7 @@ const PrescriptionPreview = ({
                       <>
                         <select
                           className="form-select"
-                          name="type"
+                          name="pharmacy"
                           value={selPhr}
                           onChange={(e) => setSelPhar(e.target.value)}
                         >
@@ -110,6 +105,17 @@ const PrescriptionPreview = ({
                               ))}
                           </>
                         </select>
+                        {filItem.length > 0 && (
+                          <p>
+                            <strong>Address:</strong>{" "}
+                            {filItem[0]?.addr?.formatted_address}
+                          </p>
+                        )}
+                        {filItem.length > 0 && (
+                          <p>
+                            <strong>Phone:</strong> {filItem[0]?.phone}
+                          </p>
+                        )}
                       </>
                     ) : (
                       <>
@@ -189,7 +195,30 @@ const PrescriptionPreview = ({
                 <div className="card">
                   <div className="card-header">
                     <strong>Valid Date:</strong>{" "}
-                    {formatDateToString(apt?.createdAt || new Date())}
+                    {/* {formatDateToString(apt?.createdAt || new Date())} */}
+                    <>
+                      {
+                        doctor && 
+                        <select
+                        className="form-select"
+                        name="validDt"
+                        value={validDt}
+                        onChange={(e) => setVdt(e.target.value)}
+                      >
+                        <>
+                          {validSel &&
+                            validSel.map((item) => (
+                              <option value={item} key={item}>
+                                <strong>Duration:</strong> {item} month{", "}
+                                <strong>End Date:</strong>{" "}
+                                {calculateValidDt(item)}
+                              </option>
+                            ))}
+                        </>
+                      </select>
+                      }
+                      {formatDateToString(apt?.validDt)}
+                    </>
                   </div>
                 </div>
               </div>

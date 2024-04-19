@@ -12,11 +12,9 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./medicine-suggestions.css";
-import { formatDateToString, calculateAge } from "../../utils";
+import { formatStringToDate, calculateValidDt } from "../../utils";
 import Autosuggest from "react-autosuggest";
 import PrescriptionPreview from '../common/PrescriptionPreview'
-//
-const dose = ["150ml", "250ml"];
 //
 const prescriptionInstructions = [
   "Before meals",
@@ -42,8 +40,16 @@ const prescriptionInstructions = [
   "As required",
   "With/after food",
 ];
+const validSel = [
+  '1 month',
+  '2 month',
+  '3 month',
+  '4 month',
+  '5 month',
+  '6 month'
+]
 //
-const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
+const PrescriptionCreateView = ({ onCloseModal, title, apt  }) => {
   //
   const [medicineList, setMedicineList] = useState([
     {
@@ -58,10 +64,11 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
   ]);
   const [suggestions, setSuggestions] = useState([]);
   const [pharmacies, setPharmacies] = useState([]);
-  const [selPhr, setSelPhar] = useState("");
+  const [selPhr, setSelPhar] = useState({});
   const [showPreview, setShowPreview] = useState(false);
   const [showBtnLoader, setShowBtnLoader] = useState(false);
   const [showResp, setShowResp] = useState({});
+  const [validDt, setVdt] = useState("1");
   useEffect(()=>{
     fetchPharmacies()
   },[])
@@ -125,7 +132,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
   };
   //
   const renderSuggestion = (suggestion) => <div>{suggestion.genericName}</div>;
-  //
+  //need validation
   const createNewPrescription = async () => {
     try {
       //
@@ -136,9 +143,9 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
 
       const params = {
         apt_id: apt?._id,
-        phr_id: selPhr,
+        phr_id: selPhr?._id,
         medications: userMedicineList,
-        validDt: new Date(),
+        validDt: formatStringToDate(calculateValidDt(validDt || 1)),
       };
       console.log("params",params)
       //
@@ -393,6 +400,8 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
               selPhr={selPhr}
               doctor={true}
               setSelPhar={setSelPhar}
+              setVdt={setVdt}
+              validDt={validDt}
             />
           )}
           {showResp?.msg && (
