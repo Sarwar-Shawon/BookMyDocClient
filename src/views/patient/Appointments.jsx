@@ -13,6 +13,8 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import AppCalendar from "../../components/Calendar";
 import TimeSlotView from "../common/TimeSlotView";
 import InfiniteScroll from "react-infinite-scroll-component";
+import AppointmentDetails from "../common/AppointmentDetails";
+
 //
 const PatientAppointments = () => {
   const [selType, setSelType] = useState("Accepted");
@@ -268,6 +270,16 @@ const AppointmentView = ({ selType }) => {
           onCloseModal={() => setShowResp({})}
         />
       )}
+      {
+        showDetails && 
+        <AppointmentDetails
+          onCloseModal={() => {
+            setShowDetails(false);
+            setSelApt("");
+          }}
+          apt={selApt}
+        />
+      }
     </div>
   );
 };
@@ -279,6 +291,7 @@ const AppointmentCard = ({
   setShowUpdateView,
   aptType,
 }) => {
+  console.log("aptTypeaptTypeaptType",aptType)
   return (
     <div
       key={apt._id}
@@ -326,12 +339,12 @@ const AppointmentCard = ({
           e.target.style.backgroundColor = "#0B2447";
           e.target.style.borderColor = "#0B2447";
         }}
-        onClick={() => {}}
+        onClick={() => setShowDetails()}
       >
         See Details
       </button>
       {
-        /* aptType === "Pending" &&  */
+        aptType !== "History" &&  
         <button
           style={{
             width: "200px",
@@ -356,8 +369,9 @@ const AppointmentCard = ({
           Update
         </button>
       }
-
-      <button
+      {
+        aptType !== "History" &&  
+        <button
         style={{
           width: "200px",
           marginBottom: "10px",
@@ -380,6 +394,8 @@ const AppointmentCard = ({
       >
         Cancel
       </button>
+      }
+    
     </div>
   );
 };
@@ -524,8 +540,9 @@ const UpdateModal = ({
   );
 };
 //
-const HistoryView = ({ aptType }) => {
+const HistoryView = ({ selType }) => {
   //
+  const [selApt, setSelApt] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -560,7 +577,7 @@ const HistoryView = ({ aptType }) => {
     try {
       const skip = appointments.length;
       const resp = await Get(
-        `${apiUrl()}/doctor/get-appointments-history?skip=${skip}&startDay=${
+        `${apiUrl()}/patient/get-appointments-history?skip=${skip}&startDay=${
           formData.start_date
         }&endDay=${formData.end_date}&limit=${config.FETCH_LIMIT}`
       );
@@ -646,7 +663,11 @@ const HistoryView = ({ aptType }) => {
                     <AppointmentCard
                       key={apt._id}
                       apt={apt}
-                      aptType={aptType}
+                      aptType={selType}
+                      setShowDetails={() => {
+                        setSelApt(apt);
+                        setShowDetails(true);
+                      }}
                     />
                   );
                 })}
@@ -654,6 +675,15 @@ const HistoryView = ({ aptType }) => {
             )}
           </>
         )}
+        {showDetails && (
+        <AppointmentDetails
+          onCloseModal={() => {
+            setShowDetails(false);
+            setSelApt("");
+          }}
+          apt={selApt}
+        />
+      )}
       </div>
     </div>
   );

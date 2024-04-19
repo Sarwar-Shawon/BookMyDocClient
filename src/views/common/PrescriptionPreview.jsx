@@ -17,6 +17,7 @@ const PrescriptionPreview = ({
     // doctorDetails,
     // pharmacyDetails,
     createNewPrescription,
+    doctor
   }) => {
     console.log("medicineList", medicineList);
     const patientDetails = {
@@ -37,33 +38,58 @@ const PrescriptionPreview = ({
           <div className="container">
             <div className="row">
               <div className="col-lg-4">
-                <div className="card">
-                  <div className="card-header">Patient</div>
+                <div className="card" style={{ height: "250px" }}>
+                  <div className="card-header">
+                    <strong>Patient</strong>
+                  </div>
                   <div className="card-body">
-                    <p>Name: {[apt?.pt.f_name, apt?.pt.l_name]}</p>
-                    <p>Age: {calculateAge(apt?.pt.dob)}</p>
-                    <p>DOB: {apt?.pt.dob}</p>
+                    <p>
+                      <strong>Name:</strong> {[apt?.pt.f_name, apt?.pt.l_name]}
+                    </p>
+                    <p>
+                      <strong>Age:</strong> {calculateAge(apt?.pt.dob)}
+                    </p>
+                    <p>
+                      <strong>DOB:</strong> {apt?.pt.dob}
+                    </p>
+                    <p>
+                      <strong>Nhs:</strong> {apt?.pt.nhs}
+                    </p>
                   </div>
                 </div>
               </div>
               <div className="col-lg-4">
-                <div className="card">
-                  <div className="card-header">Doctor</div>
+                <div className="card" style={{ height: "250px" }}>
+                  <div className="card-header">
+                    <strong>Doctor</strong>
+                  </div>
                   <div className="card-body">
-                    <p>Doctor: {[apt?.doc.f_name, apt?.doc.l_name]}</p>
                     <p>
-                      Dept: {apt?.dept ? apt?.dept?.name : apt?.doc?.dept?.name}
+                      <strong>Doctor:</strong>{" "}
+                      {[apt?.doc.f_name, apt?.doc.l_name]}
                     </p>
                     <p>
-                      Org:{" "}
+                      <strong>Dept:</strong>{" "}
+                      {apt?.dept ? apt?.dept?.name : apt?.doc?.dept?.name}
+                    </p>
+                    <p>
+                      <strong>GP Center:</strong>{" "}
                       {apt?.org ? apt?.org?.name : apt?.doc?.organization?.name}
                     </p>
+                    <p>
+                      <strong>Address:</strong>{" "}
+                      {apt?.org
+                        ? apt?.org?.name
+                        : apt?.doc?.organization?.addr?.formatted_address}
+                    </p>
                   </div>
                 </div>
               </div>
               <div className="col-lg-4">
-                <div className="card">
-                  <div className="card-header">Pharmacy</div>
+                <div className="card" style={{ height: "250px" }}>
+                  <div className="card-header">
+                    <strong>Pharmacy</strong>
+                  </div>
                   <div className="card-body">
                     {createNewPrescription ? (
                       <>
@@ -87,8 +113,16 @@ const PrescriptionPreview = ({
                       </>
                     ) : (
                       <>
-                        <p>Name: {apt?.phar?.name}</p>
-                        <p>Address: {apt?.phar?.addr?.formatted_address}</p>
+                        <p>
+                          <strong>Name:</strong> {apt?.phar?.name}
+                        </p>
+                        <p>
+                          <strong>Address:</strong>{" "}
+                          {apt?.phar?.addr?.formatted_address}
+                        </p>
+                        <p>
+                          <strong>Phone:</strong> {apt?.phar?.phone}
+                        </p>
                       </>
                     )}
                   </div>
@@ -144,33 +178,55 @@ const PrescriptionPreview = ({
               <div className="col-lg-12">
                 <div className="card">
                   <div className="card-header">
-                    Date: {formatDateToString(apt?.createdAt || new Date())}
+                    <strong>Created Date:</strong>{" "}
+                    {formatDateToString(apt?.createdAt || new Date())}
                   </div>
                 </div>
               </div>
             </div>
             <div className="row mt-4">
               <div className="col-lg-12">
-                <div className="d-grid">
-                  {false ? (
-                    <button className="btn btn-primary" disabled>
-                      <div
-                        className="spinner-border spinner-border-sm"
-                        role="status"
-                      ></div>
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={createNewPrescription}
-                    >
-                      Create Prescription
-                    </button>
-                  )}
+                <div className="card">
+                  <div className="card-header">
+                    <strong>Valid Date:</strong>{" "}
+                    {formatDateToString(apt?.createdAt || new Date())}
+                  </div>
                 </div>
               </div>
             </div>
+            <div className="row mt-4">
+              <div className="col-lg-12">
+                <div className="card">
+                  <div className="card-header">
+                    <strong>Doctor Signature:</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {doctor && (
+              <div className="row mt-4">
+                <div className="col-lg-12">
+                  <div className="d-grid">
+                    {false ? (
+                      <button className="btn btn-primary" disabled>
+                        <div
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                        ></div>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={createNewPrescription}
+                      >
+                        Create Prescription
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         }
         onCloseModal={onCloseModal}

@@ -391,6 +391,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
               pharmacies={pharmacies}
               apt={apt}
               selPhr={selPhr}
+              doctor={true}
               setSelPhar={setSelPhar}
             />
           )}
