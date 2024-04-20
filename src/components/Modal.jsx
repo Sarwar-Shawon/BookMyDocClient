@@ -7,10 +7,10 @@ const Modal = (props) => {
   return (
     <div
       className="modal fade show"
-      id="exampleModalCenter"
+      id="Modal"
       tabIndex="-1"
       role="dialog"
-      aria-labelledby="exampleModalCenterTitle"
+      aria-labelledby="modaltitle"
       aria-hidden="true"
       style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
     >

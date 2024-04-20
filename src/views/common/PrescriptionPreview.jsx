@@ -4,13 +4,21 @@
 import React from "react";
 import { formatDateToString, calculateAge, calculateValidDt } from "../../utils";
 import Modal from "../../components/Modal";
+const repeatVal = [ "Yes" , "No" ]
 const validSel = [
   '1',
   '2',
   '3',
   '4',
   '5',
-  '6'
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+  '12',
+  'One Time Use'
 ]
 //
 const PrescriptionPreview = ({
@@ -23,7 +31,9 @@ const PrescriptionPreview = ({
     createNewPrescription,
     doctor,
     setVdt,
-    validDt
+    validDt,
+    setRepeatOption,
+    repeatOption
   }) => {
     const filItem = doctor ? pharmacies.filter((item)=> item._id == selPhr) : [];
     return (
@@ -33,7 +43,7 @@ const PrescriptionPreview = ({
           <div className="container">
             <div className="row">
               <div className="col-lg-4">
-                <div className="card" style={{ height: "250px" }}>
+                <div className="card" style={{ height: "200px" }}>
                   <div className="card-header">
                     <strong>Patient</strong>
                   </div>
@@ -54,7 +64,7 @@ const PrescriptionPreview = ({
                 </div>
               </div>
               <div className="col-lg-4">
-                <div className="card" style={{ height: "250px" }}>
+                <div className="card" style={{ height: "200px" }}>
                   <div className="card-header">
                     <strong>Doctor</strong>
                   </div>
@@ -80,31 +90,21 @@ const PrescriptionPreview = ({
                   </div>
                 </div>
               </div>
+
               <div className="col-lg-4">
-                <div className="card" style={{ height: "250px" }}>
+                <div className="card" style={{ height: "200px" }}>
                   <div className="card-header">
                     <strong>Pharmacy</strong>
                   </div>
                   <div className="card-body">
                     {createNewPrescription ? (
                       <>
-                        <select
-                          className="form-select"
-                          name="pharmacy"
-                          value={selPhr}
-                          onChange={(e) => setSelPhar(e.target.value)}
-                        >
-                          <option value="">Select Pharmacy</option>
-
-                          <>
-                            {pharmacies &&
-                              pharmacies.map((phr) => (
-                                <option value={phr._id} key={phr._id}>
-                                  {phr.name}
-                                </option>
-                              ))}
-                          </>
-                        </select>
+                        {filItem.length > 0 && (
+                          <p>
+                            <strong>Name:</strong>{" "}
+                            {filItem[0]?.name}
+                          </p>
+                        )}
                         {filItem.length > 0 && (
                           <p>
                             <strong>Address:</strong>{" "}
@@ -194,29 +194,21 @@ const PrescriptionPreview = ({
               <div className="col-lg-12">
                 <div className="card">
                   <div className="card-header">
+                    <strong>Repeat Option:</strong>{repeatOption}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row mt-4">
+              <div className="col-lg-12">
+                <div className="card">
+                  <div className="card-header">
                     <strong>Valid Date:</strong>{" "}
                     {/* {formatDateToString(apt?.createdAt || new Date())} */}
                     <>
-                      {
-                        doctor && 
-                        <select
-                        className="form-select"
-                        name="validDt"
-                        value={validDt}
-                        onChange={(e) => setVdt(e.target.value)}
-                      >
-                        <>
-                          {validSel &&
-                            validSel.map((item) => (
-                              <option value={item} key={item}>
-                                <strong>Duration:</strong> {item} month{", "}
-                                <strong>End Date:</strong>{" "}
-                                {calculateValidDt(item)}
-                              </option>
-                            ))}
-                        </>
-                      </select>
-                      }
+                      {doctor && (
+                        validDt == "One Time Use" ? "One Time Use" : calculateValidDt(validDt)
+                      )}
                       {formatDateToString(apt?.validDt)}
                     </>
                   </div>

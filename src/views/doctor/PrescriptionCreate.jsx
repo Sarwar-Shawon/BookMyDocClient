@@ -12,9 +12,14 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./medicine-suggestions.css";
-import { formatStringToDate, calculateValidDt } from "../../utils";
+import {
+  formatStringToDate,
+  calculateValidDt,
+  calculateAge,
+  formatDateToString
+} from "../../utils";
 import Autosuggest from "react-autosuggest";
-import PrescriptionPreview from '../common/PrescriptionPreview'
+import PrescriptionPreview from "../common/PrescriptionPreview";
 //
 const prescriptionInstructions = [
   "Before meals",
@@ -41,15 +46,23 @@ const prescriptionInstructions = [
   "With/after food",
 ];
 const validSel = [
-  '1 month',
-  '2 month',
-  '3 month',
-  '4 month',
-  '5 month',
-  '6 month'
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+  '12',
+  'One Time Use'
 ]
+const repeatVal = [ "Yes" , "No" ]
 //
-const PrescriptionCreateView = ({ onCloseModal, title, apt  }) => {
+const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
   //
   const [medicineList, setMedicineList] = useState([
     {
@@ -69,23 +82,22 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt  }) => {
   const [showBtnLoader, setShowBtnLoader] = useState(false);
   const [showResp, setShowResp] = useState({});
   const [validDt, setVdt] = useState("1");
-  useEffect(()=>{
-    fetchPharmacies()
-  },[])
+  const [repeatOption, setRepeatOption] = useState("No");
+  useEffect(() => {
+    fetchPharmacies();
+  }, []);
   //
-  const fetchPharmacies = async () =>{
-    try{
+  const fetchPharmacies = async () => {
+    try {
       const resp = await Get(`${apiUrl()}/doctor/get-org-pharmacy`);
       console.log("resp:::", resp);
       if (resp.success) {
-        setPharmacies(resp?.data)
+        setPharmacies(resp?.data);
       }
-    }catch(err){
-
-    }finally{
-
+    } catch (err) {
+    } finally {
     }
-  }
+  };
   //
   const handleAddMedicine = () => {
     setMedicineList([
@@ -136,18 +148,19 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt  }) => {
   const createNewPrescription = async () => {
     try {
       //
-      setShowBtnLoader(true)
+      setShowBtnLoader(true);
       const userMedicineList = medicineList.map(
         ({ suggestions, ...rest }) => rest
       );
 
       const params = {
         apt_id: apt?._id,
-        phr_id: selPhr?._id,
+        phr_id: selPhr,
         medications: userMedicineList,
         validDt: formatStringToDate(calculateValidDt(validDt || 1)),
+        repeatOption: repeatOption == "Yes" ? true : false,
       };
-      console.log("params",params)
+      console.log("params", params);
       //
       const resp = await Post(
         `${apiUrl()}/doctor/create-prescription`,
@@ -157,27 +170,133 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt  }) => {
       console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
-        setShowPreview(false)
+        setShowPreview(false);
         respObj.success = true;
         respObj.msg = resp?.message;
       } else {
         respObj.success = false;
         respObj.msg = resp?.error;
       }
-      setShowResp(respObj)
+      setShowResp(respObj);
     } catch (err) {
     } finally {
-      setShowBtnLoader(false)
+      setShowBtnLoader(false);
     }
   };
+  const filItem = pharmacies.filter((item) => item._id == selPhr);
+
   //
   return (
     <Modal
       title={title}
       body={
         <div className="container">
+          <div className="row">
+            <div className="col-lg-4">
+              <div className="card" style={{ height: "200px" }}>
+                <div className="card-header">
+                  <strong>Patient</strong>
+                </div>
+                <div className="card-body">
+                  <p>
+                    <strong>Name:</strong> {[apt?.pt.f_name, apt?.pt.l_name]}
+                  </p>
+                  <p>
+                    <strong>Age:</strong> {calculateAge(apt?.pt.dob)}
+                  </p>
+                  <p>
+                    <strong>DOB:</strong> {apt?.pt.dob}
+                  </p>
+                  <p>
+                    <strong>Nhs:</strong> {apt?.pt.nhs}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4">
+              <div className="card" style={{ height: "200px" }}>
+                <div className="card-header">
+                  <strong>Doctor</strong>
+                </div>
+                <div className="card-body">
+                  <p>
+                    <strong>Doctor:</strong>{" "}
+                    {[apt?.doc.f_name, apt?.doc.l_name]}
+                  </p>
+                  <p>
+                    <strong>Dept:</strong>{" "}
+                    {apt?.dept ? apt?.dept?.name : apt?.doc?.dept?.name}
+                  </p>
+                  <p>
+                    <strong>GP Center:</strong>{" "}
+                    {apt?.org ? apt?.org?.name : apt?.doc?.organization?.name}
+                  </p>
+                  <p>
+                    <strong>Address:</strong>{" "}
+                    {apt?.org
+                      ? apt?.org?.name
+                      : apt?.doc?.organization?.addr?.formatted_address}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4">
+              <div className="card" style={{ height: "200px" }}>
+                <div className="card-header">
+                  <strong>Pharmacy</strong>
+                </div>
+                <div className="card-body">
+                  {createNewPrescription ? (
+                    <>
+                      <select
+                        className="form-select"
+                        name="pharmacy"
+                        value={selPhr}
+                        onChange={(e) => setSelPhar(e.target.value)}
+                      >
+                        <option value="">Select Pharmacy</option>
+
+                        <>
+                          {pharmacies &&
+                            pharmacies.map((phr) => (
+                              <option value={phr._id} key={phr._id}>
+                                {phr.name}
+                              </option>
+                            ))}
+                        </>
+                      </select>
+                      {filItem.length > 0 && (
+                        <p>
+                          <strong>Address:</strong>{" "}
+                          {filItem[0]?.addr?.formatted_address}
+                        </p>
+                      )}
+                      {filItem.length > 0 && (
+                        <p>
+                          <strong>Phone:</strong> {filItem[0]?.phone}
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <p>
+                        <strong>Name:</strong> {apt?.phar?.name}
+                      </p>
+                      <p>
+                        <strong>Address:</strong>{" "}
+                        {apt?.phar?.addr?.formatted_address}
+                      </p>
+                      <p>
+                        <strong>Phone:</strong> {apt?.phar?.phone}
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
           {/* Medicine List */}
-          <div className="row mt-4">
+          <div className="row mt-4 medicine-list">
             <div className="col-lg-12">
               <div className="card">
                 <div className="card-header d-flex justify-content-between align-items-center">
@@ -368,7 +487,93 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt  }) => {
               </div>
             </div>
           </div>
+          
           <div className="row mt-4">
+              <div className="col-lg-12">
+                <div className="card">
+                  <div className="card-header">
+                    <strong>Created Date:</strong>{" "}
+                    {formatDateToString(apt?.createdAt || new Date())}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row mt-4">
+              <div className="col-lg-12">
+                <div className="card">
+                  <div className="card-header">
+                    <strong>Repeat Option:</strong>{" "}
+                    <>
+                      {
+                        <select
+                          className="form-select"
+                          name="reapetOption"
+                          value={repeatOption}
+                          onChange={(e) => setRepeatOption(e.target.value)}
+                        >
+                          <>
+                            {
+                              repeatVal.map((item) => (
+                                <option value={item} key={item}>
+                                  {item}
+                                </option>
+                              ))}
+                          </>
+                        </select>
+                      }
+                    </>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row mt-4">
+              <div className="col-lg-12">
+                <div className="card">
+                  <div className="card-header">
+                    <strong>Valid Date:</strong>{" "}
+                    {/* {formatDateToString(apt?.createdAt || new Date())} */}
+                    <>
+                      {
+                        <select
+                          className="form-select"
+                          name="validDt"
+                          value={validDt}
+                          onChange={(e) => setVdt(e.target.value)}
+                        >
+                          <>
+                            {validSel &&
+                              validSel.map((item) => (
+                                <option value={item} key={item}>
+                                  {item === "One Time Use" ? (
+                                    <strong>{item}</strong>
+                                  ) : (
+                                    <>
+                                      <strong>Duration:</strong> {item} month
+                                      {", "}
+                                      <strong>End Date:</strong>{" "}
+                                      {calculateValidDt(item)}
+                                    </>
+                                  )}
+                                </option>
+                              ))}
+                          </>
+                        </select>
+                      }
+                    </>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row mt-4">
+              <div className="col-lg-12">
+                <div className="card">
+                  <div className="card-header">
+                    <strong>Doctor Signature:</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row mt-4">
             <div className="col-lg-12">
               <div className="d-grid">
                 {false ? (
@@ -402,6 +607,8 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt  }) => {
               setSelPhar={setSelPhar}
               setVdt={setVdt}
               validDt={validDt}
+              setRepeatOption={setRepeatOption}
+              repeatOption={repeatOption}
             />
           )}
           {showResp?.msg && (

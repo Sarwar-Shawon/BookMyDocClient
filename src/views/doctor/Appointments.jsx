@@ -421,7 +421,7 @@ const UpdateModal = ({
   //
   return (
     <Modal
-      title={"Create New Appointment"}
+      title={"Update Appointment"}
       body={
         <div>
           {isLoading && (
