@@ -8,7 +8,7 @@ import { apiUrl, config } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import PrescriptionPreview from "../common/PrescriptionPreview";
-import RepeatPrescription from "../common/RepeatPrescription";
+import RepeatPrescription from "./RepeatPrescription";
 import { formatDateToString } from "../../utils";
 import moment from "moment";
 import Modal from "../../components/Modal";
@@ -355,8 +355,6 @@ const RequestPrescription = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
   const [showBtnLoader, setShowBtnLoader] = useState(false);
-
-  console.log("prescriptions",prescriptions)
   //
   useEffect(() => {
     setPrescriptions([])
@@ -397,45 +395,7 @@ const RequestPrescription = () => {
     }
     setShowCalendar(false);
   };
-  //
-   //need validation
-   const createRepeatPrescription = async () => {
-    try {
-      //
-      setShowBtnLoader(true)
-      // const userMedicineList = medicineList.map(
-      //   ({ suggestions, ...rest }) => rest
-      // );
 
-      // const params = {
-      //   apt_id: apt?._id,
-      //   phr_id: selPhr?._id,
-      //   medications: userMedicineList,
-      //   validDt: formatStringToDate(calculateValidDt(validDt || 1)),
-      // };
-      // console.log("params",params)
-      // //
-      // const resp = await Post(
-      //   `${apiUrl()}/doctor/create-prescription`,
-      //   params,
-      //   "application/json"
-      // );
-      // console.log("resp:::", resp);
-      // const respObj = {};
-      // if (resp.success) {
-      //   setShowPreview(false)
-      //   respObj.success = true;
-      //   respObj.msg = resp?.message;
-      // } else {
-      //   respObj.success = false;
-      //   respObj.msg = resp?.error;
-      // }
-      // setShowResp(respObj)
-    } catch (err) {
-    } finally {
-      setShowBtnLoader(false)
-    }
-  };
   //
   if (isLoading) {
     return <LoadingView />;
@@ -577,7 +537,7 @@ const RequestPrescription = () => {
                     setShowPresView(true);
                   }}
                 >
-                  View Old Prescription
+                  Create Repeat Prescription
                 </button>
               </div>
             ))
@@ -593,10 +553,9 @@ const RequestPrescription = () => {
           onCloseModal={() => {
             setShowPresView(false);
           }}
-          apt={selPC}
+          prescription={selPC}
           medicineList={selPC?.medications}
           title={"Prescription View"}
-          createRepeatPrescription={createRepeatPrescription}
         />
       )}
     </>

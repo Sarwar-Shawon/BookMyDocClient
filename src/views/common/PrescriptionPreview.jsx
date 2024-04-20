@@ -18,7 +18,7 @@ const validSel = [
   '10',
   '11',
   '12',
-  'One Time Use'
+  // 'One Time Use'
 ]
 //
 const PrescriptionPreview = ({
@@ -27,13 +27,11 @@ const PrescriptionPreview = ({
     apt,
     pharmacies,
     selPhr,
-    setSelPhar,
     createNewPrescription,
     doctor,
-    setVdt,
     validDt,
-    setRepeatOption,
-    repeatOption
+    repeatOption,
+    prescriptionRepeat
   }) => {
     const filItem = doctor ? pharmacies.filter((item)=> item._id == selPhr) : [];
     return (
@@ -101,8 +99,7 @@ const PrescriptionPreview = ({
                       <>
                         {filItem.length > 0 && (
                           <p>
-                            <strong>Name:</strong>{" "}
-                            {filItem[0]?.name}
+                            <strong>Name:</strong> {filItem[0]?.name}
                           </p>
                         )}
                         {filItem.length > 0 && (
@@ -184,7 +181,7 @@ const PrescriptionPreview = ({
               <div className="col-lg-12">
                 <div className="card">
                   <div className="card-header">
-                    <strong>Created Date:</strong>{" "}
+                    <strong>{prescriptionRepeat ? "Repeated Date:" : "Created Date"}</strong>{" "}
                     {formatDateToString(apt?.createdAt || new Date())}
                   </div>
                 </div>
@@ -194,7 +191,8 @@ const PrescriptionPreview = ({
               <div className="col-lg-12">
                 <div className="card">
                   <div className="card-header">
-                    <strong>Repeat Option:</strong>{repeatOption}
+                    <strong>Repeat Option:</strong>
+                    {doctor ? repeatOption : apt?.repeatOption ? "Yes" : "No"}
                   </div>
                 </div>
               </div>
@@ -206,10 +204,11 @@ const PrescriptionPreview = ({
                     <strong>Valid Date:</strong>{" "}
                     {/* {formatDateToString(apt?.createdAt || new Date())} */}
                     <>
-                      {doctor && (
-                        validDt == "One Time Use" ? "One Time Use" : calculateValidDt(validDt)
-                      )}
-                      {formatDateToString(apt?.validDt)}
+                      {doctor
+                        ? validDt == "One Time Use"
+                          ? "One Time Use"
+                          : calculateValidDt(validDt)
+                        : formatDateToString(apt?.validDt)}
                     </>
                   </div>
                 </div>
@@ -241,7 +240,9 @@ const PrescriptionPreview = ({
                         className="btn btn-primary"
                         onClick={createNewPrescription}
                       >
-                        Create Prescription
+                        {prescriptionRepeat
+                          ? "Create Repeat Prescription"
+                          : "Create Prescription"}
                       </button>
                     )}
                   </div>

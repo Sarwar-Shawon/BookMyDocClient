@@ -9,7 +9,6 @@ const api = axios.create({
 api.interceptors.request.use(
   async config => {
     const token = await getItem('apat');
-    console.log("token",token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,13 +24,12 @@ api.interceptors.response.use(
     if (error.response.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        console.log("${apiUrl()}/auth/refreshToken",`${apiUrl()}/auth/refreshToken`);
         const resp = await axios.get(
           `${apiUrl()}/auth/refreshToken`,{
             withCredentials: true, 
           }
         );
-        console.log("resp:::",resp)
+        // console.log("resp:::",resp)
         const {token} = resp.data;
         if(token)
           await setItem('apat', token);
