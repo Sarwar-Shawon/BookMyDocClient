@@ -4,6 +4,7 @@
 import React from "react";
 import { formatDateToString, calculateAge, calculateValidDt } from "../../utils";
 import Modal from "../../components/Modal";
+import { apiUrl } from "../../config/appConfig";
 const repeatVal = [ "Yes" , "No" ]
 const validSel = [
   '1',
@@ -24,7 +25,7 @@ const validSel = [
 const PrescriptionPreview = ({
     onCloseModal,
     medicineList,
-    apt,
+    prescription,
     pharmacies,
     selPhr,
     createNewPrescription,
@@ -47,16 +48,17 @@ const PrescriptionPreview = ({
                   </div>
                   <div className="card-body">
                     <p>
-                      <strong>Name:</strong> {[apt?.pt.f_name, apt?.pt.l_name]}
+                      <strong>Name:</strong>{" "}
+                      {[prescription?.pt.f_name, prescription?.pt.l_name]}
                     </p>
                     <p>
-                      <strong>Age:</strong> {calculateAge(apt?.pt.dob)}
+                      <strong>Age:</strong> {calculateAge(prescription?.pt.dob)}
                     </p>
                     <p>
-                      <strong>DOB:</strong> {apt?.pt.dob}
+                      <strong>DOB:</strong> {prescription?.pt.dob}
                     </p>
                     <p>
-                      <strong>Nhs:</strong> {apt?.pt.nhs}
+                      <strong>Nhs:</strong> {prescription?.pt.nhs}
                     </p>
                   </div>
                 </div>
@@ -69,21 +71,26 @@ const PrescriptionPreview = ({
                   <div className="card-body">
                     <p>
                       <strong>Doctor:</strong>{" "}
-                      {[apt?.doc.f_name, apt?.doc.l_name]}
+                      {[prescription?.doc.f_name, prescription?.doc.l_name]}
                     </p>
                     <p>
                       <strong>Dept:</strong>{" "}
-                      {apt?.dept ? apt?.dept?.name : apt?.doc?.dept?.name}
+                      {prescription?.dept
+                        ? prescription?.dept?.name
+                        : prescription?.doc?.dept?.name}
                     </p>
                     <p>
                       <strong>GP Center:</strong>{" "}
-                      {apt?.org ? apt?.org?.name : apt?.doc?.organization?.name}
+                      {prescription?.org
+                        ? prescription?.org?.name
+                        : prescription?.doc?.organization?.name}
                     </p>
                     <p>
                       <strong>Address:</strong>{" "}
-                      {apt?.org
-                        ? apt?.org?.name
-                        : apt?.doc?.organization?.addr?.formatted_address}
+                      {prescription?.org
+                        ? prescription?.org?.name
+                        : prescription?.doc?.organization?.addr
+                            ?.formatted_address}
                     </p>
                   </div>
                 </div>
@@ -117,14 +124,14 @@ const PrescriptionPreview = ({
                     ) : (
                       <>
                         <p>
-                          <strong>Name:</strong> {apt?.phar?.name}
+                          <strong>Name:</strong> {prescription?.phar?.name}
                         </p>
                         <p>
                           <strong>Address:</strong>{" "}
-                          {apt?.phar?.addr?.formatted_address}
+                          {prescription?.phar?.addr?.formatted_address}
                         </p>
                         <p>
-                          <strong>Phone:</strong> {apt?.phar?.phone}
+                          <strong>Phone:</strong> {prescription?.phar?.phone}
                         </p>
                       </>
                     )}
@@ -181,8 +188,10 @@ const PrescriptionPreview = ({
               <div className="col-lg-12">
                 <div className="card">
                   <div className="card-header">
-                    <strong>{prescriptionRepeat ? "Repeated Date:" : "Created Date"}</strong>{" "}
-                    {formatDateToString(apt?.createdAt || new Date())}
+                    <strong>
+                      {prescriptionRepeat ? "Repeated Date:" : "Created Date:"}
+                    </strong>{" "}
+                    {formatDateToString(prescription?.createdAt || new Date())}
                   </div>
                 </div>
               </div>
@@ -191,24 +200,55 @@ const PrescriptionPreview = ({
               <div className="col-lg-12">
                 <div className="card">
                   <div className="card-header">
-                    <strong>Repeat Option:</strong>
-                    {doctor ? repeatOption : apt?.repeatOption ? "Yes" : "No"}
+                    <strong>Repeat Option:</strong>{" "}
+                    {doctor
+                      ? repeatOption
+                      : prescription?.repeatOption
+                      ? "Yes"
+                      : "No"}
                   </div>
                 </div>
               </div>
             </div>
+            
+            {!doctor && prescription?.status && (
+              <div className="row mt-4">
+                <div className="col-lg-12">
+                  <div className="card">
+                    <div className="card-header">
+                      <strong>Status:</strong>{" "}
+                      {
+                        prescription.repeatReq ?
+                        "You have requested for repeat prescription.":
+                        prescription?.status == "New" && prescription?.phar._id
+                        ? `${prescription?.phar.name} is preparing the prescription.`
+                        : prescription?.status == "Ready" &&
+                          prescription?.phar._id
+                        ? `${prescription?.phar.name} has prepared the prescription.`
+                        : prescription?.status == "Dispensed" &&
+                          prescription?.phar._id
+                        ? `${prescription?.phar.name} has Dispensed the prescription.`
+                        : prescription?.status == "Repeated"
+                        ? `Request for repeat prescription.`
+                        : ""}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="row mt-4">
               <div className="col-lg-12">
                 <div className="card">
                   <div className="card-header">
                     <strong>Valid Date:</strong>{" "}
-                    {/* {formatDateToString(apt?.createdAt || new Date())} */}
+                    {/* {formatDateToString(prescription?.createdAt || new Date())} */}
                     <>
                       {doctor
                         ? validDt == "One Time Use"
                           ? "One Time Use"
                           : calculateValidDt(validDt)
-                        : formatDateToString(apt?.validDt)}
+                        : formatDateToString(prescription?.validDt)}
                     </>
                   </div>
                 </div>
@@ -219,6 +259,16 @@ const PrescriptionPreview = ({
                 <div className="card">
                   <div className="card-header">
                     <strong>Doctor Signature:</strong>
+                    {
+                      <img
+                        src={`${apiUrl()}/uploads/${prescription?.doc?.pSign}`}
+                        style={{
+                          width: 250,
+                          height: 80,
+                          // borderRadius: 100,
+                        }}
+                      />
+                    }
                   </div>
                 </div>
               </div>

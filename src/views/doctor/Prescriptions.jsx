@@ -333,7 +333,7 @@ const PrescriptionViews = () => {
           onCloseModal={() => {
             setShowPresView(false);
           }}
-          apt={selPC}
+          prescription={selPC}
           medicineList={selPC?.medications}
           title={"Prescription View"}
         />

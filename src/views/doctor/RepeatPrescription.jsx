@@ -596,7 +596,7 @@ const RepeatPrescription = ({ onCloseModal, title, prescription }) => {
                     className="btn btn-primary"
                     onClick={() => setShowPreview(true)}
                   >
-                    View Prescription
+                    Preview Prescription
                   </button>
                 )}
               </div>
@@ -608,7 +608,7 @@ const RepeatPrescription = ({ onCloseModal, title, prescription }) => {
               createNewPrescription={createRepeatPrescription}
               onCloseModal={() => setShowPreview(false)}
               pharmacies={pharmacies}
-              apt={prescription}
+              prescription={prescription}
               selPhr={selPhr}
               doctor={true}
               setSelPhar={setSelPhar}

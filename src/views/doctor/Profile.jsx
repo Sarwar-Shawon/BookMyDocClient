@@ -222,9 +222,9 @@ const DoctorProfile = () => {
                         : URL.createObjectURL(profile?.pSign)
                     }
                     style={{
-                      width: 200,
-                      height: 200,
-                      borderRadius: 100,
+                      width: 300,
+                      height: 100,
+                      // borderRadius: 100,
                     }}
                   />
                 )}
@@ -438,9 +438,9 @@ const UpdateProfileView = ({isLoading , formData, setFormData , handleChange , u
                       : URL.createObjectURL(formData.pSign)
                   }
                   style={{
-                    width: 100,
+                    width: 300,
                     height: 100,
-                    borderRadius: 50,
+                    // borderRadius: 50,
                   }}
                 />
               )}

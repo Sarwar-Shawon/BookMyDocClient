@@ -544,12 +544,12 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
                               validSel.map((item) => (
                                 <option value={item} key={item}>
                                   {item === "One Time Use" ? (
-                                    <strong>{item}</strong>
+                                    {item}
                                   ) : (
                                     <>
-                                      <strong>Duration:</strong> {item} month
+                                      Duration: {item} month
                                       {", "}
-                                      <strong>End Date:</strong>{" "}
+                                      End Date:{" "}
                                       {calculateValidDt(item)}
                                     </>
                                   )}
@@ -568,7 +568,18 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
                 <div className="card">
                   <div className="card-header">
                     <strong>Doctor Signature:</strong>
+                    {
+                    <img
+                    src={`${apiUrl()}/uploads/${apt?.doc?.pSign}`}
+                    style={{
+                      width: 250,
+                      height: 80,
+                      // borderRadius: 100,
+                    }}
+                  />
+                  }
                   </div>
+                  
                 </div>
               </div>
             </div>
@@ -596,7 +607,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
                       }
                       setShowPreview(true)}}
                   >
-                    View Prescription
+                    Preview Prescription
                   </button>
                 )}
               </div>
@@ -608,7 +619,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
               createNewPrescription={createNewPrescription}
               onCloseModal={() => setShowPreview(false)}
               pharmacies={pharmacies}
-              apt={apt}
+              prescription={apt}
               selPhr={selPhr}
               doctor={true}
               setSelPhar={setSelPhar}
