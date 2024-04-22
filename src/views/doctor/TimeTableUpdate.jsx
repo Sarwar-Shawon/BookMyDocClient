@@ -116,6 +116,7 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
     console.log("slots", slots);
     return slots;
   };
+  console.log("timeSlots", timeSlots);
   //
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -171,14 +172,14 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
       body={
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-          <ErrorAlert
-            msg={!showResp?.success ? showResp?.msg : ""}
-            hideMsg={() => setShowResp({})}
-          />
-          <SuccessAlert
-            msg={showResp?.success ? showResp?.msg : ""}
-            hideMsg={() => setShowResp({})}
-          />
+            <ErrorAlert
+              msg={!showResp?.success ? showResp?.msg : ""}
+              hideMsg={() => setShowResp({})}
+            />
+            <SuccessAlert
+              msg={showResp?.success ? showResp?.msg : ""}
+              hideMsg={() => setShowResp({})}
+            />
             <legend className="fw-bold">Select Available Days:</legend>
             {Object.keys(_days).map((day) => (
               <div className="form-check form-check-inline" key={day}>
@@ -199,64 +200,75 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
                 </label>
               </div>
             ))}
-            {/* Repeat for other days */}
           </div>
-          {Object.entries(days).map(([day, obj]) => (
-            <div className="mb-3" key={day}>
-              <legend className="fw-bold">
-                {day.charAt(0).toUpperCase() + day.slice(1)}:
-              </legend>
-              <div className="row">
-                <div className="col-md-4">
-                  <div className="mb-3">
-                    <label className="form-label" style={{ color: "#219F94" }}>
-                      Start Time:
-                    </label>
-                    <input
-                      type="time"
-                      className="form-control"
-                      value={obj.startTime}
-                      onChange={(e) => handleTimeChange(e, day)}
-                      name="startTime"
-                      required
-                    />
+          <div className="update-timeslot-list">
+            {Object.entries(days).map(([day, obj]) => (
+              <div className="mb-3" key={day}>
+                <legend className="fw-bold">
+                  {day.charAt(0).toUpperCase() + day.slice(1)}:
+                </legend>
+                <div className="row">
+                  <div className="col-md-4">
+                    <div className="mb-3">
+                      <label
+                        className="form-label"
+                        style={{ color: "#219F94" }}
+                      >
+                        Start Time:
+                      </label>
+                      <input
+                        type="time"
+                        className="form-control"
+                        value={obj.startTime}
+                        onChange={(e) => handleTimeChange(e, day)}
+                        name="startTime"
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="mb-3">
-                    <label className="form-label" style={{ color: "#EB6440" }}>
-                      End Time:
-                    </label>
-                    <input
-                      type="time"
-                      className="form-control"
-                      value={obj.endTime}
-                      onChange={(e) => handleTimeChange(e, day)}
-                      name="endTime"
-                      required
-                    />
+                  <div className="col-md-4">
+                    <div className="mb-3">
+                      <label
+                        className="form-label"
+                        style={{ color: "#EB6440" }}
+                      >
+                        End Time:
+                      </label>
+                      <input
+                        type="time"
+                        className="form-control"
+                        value={obj.endTime}
+                        onChange={(e) => handleTimeChange(e, day)}
+                        name="endTime"
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="mb-3">
-                    <label className="form-label" style={{ color: "#5D8BF4" }}>
-                      Appointment Duration:
-                    </label>
-                    <select
-                      className="form-select"
-                      value={obj.duration}
-                      name="duration"
-                      onChange={(e) => handleTimeChange(e, day)}
-                    >
-                      <option value="15">15</option>
-                      <option value="30">30</option>
-                      <option value="45">45</option>
-                    </select>
+                  <div className="col-md-4">
+                    <div className="mb-3">
+                      <label
+                        className="form-label"
+                        style={{ color: "#5D8BF4" }}
+                      >
+                        Appointment Duration:
+                      </label>
+                      <select
+                        className="form-select"
+                        value={obj.duration}
+                        name="duration"
+                        onChange={(e) => handleTimeChange(e, day)}
+                      >
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
           <button type="submit" className="btn btn-primary">
             Update Time Slots
           </button>

@@ -24,6 +24,7 @@ const DoctorProfile = () => {
     active: true,
     organization: "",
     nurses: [],
+    pSign: ""
   });
   //
   const [profile, setProfile] = useState([]);
@@ -50,7 +51,14 @@ const DoctorProfile = () => {
         ...formData,
         [name]: value == "true" ? true : false,
       });
-    } else if (name == "img") {
+    }
+    else if (name == "pSign") {
+      setFormData({
+        ...formData,
+        [name]: e.target.files[0],
+      });
+    } 
+    else if (name == "img") {
       setFormData({
         ...formData,
         [name]: e.target.files[0],
@@ -104,6 +112,7 @@ const DoctorProfile = () => {
         phone: formData.phone,
         active: formData.active,
         img: formData.img,
+        pSign: formData.pSign,
       }
       const resp = await Put(`${apiUrl()}/doctor/update-profile`, params);
       console.log("resp:::", resp);
@@ -182,23 +191,44 @@ const DoctorProfile = () => {
                 ))
               : null}
           </div>
-          <div className="mb-3">
-            <label className="form-label">Image:</label>
-            <div style={{ paddingBottom: "10px" }}>
-              {profile?.img && (
-                <img
-                  src={
-                    typeof profile?.img === "string"
-                      ? `${apiUrl()}/uploads/${profile?.img}`
-                      : URL.createObjectURL(profile?.img)
-                  }
-                  style={{
-                    width: 200,
-                    height: 200,
-                    borderRadius: 100,
-                  }}
-                />
-              )}
+          <div style={{ display: "flex", flexDirection: "row" , justifyContent: 'space-between'}}>
+            <div className="mb-3">
+              <label className="form-label">Image:</label>
+              <div style={{ paddingBottom: "10px" }}>
+                {profile?.img && (
+                  <img
+                    src={
+                      typeof profile?.img === "string"
+                        ? `${apiUrl()}/uploads/${profile?.img}`
+                        : URL.createObjectURL(profile?.img)
+                    }
+                    style={{
+                      width: 200,
+                      height: 200,
+                      borderRadius: 100,
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Prescription Signature:</label>
+              <div style={{ paddingBottom: "10px" }}>
+                {profile?.pSign && (
+                  <img
+                    src={
+                      typeof profile?.pSign === "string"
+                        ? `${apiUrl()}/uploads/${profile?.pSign}`
+                        : URL.createObjectURL(profile?.pSign)
+                    }
+                    style={{
+                      width: 200,
+                      height: 200,
+                      borderRadius: 100,
+                    }}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -265,10 +295,9 @@ const DoctorProfile = () => {
           onCloseModal={() => setShowUpdateModal(false)}
         />
       )}
-      {
-        showCngPassModal &&
-        <ChnagePasswordView onCloseModal={()=> setShowCngPassModal(false)}/>
-      }
+      {showCngPassModal && (
+        <ChnagePasswordView onCloseModal={() => setShowCngPassModal(false)} />
+      )}
     </div>
   );
 };
@@ -390,6 +419,33 @@ const UpdateProfileView = ({isLoading , formData, setFormData , handleChange , u
                 />
               )}
             </div>
+            <div className="mb-3 ">
+              <label className="form-label">Prescription Signature:</label>
+              <input
+                type="file"
+                className="form-control"
+                accept="image/*"
+                name="pSign"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="align-items-center">
+              {formData.pSign && (
+                <img
+                  src={
+                    typeof formData.pSign == "string"
+                      ? `${apiUrl()}/uploads/${formData.pSign}`
+                      : URL.createObjectURL(formData.pSign)
+                  }
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 50,
+                  }}
+                />
+              )}
+            </div>
+            
           </div>
           <div className="col-12">
             <div className="d-grid">
