@@ -486,104 +486,101 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
               </div>
             </div>
           </div>
-          
+
           <div className="row mt-4">
-              <div className="col-lg-12">
-                <div className="card">
-                  <div className="card-header">
-                    <strong>Created Date:</strong>{" "}
-                    {formatDateToString(apt?.createdAt || new Date())}
-                  </div>
+            <div className="col-lg-12">
+              <div className="card">
+                <div className="card-header">
+                  <strong>Created Date:</strong>{" "}
+                  {formatDateToString(apt?.createdAt || new Date())}
                 </div>
               </div>
             </div>
-            <div className="row mt-4">
-              <div className="col-lg-12">
-                <div className="card">
-                  <div className="card-header">
-                    <strong>Repeat Option:</strong>{" "}
-                    <>
-                      {
-                        <select
-                          className="form-select"
-                          name="reapetOption"
-                          value={repeatOption}
-                          onChange={(e) => setRepeatOption(e.target.value)}
-                        >
-                          <>
-                            {
-                              repeatVal.map((item) => (
-                                <option value={item} key={item}>
-                                  {item}
-                                </option>
-                              ))}
-                          </>
-                        </select>
-                      }
-                    </>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-lg-12">
-                <div className="card">
-                  <div className="card-header">
-                    <strong>Valid Date:</strong>{" "}
-                    {/* {formatDateToString(apt?.createdAt || new Date())} */}
-                    <>
-                      {
-                        <select
-                          className="form-select"
-                          name="validDt"
-                          value={validDt}
-                          onChange={(e) => setVdt(e.target.value)}
-                        >
-                          <>
-                            {validSel &&
-                              validSel.map((item) => (
-                                <option value={item} key={item}>
-                                  {item === "One Time Use" ? (
-                                    {item}
-                                  ) : (
-                                    <>
-                                      Duration: {item} month
-                                      {", "}
-                                      End Date:{" "}
-                                      {calculateValidDt(item)}
-                                    </>
-                                  )}
-                                </option>
-                              ))}
-                          </>
-                        </select>
-                      }
-                    </>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row mt-4">
-              <div className="col-lg-12">
-                <div className="card">
-                  <div className="card-header">
-                    <strong>Doctor Signature:</strong>
+          </div>
+          <div className="row mt-4">
+            <div className="col-lg-12">
+              <div className="card">
+                <div className="card-header">
+                  <strong>Repeat Option:</strong>{" "}
+                  <>
                     {
-                    <img
-                    src={`${apiUrl()}/uploads/${apt?.doc?.pSign}`}
-                    style={{
-                      width: 250,
-                      height: 80,
-                      // borderRadius: 100,
-                    }}
-                  />
-                  }
-                  </div>
-                  
+                      <select
+                        className="form-select"
+                        name="reapetOption"
+                        value={repeatOption}
+                        onChange={(e) => setRepeatOption(e.target.value)}
+                      >
+                        <>
+                          {repeatVal.map((item) => (
+                            <option value={item} key={item}>
+                              {item}
+                            </option>
+                          ))}
+                        </>
+                      </select>
+                    }
+                  </>
                 </div>
               </div>
             </div>
-            <div className="row mt-4">
+          </div>
+          <div className="row mt-4">
+            <div className="col-lg-12">
+              <div className="card">
+                <div className="card-header">
+                  <strong>Valid Date:</strong>{" "}
+                  {/* {formatDateToString(apt?.createdAt || new Date())} */}
+                  <>
+                    {
+                      <select
+                        className="form-select"
+                        name="validDt"
+                        value={validDt}
+                        onChange={(e) => setVdt(e.target.value)}
+                      >
+                        <>
+                          {validSel &&
+                            validSel.map((item) => (
+                              <option value={item} key={item}>
+                                {item === "One Time Use" ? (
+                                  <>{ item }</>
+                                ) : (
+                                  <>
+                                    Duration: {item} month
+                                    {", "}
+                                    End Date: {calculateValidDt(item)}
+                                  </>
+                                )}
+                              </option>
+                            ))}
+                        </>
+                      </select>
+                    }
+                  </>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mt-4">
+            <div className="col-lg-12">
+              <div className="card">
+                <div className="card-header">
+                  <strong>Doctor Signature:</strong>
+                  {
+                    <img
+                      src={`${apiUrl()}/uploads/${apt?.doc?.pSign}`}
+                      style={{
+                        width: 250,
+                        height: 80,
+                        // borderRadius: 100,
+                      }}
+                    />
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row mt-4">
             <div className="col-lg-12">
               <div className="d-grid">
                 {false ? (
@@ -605,7 +602,8 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
                         setShowResp(respObj);
                         return;
                       }
-                      setShowPreview(true)}}
+                      setShowPreview(true);
+                    }}
                   >
                     Preview Prescription
                   </button>
@@ -627,6 +625,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
               validDt={validDt}
               setRepeatOption={setRepeatOption}
               repeatOption={repeatOption}
+              showBtnLoader={showBtnLoader}
             />
           )}
           {showResp?.msg && (

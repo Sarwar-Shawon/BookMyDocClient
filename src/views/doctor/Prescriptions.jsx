@@ -14,8 +14,7 @@ import moment from "moment";
 import Modal from "../../components/Modal";
 import AppCalendar from "../../components/Calendar";
 import InfiniteScroll from "react-infinite-scroll-component";
-
-import { FaCalendarAlt, FaHospitalUser } from "react-icons/fa";
+import { FaCalendarAlt, FaHospitalUser,FaClipboardList } from "react-icons/fa";
 //
 const DoctorPrescriptions = ({ doctorId }) => {
   const [selType, setSelType] = useState("created");
@@ -231,7 +230,11 @@ const PrescriptionViews = () => {
               <div
                 key={pr._id}
                 className="doctor-card card mb-3 mx-2"
-                style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" }}
+                style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" ,
+                backgroundColor:  pr.presType == "Repeated" ? "#FFF9C9" : pr.repeatReq ? "#FFF9C9" : "#fff",
+                
+                }}
+                
               >
                 <img
                   src={
@@ -268,6 +271,18 @@ const PrescriptionViews = () => {
                     <FaHospitalUser style={{ marginRight: "5px" }} />
                     <p className="card-text" style={{ fontWeight: "bold" }}>
                       {pr?.pt?.nhs}
+                    </p>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <FaClipboardList style={{ marginRight: "5px" }} />
+                    <p className="card-text" style={{ fontWeight: "bold" }}>
+                      {pr?.presType}
                     </p>
                   </div>
                 </div>

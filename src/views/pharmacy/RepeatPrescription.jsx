@@ -11,7 +11,7 @@ import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "./medicine-suggestions.css";
+// import "./medicine-suggestions.css";
 import moment from "moment/moment";
 import {
   formatStringToDate,

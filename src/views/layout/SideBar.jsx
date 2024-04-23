@@ -35,7 +35,10 @@ const AppRoutes = {
     { name: "Doctor Timetables", path: "/timetable" },
     { name: "Profile", path: "/profile" },
   ],
-  Pharmacy: [{ name: "Home", path: "/home" }],
+  Pharmacy: [
+    { name: "Home", path: "/home" },
+    { name: "Profile", path: "/profile" },
+  ],
 };
 
 const SideBar = ({isVisible}) => {
