@@ -2,12 +2,13 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { Get } from "../../api";
+import { Get,getAddressFromLatLng } from "../../api";
 import { apiUrl } from "../../config/appConfig";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import CreateAppointmentView from "./CreateAppointmentView";
 import InfiniteScroll from "react-infinite-scroll-component";
+import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 
 //
 const PatientHome = () => {
@@ -15,24 +16,25 @@ const PatientHome = () => {
   const [selDept, setSelDept] = useState("");
   const [selDoc, setSelDoc] = useState("");
   const [doctors, setDoctors] = useState([]);
-  const [organizations, setOrganizations] = useState([]);
   const [error, setError] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [showAppointment, setShowAppointment] = useState(false);
-
+  //
+  const [curAddr, setCurAddr] = useState("");
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
   //
   useEffect(() => {
-    // fetchOrganizations();
     fetchDepartments();
   }, []);
-  //
+  //get data when change department
   useEffect(() => {
-    console.log("asd");
+    setLoading(true);
     setDoctors([]);
     fetchDoctors({ pSkip: true });
   }, [selDept]);
-  //
+  //get doctors
   const fetchDoctors = async ({ pSkip }) => {
     try {
       const skip = pSkip ? 0 : doctors.length;
@@ -48,27 +50,40 @@ const PatientHome = () => {
       }
     } catch (err) {
       // console.error('err:', err);
-      setError(err?.message);
     } finally {
       setLoading(false);
     }
   };
+  //get current location
+  useEffect(() => {
+    getLocation();
+  }, []);
   //
-  // const fetchOrganizations = async () => {
-  //   try {
-  //     const resp = await Get(`${apiUrl()}/admin/getAllOrganizations`);
-  //     console.log("resp:::", resp);
-  //     if (resp.success) {
-  //       setOrganizations(resp.data);
-  //     }
-  //   } catch (err) {
-  //     // console.error('err:', err);
-  //     setError(err?.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  useEffect(() => {
+    const getAddress = async () => {
+      if (latitude && longitude)
+        setCurAddr(await getAddressFromLatLng(latitude, longitude));
+    };
+    getAddress();
+  }, [latitude,longitude]);
   //
+  const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          console.log("position",position)
+          setLatitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
+        },
+        err => {
+          setError(err.message);
+        }
+      );
+    } else {
+      setError("Geolocation is not supported by this browser.");
+    }
+  };
+  //get Departments
   const fetchDepartments = async () => {
     try {
       const resp = await Get(`${apiUrl()}/patient/get-dept`);
@@ -84,8 +99,6 @@ const PatientHome = () => {
     }
   };
   //
-
-  //
   return (
     <div className="container-fluid">
       <div className="row">
@@ -100,7 +113,7 @@ const PatientHome = () => {
                 onChange={(e) => setSelDept(e.target.value)}
                 required
               >
-                <option value="">Select Department</option>
+                <option value="">All Departments</option>
                 <>
                   {departments.length &&
                     departments.map((dept) => (
@@ -110,6 +123,21 @@ const PatientHome = () => {
                     ))}
                 </>
               </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Location:</label>
+              <PLaceAutoComplete
+                onPlaceSelected={(place) => {
+                  console.log("place", place);
+                  // setFormData((prevFormData) => ({
+                  //   ...prevFormData,
+                  //   addr: {
+                  //     ...prevFormData.addr,
+                  //     ...place,
+                  //   },
+                  // }));
+                }}
+              />
             </div>
             <button
               style={{
@@ -147,71 +175,76 @@ const PatientHome = () => {
             )}
             <InfiniteScroll
               dataLength={doctors.length}
-              next={()=>fetchDoctors({pSkip: false})}
+              next={() => fetchDoctors({ pSkip: false })}
               hasMore={hasMore}
               loader={
-                <div className="d-flex justify-content-center align-items-center">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh",
+                  }}
+                >
                   <div className="spinner"></div>
                 </div>
               }
               style={{ display: "flex", flexWrap: "wrap" }}
             >
-               {doctors.map((doctor) => {
-              return (
-                <div
-                  key={doctor._id}
-                  className="doctor-card card mb-3 mx-2"
-                  onClick={() => {
-                    // setSelectedDoctor(doctor);
-                    // setOpenAddView(true);
-                  }}
-                >
-                  <img
-                    src={
-                      typeof doctor.img == "string"
-                        ? `${apiUrl()}/uploads/${doctor.img}`
-                        : URL.createObjectURL(doctor.img)
-                    }
-                    className="card-img-top"
-                    alt={doctor.f_name}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      {[doctor.f_name, doctor.l_name].join(" ")}
-                    </h5>
-                    <p className="card-text">{doctor?.dept?.name}</p>
-                    <p className="card-text">{doctor?.organization?.name}</p>
-                  </div>
-                  <button
-                    style={{
-                      width: "200px",
-                      marginBottom: "10px",
-                      backgroundColor: "#0B2447",
-                      borderColor: "#0B2447",
-                      transition: "background-color 0.3s, border-color 0.3s",
-                    }}
-                    className="btn btn-primary"
-                    onMouseOver={(e) => {
-                      e.target.style.backgroundColor = "#1a4a8a";
-                      e.target.style.borderColor = "#1a4a8a";
-                    }}
-                    onMouseOut={(e) => {
-                      e.target.style.backgroundColor = "#0B2447";
-                      e.target.style.borderColor = "#0B2447";
-                    }}
+              {doctors.map((doctor) => {
+                return (
+                  <div
+                    key={doctor._id}
+                    className="doctor-card card mb-3 mx-2"
                     onClick={() => {
-                      setSelDoc(doctor);
-                      setShowAppointment(true);
+                      // setSelectedDoctor(doctor);
+                      // setOpenAddView(true);
                     }}
                   >
-                    Book Appointment
-                  </button>
-                </div>
-              );
-            })}
+                    <img
+                      src={
+                        typeof doctor.img == "string"
+                          ? `${apiUrl()}/uploads/${doctor.img}`
+                          : URL.createObjectURL(doctor.img)
+                      }
+                      className="card-img-top"
+                      alt={doctor.f_name}
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title">
+                        {[doctor.f_name, doctor.l_name].join(" ")}
+                      </h5>
+                      <p className="card-text">{doctor?.dept?.name}</p>
+                      <p className="card-text">{doctor?.organization?.name}</p>
+                    </div>
+                    <button
+                      style={{
+                        width: "200px",
+                        marginBottom: "10px",
+                        backgroundColor: "#0B2447",
+                        borderColor: "#0B2447",
+                        transition: "background-color 0.3s, border-color 0.3s",
+                      }}
+                      className="btn btn-primary"
+                      onMouseOver={(e) => {
+                        e.target.style.backgroundColor = "#1a4a8a";
+                        e.target.style.borderColor = "#1a4a8a";
+                      }}
+                      onMouseOut={(e) => {
+                        e.target.style.backgroundColor = "#0B2447";
+                        e.target.style.borderColor = "#0B2447";
+                      }}
+                      onClick={() => {
+                        setSelDoc(doctor);
+                        setShowAppointment(true);
+                      }}
+                    >
+                      Book Appointment
+                    </button>
+                  </div>
+                );
+              })}
             </InfiniteScroll>
-
-           
           </>
         )}
       </div>

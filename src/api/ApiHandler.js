@@ -118,22 +118,13 @@ export const PublicGet = async (url) => {
     };
   }
 };
-
-// Function to search for a medicine by name
-export async function searchMedicineByName(medicineName) {
-  try {
-    const response = await axios.get(`https://api.fda.gov/drug/label.json?search=generic_name:${medicineName}`);
-    console.log("responseresponseresponse:::", response)
-
-    const medicineList = response.data.results.map(result => result.openfda.generic_name);
-    console.log(medicineList);
-    return medicineList;
-
-    return medicineList;
-  } catch (error) {
-    console.error('Error searching for medicine:', error);
-    return [];
+//
+export const getAddressFromLatLng = async (latitude, longitude) => {
+  try{
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
+    const response = await axios.get(url);
+    return response?.data?.results[0].formatted_address || ""
+  }catch (error) {
+    return "";
   }
-}
-
-// Call the function with the medicine name you want to search for
+};

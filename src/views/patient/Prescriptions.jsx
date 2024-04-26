@@ -21,7 +21,6 @@ const PatientPrescriptions = () => {
   const [showPresView, setShowPresView] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [isBtnLoading, seBtntLoading] = useState(false);
-  const [selType, setSelType] = useState("Accepted");
   const [showResp, setShowResp] = useState({});
   const [hasMore, setHasMore] = useState(true);
   const [showRepeatModal, setShowRepeatModal] = useState(false);

@@ -1,7 +1,7 @@
 /*
  * @copyRight by md sarwar hoshen.
  */
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Routes,
   Route,
@@ -11,7 +11,6 @@ import {
 //
 import { useAuthContext } from "../context/AuthContext";
 //all pages
-import NotFoundPage from "../views/notfound/NotFoundPage";
 import {Home, Doctors, Nurses, Pharmacies , Departments , Profile , Organizations} from '../views/admin'
 import {Login, SignUp, Verification} from '../views/auth'
 import {PasswordChange} from '../views/common'
@@ -26,7 +25,6 @@ const ProtectedRoute = ({ children }) => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
   if (isAuthenticated || user_type == "Admin") {
     return children || <Outlet />;
   } else {
@@ -35,7 +33,7 @@ const ProtectedRoute = ({ children }) => {
 };
 //
 const AppRoutes = () => {
-  const { user_type, isAuthenticated } = useAuthContext();
+  const { user_type } = useAuthContext();
   //
   const userRoutes = {
     Admin: [
