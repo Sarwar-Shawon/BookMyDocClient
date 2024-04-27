@@ -149,7 +149,7 @@
 .card-img-top {
     width: 200px;
     height: 200px;
-    object-fit: cover;
+    object-fit: fill;
 }
 
 .doctor-card {
@@ -191,9 +191,7 @@ button.btn-primary:hover {
 .search-btn,
 .add-btn {
     background-color: #1a4a8a;
-    /* Change to the desired hover color */
     border-color: #1a4a8a;
-    /* Change to the desired hover border color */
 }
 
 .button-container {
@@ -260,4 +258,8 @@ button.btn-primary:hover {
 
 .card-body p {
     margin-bottom: 5px;
+}
+
+.apt-details .form-label {
+    color: #074173;
 }

@@ -19,7 +19,7 @@ import DoctorSelection from "./DoctorSelection";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AppointmentCard from "../common/AppointmentCard"
 import AppointmentDetails from "../common/AppointmentDetails";
-
+import PatientsMedicalRecord from '../common/PatientsMedicalRecord'
 //
 const NurseAppointments = () => {
   const [selDoc, setSelDoctor] = useState("");
@@ -92,6 +92,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
   const [showCancelView, setShowCancelView] = useState(false);
   const [showUpdateView, setShowUpdateView] = useState(false);
   const [showAcceptView, setShowAcceptView] = useState(false);
+  const [showPtRecordView, setShowPatientRecordView] = useState(false);
   //
   const [isBtnLoading, setIsBtnLoading] = useState(false);
   //
@@ -271,6 +272,10 @@ const AppointmentView = ({ aptType, selDoc }) => {
                       setSelApt(apt);
                       setShowAcceptView(true);
                     }}
+                    setShowPatientRecordView={() => {
+                      setSelApt(apt);
+                      setShowPatientRecordView(true);
+                    }}
                     aptType={aptType}
                   />
                 );
@@ -300,6 +305,13 @@ const AppointmentView = ({ aptType, selDoc }) => {
           formData={formData}
           setFormData={setFormData}
           isBtnLoading={isBtnLoading}
+          selDoc={selDoc}
+        />
+      )}
+      {showPtRecordView && (
+        <PatientsMedicalRecord
+          onCloseModal={() => setShowPatientRecordView(false)}
+          apt={selApt}
           selDoc={selDoc}
         />
       )}

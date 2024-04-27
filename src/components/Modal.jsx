@@ -17,7 +17,7 @@ const Modal = (props) => {
       <div className={`modal-dialog modal-dialog-centered ${props.big ? "modal-lg" : ""} ${props.bigger ? "modal-xl" : ""}`} role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLongTitle">
+            <h5 className="modal-title" id="exampleModalLongTitle" style={{color: '#074173'}}>
               {props?.title}
             </h5>
             <button

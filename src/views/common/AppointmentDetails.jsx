@@ -6,7 +6,6 @@ import {
   FaCalendarAlt,
   FaClock,
   FaHospitalUser,
-  FaClipboard,
   FaClinicMedical,
   FaCity,
   FaRegUser,
@@ -23,9 +22,9 @@ const AppointmentDetails = ({ apt, onCloseModal , doctor , setShowCreatePresView
       title={"Appointment Details"}
       body={
         <div>
-          <div className="col-md-12">
+          <div className="col-md-12 apt-details">
             <div className="mb-3">
-              <label className="form-label">Doctor Name:</label>
+              <label className="form-label" style={{ color: '#2C4E80'  }}>Doctor Name:</label>
 
               <label
                 className="form-control"

@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import Header from "./Header";
 import SideBar from "./SideBar";
-import "./css/Layout.css";
+import "../../css/Layout.css";
 const Layout = (props) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   //
