@@ -647,6 +647,10 @@ const HistoryView = ({ aptType,selDoc }) => {
                     <AppointmentCard
                       key={apt._id}
                       apt={apt}
+                      setShowDetails={() => {
+                        setSelApt(apt);
+                        setShowDetails(true);
+                      }}
                       aptType={aptType}
                     />
                   );
@@ -655,6 +659,16 @@ const HistoryView = ({ aptType,selDoc }) => {
           </>
         )}
       </div>
+      {
+        showDetails && 
+        <AppointmentDetails
+          onCloseModal={() => {
+            setShowDetails(false);
+            setSelApt("");
+          }}
+          apt={selApt}
+        />
+      }
     </div>
   );
 };

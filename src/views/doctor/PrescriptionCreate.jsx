@@ -5,11 +5,9 @@
 import React, { useState, useEffect } from "react";
 import { Get, Post } from "../../api";
 import { apiUrl } from "../../config/appConfig";
-import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
-import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./medicine-suggestions.css";
 import {
@@ -19,48 +17,8 @@ import {
   formatDateToString
 } from "../../utils";
 import Autosuggest from "react-autosuggest";
+import {prescriptionInstructionsOptions, validOptions, repeatOptions} from '../../utils'
 import PrescriptionPreview from "../common/PrescriptionPreview";
-//
-const prescriptionInstructions = [
-  "Before meals",
-  "Use as much as desired",
-  "Twice a day",
-  "With food",
-  "Every other day",
-  "After meals",
-  "Every day",
-  "Every hour",
-  "Every night at bedtime",
-  "Every three hours",
-  "Four times a day",
-  "Every week",
-  "Three times a day",
-  "Times",
-  "Daily",
-  "Morning",
-  "Twice daily, 12-hrly",
-  "Three times daily, 8-hrly",
-  "Four times daily, 6-hrly",
-  "Six times daily, 4-hrly",
-  "As required",
-  "With/after food",
-];
-const validSel = [
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '10',
-  '11',
-  '12',
-  // 'One Time Use'
-]
-const repeatVal = [ "Yes" , "No" ]
 //
 const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
   //
@@ -182,8 +140,8 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
       setShowBtnLoader(false);
     }
   };
+  //
   const filItem = pharmacies.filter((item) => item._id == selPhr);
-
   //
   return (
     <Modal
@@ -431,8 +389,8 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
                               <option value="">Select Instruction</option>
 
                               <>
-                                {prescriptionInstructions.length > 0 &&
-                                  prescriptionInstructions.map((item) => (
+                                {prescriptionInstructionsOptions.length > 0 &&
+                                  prescriptionInstructionsOptions.map((item) => (
                                     <option value={item} key={item}>
                                       {item}
                                     </option>
@@ -511,7 +469,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
                         onChange={(e) => setRepeatOption(e.target.value)}
                       >
                         <>
-                          {repeatVal.map((item) => (
+                          {repeatOptions.map((item) => (
                             <option value={item} key={item}>
                               {item}
                             </option>
@@ -539,8 +497,8 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
                         onChange={(e) => setVdt(e.target.value)}
                       >
                         <>
-                          {validSel &&
-                            validSel.map((item) => (
+                          {validOptions &&
+                            validOptions.map((item) => (
                               <option value={item} key={item}>
                                 {item === "One Time Use" ? (
                                   <>{ item }</>

@@ -22,6 +22,7 @@ const AppCalendar = (props) => {
         onFocus={() => {
           setShowCalendar(true);
         }}
+        onChange={()=>{}}
       />
       {showCalendar && (
         <div

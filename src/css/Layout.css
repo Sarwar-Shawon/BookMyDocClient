@@ -255,6 +255,10 @@ button.btn-primary:hover {
     max-height: 500px;
     overflow-y: auto;
 }
+.pt-record {
+    max-height: 600px;
+    overflow-y: auto;
+}
 
 .card-body p {
     margin-bottom: 5px;
