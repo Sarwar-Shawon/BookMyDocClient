@@ -259,7 +259,9 @@ button.btn-primary:hover {
     max-height: 600px;
     overflow-y: auto;
 }
-
+.pt-record::-webkit-scrollbar {
+    display: none;
+}
 .card-body p {
     margin-bottom: 5px;
 }

@@ -221,6 +221,18 @@ const AppointmentView = ({ aptType, selDoc }) => {
       setSelApt("");
     }
   };
+  //
+  const updateApt = (medicalRecord) =>{
+    //
+    const updatedPt = { ...selApt.pt, medical_history: medicalRecord };
+    const updatedApt = appointments.map((apnt) =>
+      apnt._id === selApt._id
+        ? { ...apnt, pt: updatedPt }
+        : apnt
+    );
+    setAppointments(updatedApt);
+    setSelApt({ ...selApt, pt: updatedPt });
+  }
   //render
   return (
     <div>
@@ -312,6 +324,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
         <PatientsMedicalRecord
           onCloseModal={() => setShowPatientRecordView(false)}
           apt={selApt}
+          updateApt={updateApt}
           selDoc={selDoc}
         />
       )}

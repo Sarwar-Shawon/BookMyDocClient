@@ -14,7 +14,7 @@ import Autosuggest from "react-autosuggest";
 import { allergiesLists, diagnosesLists } from "../../utils";
 
 //
-const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
+const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt, updateApt }) => {
   //
   const [allergiesSuggestions, setAllergiesSuggestions] =
     useState(allergiesLists);
@@ -22,7 +22,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
     useState(diagnosesLists);
   const [showResp, setShowResp] = useState({});
   const [isBtnLoading, setIsBtnLoading] = useState(false);
-
+  console.log("selAptselAptselAptselAptselApt:::::",apt)
   const [formData, setFormData] = useState({
     healthInfo: {
       bloodPressure: "",
@@ -97,8 +97,6 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
         pt_id: apt?.pt?._id,
         medical_history: medicalRecord,
       };
-      console.log("params", apt);
-      console.log("params", params);
       const resp = await Put(
         `${apiUrl()}/nurse/update-patient-record`,
         params,
@@ -107,6 +105,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
       console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
+        updateApt(medicalRecord)
         respObj.success = true;
         respObj.msg = resp?.message;
         setShowResp(respObj);
@@ -148,8 +147,6 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
     setDiagnosesSuggestions(data);
   };
   //
-  console.log("formdata", formData, apt);
-  //
   return (
     <Modal
       title={"Patient Data"}
@@ -163,13 +160,13 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
             msg={showResp?.success ? showResp?.msg : ""}
             hideMsg={() => setShowResp({})}
           />
-          <div className="d-flex container pt-record">
+          <div className="d-flex container">
             <div style={{ marginRight: "10px" }}>
               <div>
                 <h3>Medical Record</h3>
                 <div className="row">
                   {Object.entries(formData.healthInfo).map(([key, value]) => (
-                    <div key={key} className="col-md-4">
+                    <div key={"e"+key} className="col-md-4">
                       <input
                         type="text"
                         className="form-control mb-3"
@@ -197,7 +194,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
                 />
               </div>
               {formData.allergies.map((allergy, index) => (
-                <div key={index} className="mb-3">
+                <div key={"a"+index} className="mb-3">
                   <div className="d-flex align-items-center">
                     <Autosuggest
                       suggestions={allergiesSuggestions}
@@ -258,7 +255,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
                 />
               </div>
               {formData.diagnoses.map((diagnosis, index) => (
-                <div key={index} className="mb-3">
+                <div key={"d"+index} className="mb-3">
                   <div className="d-flex align-items-center">
                     <Autosuggest
                       suggestions={diagnosesSuggestions}
@@ -315,7 +312,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
                 />
               </div>
               {formData.notes.map((note, index) => (
-                <div key={index} className="mb-3">
+                <div key={"no"+index} className="mb-3">
                   <div className="d-flex align-items-center">
                     <textarea
                       type="text"
@@ -345,7 +342,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
             </div>
             {apt?.pt.medical_history && (
               <div
-                className="col-md-6"
+                className="col-md-6 pt-record"
                 style={{ borderLeft: "2px solid #074173", paddingLeft: "10px" }}
               >
                 <div>
@@ -353,23 +350,23 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
                   <div>
                     <div className="table-responsive">
                       <table className="table table-bordered table-hover">
-                        <thead className="table-dark">
+                        <thead className="table-primary">
                           <tr>
                             <th className="align-middle">Date</th>
                             <th className="align-middle">Data</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {apt?.pt.medical_history.healthInfoList.map(
+                          {apt?.pt.medical_history.healthInfoList.map( 
                             (item, index) => (
-                              <tr key={index}>
+                              <tr key={"h"+index}>
                                 <td className="align-middle">
                                   {formatDateToString(item?.date)}
                                 </td>
                                 <td className="align-middle">
                                   {Object.entries(item?.data).map(
                                     ([key, value]) => (
-                                      <div key={key}>
+                                      <div key={"as"+key}>
                                         <span>
                                           {key}: {value}
                                         </span>
@@ -389,7 +386,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
 
                 <div className="d-flex align-items-center mb-3">
                   {apt?.pt?.medical_history?.allergies.map((item, index) => (
-                    <div key={item?.val}>
+                    <div key={"r"+index}>
                       <h5>{item?.val}{index !==
                         apt.pt.medical_history.allergies.length - 1 && (
                         <span>, </span>
@@ -402,7 +399,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
                   <h3 style={{ color: "#074173" }}>Diagnoses</h3>
                   <div className="table-responsive">
                     <table className="table table-bordered table-hover">
-                      <thead className="table-dark">
+                      <thead className="table-primary">
                         <tr>
                           <th className="align-middle">Date</th>
                           <th className="align-middle">Data</th>
@@ -411,7 +408,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
                       <tbody>
                         {apt?.pt.medical_history.diagnoses.map(
                           (item, index) => (
-                            <tr key={index}>
+                            <tr key={"vd"+index}>
                               <td className="align-middle">
                                 {formatDateToString(item?.date)}
                               </td>
@@ -429,7 +426,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
                   <h3 style={{ color: "#074173" }}>Notes</h3>
                   <div className="table-responsive">
                     <table className="table table-bordered table-hover">
-                      <thead className="table-dark">
+                      <thead className="table-primary">
                         <tr>
                           <th className="align-middle">Date</th>
                           <th className="align-middle">Data</th>
@@ -437,7 +434,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt }) => {
                       </thead>
                       <tbody>
                         {apt?.pt.medical_history.notes.map((item, index) => (
-                          <tr key={index}>
+                          <tr key={"vn"+index}>
                             <td className="align-middle">
                               {formatDateToString(item?.date)}
                             </td>

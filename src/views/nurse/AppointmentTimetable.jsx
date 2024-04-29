@@ -48,6 +48,24 @@ const AppointmentsTimetable = ({selDoc}) => {
     }
   }, [selDoc]);
   //
+  const UpdateActive = async () => {
+    try {
+      const resp = await Post(
+        `${apiUrl()}/nurse/update-time-slots?doc_id=${selDoc}`,
+        {
+          timeSlots: timeSlots,
+        },
+        "application/json"
+      );
+      console.log(resp);
+      if (resp?.success) {
+        setTimeSlots(timeSlots);
+      }
+    } catch (error) {
+    } finally {
+    }
+  };
+  //
   const fetchTimeSlots = async () => {
     try {
       setLoading(true);
@@ -111,7 +129,7 @@ const AppointmentsTimetable = ({selDoc}) => {
           </div>
         )}
         {Object.entries(timeSlots).length > 0 && (
-          <TimeSlotsComponent timeSlotsData={timeSlots} />
+          <TimeSlotsComponent timeSlotsData={timeSlots} UpdateActive={UpdateActive}/>
         )}
       </div>
       {showNew && (
@@ -139,7 +157,13 @@ const AppointmentsTimetable = ({selDoc}) => {
     </>
   );
 };
-const TimeSlotsComponent = ({ timeSlotsData }) => {
+const TimeSlotsComponent = ({ timeSlotsData,UpdateActive }) => {
+  const [active, setDt] = useState(new Date().getTime())
+  const handleToggle = async (slot) => {
+    slot.active = !slot.active
+    await UpdateActive()
+    setDt(new Date().getTime())
+  };
   return (
     <>
       {Object.entries(timeSlotsData).map(([day, slots]) => (
@@ -151,15 +175,25 @@ const TimeSlotsComponent = ({ timeSlotsData }) => {
                 <div
                   className={`card `}
                   style={{
-                    backgroundColor: slot.active ? "#1874C3" : "#404B69",
+                    backgroundColor: slot.active ? "#14274E" : "#BF3131",
                   }}
                 >
                   {/* <button type="button" className="btn-close bg-danger" aria-label="Close" style={{ position: 'absolute', top: '15px', right: '10px' }} /> */}
                   <div className="card-body">
-                    <h5 className="card-title">{slot.startTime}</h5>
-                    {/* <p className="card-text">
-                      Booked: {slot.active ? "No" : "Yes"}
-                    </p> */}
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5 className="card-title" style={{color: '#fff'}}>{slot.startTime}</h5>
+                      </div>
+                      <div className="form-check form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="switch"
+                          checked={slot.active}
+                          onChange={()=>handleToggle(slot)}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
