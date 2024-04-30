@@ -26,9 +26,8 @@ const NurseAppointmentsTimetable = () => {
   const [selDoc, setSelDoctor] = useState("");
   //
   return (
-    <div className="container mt-5">
+    <div className="container">
       <DoctorSelection selDoc={selDoc} setSelDoctor={setSelDoctor} />
-
       <AppointmentsTimetable selDoc={selDoc}/>
     </div>
   );

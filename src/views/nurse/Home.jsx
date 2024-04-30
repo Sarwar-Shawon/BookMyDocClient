@@ -12,6 +12,8 @@ import DoctorSelection from './DoctorSelection'
 import { formatDateToString } from "../../utils";
 import AppCalendar from "../../components/Calendar";
 import AppointmentDetails from "../common/AppointmentDetails";
+import PatientsMedicalRecord from '../common/PatientsMedicalRecord'
+
 //
 const NurseHome = () => {
   const [selDoc, setSelDoctor] = useState("")
@@ -21,6 +23,7 @@ const NurseHome = () => {
   const [selApt, setSelApt] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [showPtRecordView, setShowPatientRecordView] = useState(false);
 
   //
   useEffect(() => {
@@ -28,6 +31,13 @@ const NurseHome = () => {
       fetchTimeSlots();
     }
   }, [selDate , selDoc]);
+  //
+  const updateApt = (medicalRecord) =>{
+    //
+    const updatedPt = { ...selApt.pt, medical_history: medicalRecord };
+    setSelApt({ ...selApt, pt: updatedPt });
+    fetchTimeSlots();
+  }
   //
   const fetchTimeSlots = async () => {
     try {
@@ -47,7 +57,6 @@ const NurseHome = () => {
       setLoading(false);
     }
   };
-  //
   //
   return (
     <div className="container-fluid">
@@ -105,7 +114,19 @@ const NurseHome = () => {
             setShowDetails(false);
             setSelApt("");
           }}
+          setShowPatientRecordView={() => {
+            setShowDetails(false);
+            setShowPatientRecordView(true);
+          }}
+          selApt={selApt}
+        />
+      )}
+      {showPtRecordView && (
+        <PatientsMedicalRecord
+          onCloseModal={() => setShowPatientRecordView(false)}
           apt={selApt}
+          updateApt={updateApt}
+          selDoc={selDoc}
         />
       )}
     </div>

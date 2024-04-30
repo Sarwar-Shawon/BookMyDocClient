@@ -277,7 +277,7 @@ const AppointmentView = ({ selType }) => {
             setShowDetails(false);
             setSelApt("");
           }}
-          apt={selApt}
+          selApt={selApt}
         />
       }
     </div>
@@ -681,7 +681,7 @@ const HistoryView = ({ selType }) => {
             setShowDetails(false);
             setSelApt("");
           }}
-          apt={selApt}
+          selApt={selApt}
         />
       )}
       </div>

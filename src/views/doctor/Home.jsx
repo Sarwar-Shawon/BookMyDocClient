@@ -11,6 +11,7 @@ import { formatDateToString } from "../../utils";
 import AppCalendar from "../../components/Calendar";
 import AppointmentDetails from "../common/AppointmentDetails";
 import PrescriptionCreateView from './PrescriptionCreate'
+import PatientsMedicalRecord from '../common/PatientsMedicalRecord'
 
 //
 const Home = ({ doctorId }) => {
@@ -21,11 +22,18 @@ const Home = ({ doctorId }) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showCreatePresView, setShowCreatePresView] = useState(false);
+  const [showPtRecordView, setShowPatientRecordView] = useState(false);
 
   //
   useEffect(() => {
     fetchTimeSlots();
   }, [selDate]);
+  //
+  const updateApt = (medicalRecord) =>{
+    const updatedPt = { ...selApt.pt, medical_history: medicalRecord };
+    setSelApt({ ...selApt, pt: updatedPt });
+    fetchTimeSlots();
+  }
   //
   const fetchTimeSlots = async () => {
     try {
@@ -98,7 +106,7 @@ const Home = ({ doctorId }) => {
             setShowDetails(false);
             setSelApt("");
           }}
-          apt={selApt}
+          selApt={selApt}
           doctor={true}
           setShowCreatePresView={() => {
             setShowDetails(false);
@@ -110,6 +118,13 @@ const Home = ({ doctorId }) => {
         showCreatePresView && 
         <PrescriptionCreateView onCloseModal={()=> setShowCreatePresView(false)} apt={selApt}/>
       }
+      {showPtRecordView && (
+        <PatientsMedicalRecord
+          onCloseModal={() => setShowPatientRecordView(false)}
+          apt={selApt}
+          updateApt={updateApt}
+        />
+      )}
     </>
   );
 };

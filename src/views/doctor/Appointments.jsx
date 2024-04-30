@@ -17,6 +17,8 @@ import AppointmentTabButton from "../common/AppointmentTabButton";
 import AppointmentCard from "../common/AppointmentCard"
 import AppointmentDetails from "../common/AppointmentDetails";
 import PrescriptionCreateView from './PrescriptionCreate'
+import PatientsMedicalRecord from '../common/PatientsMedicalRecord'
+
 //
 const DoctorAppointments = () => {
   const [selType, setSelType] = useState("Accepted"); 
@@ -48,7 +50,7 @@ const AppointmentView = ({ aptType }) => {
   const [showCancelView, setShowCancelView] = useState(false);
   const [showUpdateView, setShowUpdateView] = useState(false);
   const [showAcceptView, setShowAcceptView] = useState(false);
-  //
+  const [showPtRecordView, setShowPatientRecordView] = useState(false);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
   //
   const [formData, setFormData] = useState({
@@ -175,6 +177,18 @@ const AppointmentView = ({ aptType }) => {
       setSelApt("");
     }
   };
+  //
+  const updateApt = (medicalRecord) =>{
+    //
+    const updatedPt = { ...selApt.pt, medical_history: medicalRecord };
+    const updatedApt = appointments.map((apnt) =>
+      apnt._id === selApt._id
+        ? { ...apnt, pt: updatedPt }
+        : apnt
+    );
+    setAppointments(updatedApt);
+    setSelApt({ ...selApt, pt: updatedPt });
+  }
   //render
   return (
     <div>
@@ -229,6 +243,10 @@ const AppointmentView = ({ aptType }) => {
                       setShowAcceptView={() => {
                         setSelApt(apt);
                         setShowAcceptView(true);
+                      }}
+                      setShowPatientRecordView={() => {
+                        setSelApt(apt);
+                        setShowPatientRecordView(true);
                       }}
                       aptType={aptType}
                     />
@@ -286,13 +304,24 @@ const AppointmentView = ({ aptType }) => {
             setShowDetails(false);
             setSelApt("");
           }}
-          apt={selApt}
+          setShowPatientRecordView={() => {
+            setShowDetails(false);
+            setShowPatientRecordView(true);
+          }}
+          selApt={selApt}
         />
       }
       {
         showCreatePresView && 
         <PrescriptionCreateView onCloseModal={()=> setShowCreatePresView(false)} apt={selApt}/>
       }
+      {showPtRecordView && (
+        <PatientsMedicalRecord
+          onCloseModal={() => setShowPatientRecordView(false)}
+          apt={selApt}
+          updateApt={updateApt}
+        />
+      )}
     </div>
   );
 };
@@ -621,7 +650,7 @@ const HistoryView = ({ aptType }) => {
             setShowDetails(false);
             setSelApt("");
           }}
-          apt={selApt}
+          selApt={selApt}
         />
       )}
     </div>

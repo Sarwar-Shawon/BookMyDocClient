@@ -258,42 +258,41 @@ const AppointmentView = ({ aptType, selDoc }) => {
               style={{ display: "flex", flexWrap: "wrap" }}
             >
               {appointments.length > 0 &&
-              appointments.map((apt) => {
-                return (
-                  <AppointmentCard
-                    key={apt._id}
-                    apt={apt}
-                    setShowDetails={() => {
-                      setSelApt(apt);
-                      setShowDetails(true);
-                    }}
-                    setShowCancelView={() => {
-                      setSelApt(apt);
-                      setShowCancelView(true);
-                    }}
-                    setShowUpdateView={() => {
-                      setSelApt(apt);
-                      setFormData({
-                        ...formData,
-                        apt_date: new Date(apt?.apt_date),
-                        timeslot: apt?.timeslot,
-                      });
-                      setShowUpdateView(true);
-                    }}
-                    setShowAcceptView={() => {
-                      setSelApt(apt);
-                      setShowAcceptView(true);
-                    }}
-                    setShowPatientRecordView={() => {
-                      setSelApt(apt);
-                      setShowPatientRecordView(true);
-                    }}
-                    aptType={aptType}
-                  />
-                );
-              })}
+                appointments.map((apt) => {
+                  return (
+                    <AppointmentCard
+                      key={apt._id}
+                      apt={apt}
+                      setShowDetails={() => {
+                        setSelApt(apt);
+                        setShowDetails(true);
+                      }}
+                      setShowCancelView={() => {
+                        setSelApt(apt);
+                        setShowCancelView(true);
+                      }}
+                      setShowUpdateView={() => {
+                        setSelApt(apt);
+                        setFormData({
+                          ...formData,
+                          apt_date: new Date(apt?.apt_date),
+                          timeslot: apt?.timeslot,
+                        });
+                        setShowUpdateView(true);
+                      }}
+                      setShowAcceptView={() => {
+                        setSelApt(apt);
+                        setShowAcceptView(true);
+                      }}
+                      setShowPatientRecordView={() => {
+                        setSelApt(apt);
+                        setShowPatientRecordView(true);
+                      }}
+                      aptType={aptType}
+                    />
+                  );
+                })}
             </InfiniteScroll>
-            
           </>
         )}
       </div>
@@ -346,16 +345,19 @@ const AppointmentView = ({ aptType, selDoc }) => {
           onCloseModal={() => setShowResp({})}
         />
       )}
-      {
-        showDetails && 
+      {showDetails && (
         <AppointmentDetails
           onCloseModal={() => {
             setShowDetails(false);
             setSelApt("");
           }}
-          apt={selApt}
+          setShowPatientRecordView={() => {
+            setShowDetails(false);
+            setShowPatientRecordView(true);
+          }}
+          selApt={selApt}
         />
-      }
+      )}
     </div>
   );
 };
@@ -679,7 +681,7 @@ const HistoryView = ({ aptType,selDoc }) => {
             setShowDetails(false);
             setSelApt("");
           }}
-          apt={selApt}
+          selApt={selApt}
         />
       }
     </div>
