@@ -21,6 +21,7 @@ import {
   FaRegUser,
   FaRegUserCircle,
 } from "react-icons/fa";
+const Range = [5,10,25];
 //
 const PatientHome = () => {
   const [departments, setDepartments] = useState([]);
@@ -36,65 +37,15 @@ const PatientHome = () => {
   const [curAddr, setCurAddr] = useState("");
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [range, setRange] = useState(5);
+  //get current location
+  // useEffect(() => {
+  //   getLocation();
+  // }, []);
   //
   useEffect(() => {
     fetchDepartments();
   }, []);
-  //get data when change department
-  useEffect(() => {
-    setLoading(true);
-    setDoctors([]);
-    fetchDoctors({ pSkip: true });
-  }, [selDept]);
-  //get doctors
-  const fetchDoctors = async ({ pSkip }) => {
-    try {
-      const skip = pSkip ? 0 : doctors.length;
-      const resp = await Get(
-        selDept
-          ? `${apiUrl()}/patient/get-doctors?skip=${skip}&dept=${selDept}&limit=15`
-          : `${apiUrl()}/patient/get-all-doctors?skip=${skip}&dept=${selDept}&limit=15`
-      );
-      //console.log("resp::: doctors", resp);
-      if (resp.success) {
-        setDoctors((prevDoctors) => [...prevDoctors, ...resp.data]);
-        setHasMore(resp.data.length > 0 ? true : false);
-      }
-    } catch (err) {
-      // console.error('err:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  //get current location
-  useEffect(() => {
-    getLocation();
-  }, []);
-  //
-  useEffect(() => {
-    const getAddress = async () => {
-      if (latitude && longitude)
-        setCurAddr(await getAddressFromLatLng(latitude, longitude));
-    };
-    getAddress();
-  }, [latitude, longitude]);
-  //
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          //console.log("position", position);
-          setLatitude(position.coords.latitude);
-          setLongitude(position.coords.longitude);
-        },
-        (err) => {
-          setError(err.message);
-        }
-      );
-    } else {
-      setError("Geolocation is not supported by this browser.");
-    }
-  };
   //get Departments
   const fetchDepartments = async () => {
     try {
@@ -110,6 +61,68 @@ const PatientHome = () => {
       setLoading(false);
     }
   };
+  //get data when change department
+  useEffect(() => {
+    setLoading(true);
+    setDoctors([]);
+    fetchDoctors({ pSkip: true });
+  }, [selDept]);
+  //get doctors
+  const fetchDoctors = async ({ pSkip }) => {
+    try {
+      const skip = pSkip ? 0 : doctors.length;
+      const resp = await Get(
+        selDept
+          ? `${apiUrl()}/patient/get-doctors?skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
+          : `${apiUrl()}/patient/get-all-doctors?skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
+      );
+      //console.log("resp::: doctors", resp);
+      if (resp.success) {
+        setDoctors((prevDoctors) => [...prevDoctors, ...resp.data]);
+        setHasMore(resp.data.length > 0 ? true : false);
+      }
+    } catch (err) {
+      // console.error('err:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  //
+  useEffect(() => {
+    if(latitude && longitude){
+
+      console.log("asd")
+      setLoading(true)
+      setDoctors([])
+      fetchDoctors({ pSkip: true })
+    }
+  }, [latitude, longitude , range]);
+  //
+  // const getLocation = async () => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         const getAddress = async () => {
+  //           if (position.coords.latitude && position.coords.longitude)
+  //             setCurAddr(
+  //               await getAddressFromLatLng(
+  //                 position.coords.latitude,
+  //                 position.coords.longitude
+  //               )
+  //             );
+  //         };
+  //         getAddress();
+  //         setLatitude(position.coords.latitude);
+  //         setLongitude(position.coords.longitude);
+  //       },
+  //       (err) => {
+  //         setError(err.message);
+  //       }
+  //     );
+  //   } else {
+  //     setError("Geolocation is not supported by this browser.");
+  //   }
+  // };
   //
   return (
     <div className="container-fluid">
@@ -140,7 +153,9 @@ const PatientHome = () => {
               <label className="form-label">Location:</label>
               <PLaceAutoComplete
                 onPlaceSelected={(place) => {
-                  //console.log("place", place);
+                  console.log("place", place);
+                  setLatitude(place?.lat_lng[0])
+                  setLongitude(place?.lat_lng[1])
                   // setFormData((prevFormData) => ({
                   //   ...prevFormData,
                   //   addr: {
@@ -151,27 +166,45 @@ const PatientHome = () => {
                 }}
               />
             </div>
-            <button
-              style={{
-                width: "200px",
-                marginRight: 10,
-                backgroundColor: "#0B2447",
-                borderColor: "#0B2447",
-                transition: "background-color 0.3s, border-color 0.3s",
-              }}
-              className="btn btn-primary"
-              onMouseOver={(e) => {
-                e.target.style.backgroundColor = "#1a4a8a";
-                e.target.style.borderColor = "#1a4a8a";
-              }}
-              onMouseOut={(e) => {
-                e.target.style.backgroundColor = "#0B2447";
-                e.target.style.borderColor = "#0B2447";
-              }}
-              onClick={() => {}}
-            >
-              Search Doctor
-            </button>
+            <div className="mb-3">
+              <label className="form-label">Range in miles:</label>
+              <div className="row">
+                <div className="col">
+                  <div className="d-flex justify-content-between align-items-center">
+                    {Range.map((item, index) => (
+                      <div className="button-container" key={item}>
+                        <button className={`tab-button ${range === item ? "active" : ""}`} onClick={() => setRange(item)}>
+                          {item}miles
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* <div className="mb-3">
+              <button
+                style={{
+                  width: "200px",
+                  marginRight: 10,
+                  backgroundColor: "#0B2447",
+                  borderColor: "#0B2447",
+                  transition: "background-color 0.3s, border-color 0.3s",
+                }}
+                className="btn btn-primary"
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = "#1a4a8a";
+                  e.target.style.borderColor = "#1a4a8a";
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = "#0B2447";
+                  e.target.style.borderColor = "#0B2447";
+                }}
+                onClick={() => {}}
+              >
+                Search Doctor
+              </button>
+            </div> */}
           </div>
         </div>
       </div>
@@ -306,7 +339,7 @@ const PatientHome = () => {
   );
 };
 // //
-const DoctorDetails = ({ doctor ,onCloseModal}) => {
+const DoctorDetails = ({ doctor, onCloseModal }) => {
   return (
     <Modal
       title={

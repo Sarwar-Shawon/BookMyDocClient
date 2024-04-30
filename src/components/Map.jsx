@@ -4,11 +4,13 @@
 import React from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 //
+const libraries = ['places'];
+//
 const Map = ({ location }) => {
   //
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries: ['places'],
+    libraries: libraries
   });
   //
   if (loadError) {
