@@ -35,7 +35,6 @@ const DepartmentsAddView = ({
   const [isLoading, setIsLoading] = useState(false);
   //
   useEffect(() => {
-    console.log("selectedDepartment::::::",selectedDepartment)
     const mergedFormData = {
       ...formData,
       ...selectedDepartment,
@@ -68,7 +67,6 @@ const DepartmentsAddView = ({
     setIsLoading(true);
     e.preventDefault();
     try {
-      console.log("selectedDepartment",selectedDepartment)
       if (selectedDepartment && selectedDepartment._id) {
         await updateDepartment();
       } else {
@@ -96,9 +94,8 @@ const DepartmentsAddView = ({
   const addNewDepartment = async () => {
     try {
       //
-      console.log("params:: add new department", formData);
       const resp = await Post(`${apiUrl()}/admin/createDepartment`, formData);
-      console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         addToDepartmentList({ newDept: [resp?.data] });
@@ -118,9 +115,8 @@ const DepartmentsAddView = ({
   const updateDepartment = async () => {
     try {
       //
-      console.log("params:: update department", formData);
       const resp = await Put(`${apiUrl()}/admin/updadteDepartment`, formData);
-      console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         updateDepartmentList({ updDept: formData });

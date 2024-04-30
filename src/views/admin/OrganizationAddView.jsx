@@ -46,7 +46,6 @@ const OrganizationsAddView = ({
   const [isLoading, setIsLoading] = useState(false);
   //
   useEffect(() => {
-    console.log("selectedOrganization::::::",selectedOrganization)
     const mergedFormData = {
       ...formData,
       ...selectedOrganization,
@@ -89,7 +88,6 @@ const OrganizationsAddView = ({
     setIsLoading(true);
     e.preventDefault();
     try {
-      console.log("selectedOrganization",selectedOrganization)
       if (selectedOrganization && selectedOrganization._id) {
         await updateOrganization();
       } else {
@@ -105,9 +103,7 @@ const OrganizationsAddView = ({
   const addNewOrganization = async () => {
     try {
       //
-      console.log("params:: add new organization", formData);
       const resp = await Post(`${apiUrl()}/admin/createOrganization`, formData);
-      console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         addToOrganizationList({ newDept: [resp?.data] });
@@ -127,9 +123,8 @@ const OrganizationsAddView = ({
   const updateOrganization = async () => {
     try {
       //
-      console.log("params:: update organization", formData);
       const resp = await Put(`${apiUrl()}/admin/updadteOrganization`, formData);
-      console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         updateOrganizationList({ updDept: formData });
@@ -257,7 +252,6 @@ const OrganizationsAddView = ({
               <label className="form-label">Find Address:</label>
               <PLaceAutoComplete
                 onPlaceSelected={(place) => {
-                  console.log("place", place);
                   setFormData((prevFormData) => ({
                     ...prevFormData,
                     addr: {

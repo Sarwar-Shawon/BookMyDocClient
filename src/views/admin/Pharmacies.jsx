@@ -29,8 +29,10 @@ const Pharmacies = () => {
   const fetchPharmacies = async () => {
     try {
       const skip = pharmacies.length;
-      const resp = await Get(`${apiUrl()}/admin/getAllPharmacies?skip=${skip}&limit=15`);
-      console.log("resp:::", resp);
+      const resp = await Get(
+        `${apiUrl()}/admin/getAllPharmacies?skip=${skip}&limit=15`
+      );
+      // console.log("resp:::", resp);
       if (resp.success) {
         setPharmacies((prevPharmacies) => [...prevPharmacies, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -47,7 +49,7 @@ const Pharmacies = () => {
   const fetchOrganizations = async () => {
     try {
       const resp = await Get(`${apiUrl()}/admin/getAllOrganizations`);
-      console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       if (resp.success) {
         setOrganizations(resp.data);
       }
@@ -166,44 +168,35 @@ const Pharmacies = () => {
           style={{ display: "flex", flexWrap: "wrap" }}
         >
           {pharmacies.map((pharmacy) => {
-          console.log(
-            "typeof pharmacy.img",
-            typeof pharmacy.img,
-            pharmacy.img,
-            `${apiUrl()}/uploads/${pharmacy.img}`
-          );
-          return (
-            <div
-              key={pharmacy._id}
-              className="doctor-card card mb-3 mx-2"
-              onClick={() => {
-                setSelectedPharmacy(pharmacy);
-                setOpenAddView(true);
-              }}
-            >
-              <img
-                src={
-                  typeof pharmacy.img == "string"
-                    ? `${apiUrl()}/uploads/${pharmacy.img}`
-                    : URL.createObjectURL(pharmacy.img)
-                }
-                className="card-img-top"
-                alt={pharmacy.name}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{pharmacy.name}</h5>
-                <p className="card-text">
-                    {pharmacy?.org?.name}
+            return (
+              <div
+                key={pharmacy._id}
+                className="doctor-card card mb-3 mx-2"
+                onClick={() => {
+                  setSelectedPharmacy(pharmacy);
+                  setOpenAddView(true);
+                }}
+              >
+                <img
+                  src={
+                    typeof pharmacy.img == "string"
+                      ? `${apiUrl()}/uploads/${pharmacy.img}`
+                      : URL.createObjectURL(pharmacy.img)
+                  }
+                  className="card-img-top"
+                  alt={pharmacy.name}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{pharmacy.name}</h5>
+                  <p className="card-text">{pharmacy?.org?.name}</p>
+                  <p className="card-text">
+                    {pharmacy.active ? "Active" : "Inactive"}
                   </p>
-                <p className="card-text">
-                  {pharmacy.active ? "Active" : "Inactive"}
-                </p>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
         </InfiniteScroll>
-        
       </div>
       {openAddView && (
         <PharmacyAddView

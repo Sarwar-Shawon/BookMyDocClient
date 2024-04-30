@@ -26,7 +26,7 @@ const Organizations = () => {
       setLoading(true);
       const skip = organizations.length;
       const resp = await Get(`${apiUrl()}/admin/getAllOrganizations?skip=${skip}`);
-      console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       if (resp.success) {
         setOrganizations((prevOrganizations) => [...prevOrganizations, ...resp.data]);
       }

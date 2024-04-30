@@ -165,9 +165,9 @@ const NursesAddView = ({
   const addNewNurse = async () => {
     try {
       //
-      console.log("params:: add new nurse", formData);
+      //console.log("params:: add new nurse", formData);
       const resp = await Post(`${apiUrl()}/admin/registerNurse`, formData);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         addToNurseList({ newNur: [resp?.data] });
@@ -187,9 +187,9 @@ const NursesAddView = ({
   const updateNurse = async () => {
     try {
       //
-      console.log("params:: update nurse", formData);
+      //console.log("params:: update nurse", formData);
       const resp = await Put(`${apiUrl()}/admin/updateNurse`, formData);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         updateNurseList({ updNur: resp?.data });
@@ -215,7 +215,6 @@ const NursesAddView = ({
     );
     return maxDate;
   };
-  console.log("fr", formData);
   return (
     <Modal
       title={selectedNurse ? "Update Nurse" : "Add New Nurse"}
@@ -320,86 +319,6 @@ const NursesAddView = ({
           </div>
           {/* Address View */}
           <div className="col-md-6">
-            {/* <div className="mb-3">
-              <label className="form-label">Find Address:</label>
-              <PLaceAutoComplete
-                onPlaceSelected={(place) => {
-                  console.log("place", place);
-                  setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    addr: {
-                      ...prevFormData.addr,
-                      ...place,
-                    },
-                  }));
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Line1:</label>
-              <input
-                type="text"
-                className="form-control"
-                name="addr.line1"
-                value={formData.addr.line1}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Line2:</label>
-              <input
-                type="text"
-                className="form-control"
-                name="addr.line2"
-                value={formData.addr.line2}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">City:</label>
-              <input
-                type="text"
-                className="form-control"
-                name="addr.city"
-                value={formData.addr.city}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Post Code:</label>
-              <input
-                type="text"
-                className="form-control"
-                name="addr.postal_code"
-                value={formData.addr.postal_code}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">County:</label>
-              <input
-                type="text"
-                className="form-control"
-                name="addr.line2"
-                value={formData.addr.county}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Country:</label>
-              <input
-                type="text"
-                className="form-control"
-                name="addr.line2"
-                value={formData.addr.country}
-                onChange={handleChange}
-                required
-              />
-            </div> */}
             <div className="mb-3">
               <label className="form-label">Department:</label>
               <select

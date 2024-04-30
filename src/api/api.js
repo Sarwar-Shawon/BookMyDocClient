@@ -29,7 +29,6 @@ api.interceptors.response.use(
             withCredentials: true, 
           }
         );
-        // console.log("resp:::",resp)
         const {token} = resp.data;
         if(token)
           await setItem('apat', token);

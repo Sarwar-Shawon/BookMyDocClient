@@ -16,12 +16,11 @@ export const Post = async (url, arg , ContentType) => {
     };
     
     const response = await api.post(url, arg,config);
-    // console.log("response",response);
     if (response.data.success) {
       return response.data;
     }
   } catch (error) {
-    console.log("err", error);
+    // console.log("err", error);
     return {
       success: false,
       error: error?.response?.data?.error || error?.message,
@@ -44,7 +43,7 @@ export const Put = async (url, arg , ContentType) => {
       return response.data;
     }
   } catch (error) {
-    console.log("err", error);
+    // console.log("err", error);
     return {
       success: false,
       error: error?.response?.data?.error || error?.message,
@@ -62,7 +61,7 @@ export const Get = async (url) => {
       return response.data;
     }
   } catch (error) {
-    console.log("err", error);
+    // console.log("err", error);
     return {
       success: false,
       error: error?.response?.data?.error || error?.message,

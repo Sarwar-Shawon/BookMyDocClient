@@ -31,7 +31,6 @@ const AuthProvider = ({ children }) => {
     try {
       // setLoading(true);
       const user = await getItem("usr");
-      console.log("user:::", user);
       if (user?.user_type) {
         setIsAuthenticated(true);
         setUserType(user.user_type);
@@ -74,7 +73,7 @@ const AuthProvider = ({ children }) => {
     try {
       setAuthError("");
       const resp = await PublicPost(`${apiUrl()}/auth/login`, params);
-      console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       if (resp.success) {
         const { data } = resp;
         setIsAuthenticated(true);
@@ -103,7 +102,7 @@ const AuthProvider = ({ children }) => {
   const signOut = async () => {
     try {
       const resp = await Delete(`/auth/logout`);
-      console.log("resp", resp);
+      // console.log("resp", resp);
       if (resp.success) {
         setIsAuthenticated(false);
         setUserType("");
