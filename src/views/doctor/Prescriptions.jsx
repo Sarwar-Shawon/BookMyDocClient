@@ -64,7 +64,7 @@ const PrescriptionViews = () => {
   const [ptnhs, setPtnhs] = useState("")
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
-  console.log("prescriptions",prescriptions)
+  //console.log("prescriptions",prescriptions)
   //
   useEffect(() => {
     setPrescriptions([])
@@ -79,7 +79,7 @@ const PrescriptionViews = () => {
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}`
       );
-      console.log("resp", resp);
+      //console.log("resp", resp);
       if (resp.success) {
         setPrescriptions((prevPres) => [...prevPres, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -384,7 +384,7 @@ const RequestPrescription = () => {
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}&repeated=${true}`
       );
-      console.log("resp", resp);
+      //console.log("resp", resp);
       if (resp.success) {
         setPrescriptions((prevPres) => [...prevPres, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);

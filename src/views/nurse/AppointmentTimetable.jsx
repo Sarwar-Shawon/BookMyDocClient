@@ -40,7 +40,7 @@ const AppointmentsTimetable = ({selDoc}) => {
   const [showUpdate, setShowUpdate] = useState(false);
   //
   useEffect(() => {
-    console.log("selDocselDoc:::",selDoc)
+    //console.log("selDocselDoc:::",selDoc)
     if(selDoc){
       setTimeSlots([]);
       fetchTimeSlots();
@@ -56,7 +56,7 @@ const AppointmentsTimetable = ({selDoc}) => {
         },
         "application/json"
       );
-      console.log(resp);
+      //console.log(resp);
       if (resp?.success) {
         setTimeSlots(timeSlots);
       }
@@ -72,7 +72,7 @@ const AppointmentsTimetable = ({selDoc}) => {
       const resp = await Get(
         `${apiUrl()}/nurse/get-time-slots?date=${formattedDate}&doc_id=${selDoc}`
       );
-      console.log("resp:::111111", JSON.stringify(resp));
+      //console.log("resp:::111111", JSON.stringify(resp));
       if (resp.success) {
         setTimeSlots(resp?.data);
       }

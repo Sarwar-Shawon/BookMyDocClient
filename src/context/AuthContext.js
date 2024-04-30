@@ -73,7 +73,7 @@ const AuthProvider = ({ children }) => {
     try {
       setAuthError("");
       const resp = await PublicPost(`${apiUrl()}/auth/login`, params);
-      // console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         const { data } = resp;
         setIsAuthenticated(true);
@@ -102,7 +102,7 @@ const AuthProvider = ({ children }) => {
   const signOut = async () => {
     try {
       const resp = await Delete(`/auth/logout`);
-      // console.log("resp", resp);
+      //console.log("resp", resp);
       if (resp.success) {
         setIsAuthenticated(false);
         setUserType("");
@@ -161,7 +161,7 @@ export const useAuthContext = () => useContext(AuthContext);
 //   const location = useLocation();
 //   const from = location.state?.from?.pathname;
 //   const user = useSelector((state) => state.auth);
-//   console.log("user", user);
+//   //console.log("user", user);
 //   //
 //   //Get Store Usr
 //   useEffect(() => {
@@ -171,7 +171,7 @@ export const useAuthContext = () => useContext(AuthContext);
 //   const loadUsr = async () => {
 //     try {
 //       // setLoading(true);
-//       console.log("user:::111", user);
+//       //console.log("user:::111", user);
 //       if (user) {
 //         await setItem('apat', user.apat)
 //         setIsAuthenticated(true);
@@ -199,7 +199,7 @@ export const useAuthContext = () => useContext(AuthContext);
 //     try {
 //       setAuthError("");
 //       const resp = await PublicPost(`${apiUrl()}/auth/login`, params);
-//       console.log("resp:::", resp);
+//       //console.log("resp:::", resp);
 //       if (resp.success) {
 //         //
 //         const { data } = resp;
@@ -227,9 +227,9 @@ export const useAuthContext = () => useContext(AuthContext);
 //   //signOut
 //   const signOut = async () => {
 //     try {
-//       console.log("called");
+//       //console.log("called");
 //       const resp = await Delete(`/auth/logout`);
-//       console.log("resp",resp);
+//       //console.log("resp",resp);
 
 //       if (resp.status == 'success') {
 //         setIsAuthenticated(false);

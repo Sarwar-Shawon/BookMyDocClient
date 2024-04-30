@@ -38,7 +38,7 @@ const NurseProfile = () => {
   const handleChange = (e) => {
     const { name, value, options } = e.target;
     if (name == "nurses") {
-      console.log(options)
+      //console.log(options)
       let selectedNurses = formData.nurses;
       for (let i = 0; i < options.length; i++) {
         if (options[i].selected) {
@@ -81,7 +81,7 @@ const NurseProfile = () => {
     try {
       setLoading(true);
       const resp = await Get(`${apiUrl()}/nurse/get-profile`);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setProfile(resp?.data);
       }
@@ -97,7 +97,7 @@ const NurseProfile = () => {
     try {
       //
       setBtnLoading(true)
-      console.log("params:: update nurse", formData);
+      //console.log("params:: update nurse", formData);
       const params = {
         f_name: formData.f_name,
         l_name: formData.l_name,
@@ -107,7 +107,7 @@ const NurseProfile = () => {
         img: formData.img,
       }
       const resp = await Put(`${apiUrl()}/nurse/update-profile`, params);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         respObj.success = true;

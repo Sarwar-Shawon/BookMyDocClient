@@ -7,7 +7,7 @@ export default (props) => {
   const { ref } = usePlacesWidget({
     apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     onPlaceSelected: (place) => {
-    //   console.log(place);
+    //   //console.log(place);
       const obj = {
         line1: "",
         line2: "",

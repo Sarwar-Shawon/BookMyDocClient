@@ -31,7 +31,7 @@ const PatientPrescriptions = () => {
   });
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
-  console.log("prescriptions", prescriptions);
+  //console.log("prescriptions", prescriptions);
   //
   useEffect(() => {
     setPrescriptions([]);
@@ -46,7 +46,7 @@ const PatientPrescriptions = () => {
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}`
       );
-      console.log("resp", resp);
+      //console.log("resp", resp);
       if (resp.success) {
         setPrescriptions((prevPres) => [...prevPres, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -89,7 +89,7 @@ const PatientPrescriptions = () => {
         "application/json"
       );
       //
-      console.log("resp", resp);
+      //console.log("resp", resp);
       const respObj = {};
       if (resp.success) {
         setPrescriptions((prevPres) => prevPres.map(obj => ({ ...obj, ...resp.data })));
@@ -378,7 +378,7 @@ const RequestPrescription = () => {
   });
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
-  console.log("prescriptions",prescriptions)
+  //console.log("prescriptions",prescriptions)
   //
   useEffect(() => {
     setPrescriptions([])
@@ -393,7 +393,7 @@ const RequestPrescription = () => {
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}`
       );
-      console.log("resp", resp);
+      //console.log("resp", resp);
       if (resp.success) {
         setPrescriptions((prevPres) => [...prevPres, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);

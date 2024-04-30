@@ -76,7 +76,7 @@ const PharmacyProfile = () => {
     try {
       setLoading(true);
       const resp = await Get(`${apiUrl()}/pharmacy/get-profile`);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setProfile(resp?.data);
       }
@@ -100,7 +100,7 @@ const PharmacyProfile = () => {
         addr: formData.addr,
       }
       const resp = await Put(`${apiUrl()}/pharmacy/update-profile`, params);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         respObj.success = true;
@@ -350,7 +350,7 @@ const UpdateProfileView = ({isLoading , formData, setFormData , handleChange , u
               <label className="form-label">Find Address:</label>
               <PLaceAutoComplete
                 onPlaceSelected={(place) => {
-                  console.log("place", place);
+                  //console.log("place", place);
                   setFormData((prevFormData) => ({
                     ...prevFormData,
                     addr: {

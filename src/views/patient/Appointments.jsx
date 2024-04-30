@@ -98,7 +98,7 @@ const AppointmentView = ({ selType }) => {
           config.FETCH_LIMIT
         }`
       );
-      console.log("resp::: doctors", resp);
+      //console.log("resp::: doctors", resp);
       if (resp.success) {
         setAppointments((prevApts) => [...prevApts, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);  
@@ -125,7 +125,7 @@ const AppointmentView = ({ selType }) => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         const updatedAppointments = appointments.filter(
           (apnt) => apnt._id !== selApt._id
@@ -158,7 +158,7 @@ const AppointmentView = ({ selType }) => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setShowUpdateView(false);
         setShowResp({ success: true, msg: "successful" });
@@ -291,7 +291,7 @@ const AppointmentCard = ({
   setShowUpdateView,
   aptType,
 }) => {
-  console.log("aptTypeaptTypeaptType",aptType)
+  //console.log("aptTypeaptTypeaptType",aptType)
   return (
     <div
       key={apt._id}
@@ -462,7 +462,7 @@ const UpdateModal = ({
           formData.apt_date
         }&doc_email=${apt?.doc?.doc_email}`
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setTimeSlots(resp?.data);
       }

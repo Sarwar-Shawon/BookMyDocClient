@@ -31,7 +31,7 @@ const Holidays = ({ doctorId }) => {
     try {
       setLoading(true);
       const resp = await Get(`${apiUrl()}/doctor/get-holidays`);
-      console.log("resp:::", JSON.stringify(resp));
+      //console.log("resp:::", JSON.stringify(resp));
       if (resp.success) {
         setHolidays(resp?.data);
       }
@@ -46,7 +46,7 @@ const Holidays = ({ doctorId }) => {
     try {
       setBtnLoading(true);
       let newHolidays = [...holidays];
-      console.log(type, formData, selHoliday);
+      //console.log(type, formData, selHoliday);
       if (type == "add") {
         newHolidays.push({
           start_date: formatDateToString(formData.start_date),
@@ -71,7 +71,6 @@ const Holidays = ({ doctorId }) => {
       if (type == "delete") {
         newHolidays = newHolidays.filter((item) => item._id !== selHoliday?._id);
       }
-      console.log("newHolidaysnewHolidaysnewHolidays:::", newHolidays);
       const resp = await Put(
         `${apiUrl()}/doctor/update-holidays`,
         {
@@ -79,7 +78,7 @@ const Holidays = ({ doctorId }) => {
         },
         "application/json"
       );
-      console.log('RESP:::', resp)
+      //console.log('RESP:::', resp)
       if (resp.success) {
         setHolidays(resp?.data);
       }

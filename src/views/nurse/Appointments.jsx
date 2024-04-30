@@ -114,7 +114,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
       const resp = await Get(
         `${apiUrl()}/nurse/get-appointments?skip=${skip}&status=${aptType}&doc_id=${selDoc}&limit=${config.FETCH_LIMIT}`
       );
-      console.log("fetchAppointments resp:::", resp);
+      //console.log("fetchAppointments resp:::", resp);
       if (resp.success) {
         setAppointments((prevApts) => [...prevApts, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -139,7 +139,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         const updatedAppointments = appointments.filter(
           (apt) => apt._id !== selApt._id
@@ -170,7 +170,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         const updatedAppointments = appointments.filter(
           (apt) => apt._id !== selApt._id
@@ -203,7 +203,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setShowUpdateView(false);
         setShowResp({ success: true, msg: "successful" });
@@ -461,7 +461,7 @@ const UpdateModal = ({
           formData.apt_date
         }&doc_id=${selDoc}`
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setTimeSlots(resp?.data);
       }

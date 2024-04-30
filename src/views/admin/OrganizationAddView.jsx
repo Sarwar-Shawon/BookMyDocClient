@@ -124,7 +124,7 @@ const OrganizationsAddView = ({
     try {
       //
       const resp = await Put(`${apiUrl()}/admin/updadteOrganization`, formData);
-      // console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         updateOrganizationList({ updDept: formData });

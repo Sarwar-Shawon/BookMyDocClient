@@ -148,9 +148,8 @@ const PharmacyAddView = ({
   const addNewPharmacy = async () => {
     try {
       //
-      console.log("params:: add new pharmacy", formData);
       const resp = await Post(`${apiUrl()}/admin/registerPharmacy`, formData);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         addToPharmacyList({ newNur: [resp?.data] });
@@ -170,9 +169,8 @@ const PharmacyAddView = ({
   const updatePharmacy = async () => {
     try {
       //
-      console.log("params:: update pharmacy", formData);
       const resp = await Put(`${apiUrl()}/admin/updatePharmacy`, formData);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         updatePharmacyList({ updNur: resp?.data });
@@ -188,7 +186,6 @@ const PharmacyAddView = ({
     } finally {
     }
   };
-  console.log("fr", formData);
   return (
     <Modal
       title={selectedPharmacy ? "Update Pharmacy" : "Add New Pharmacy"}
@@ -332,7 +329,6 @@ const PharmacyAddView = ({
               <label className="form-label">Find Address:</label>
               <PLaceAutoComplete
                 onPlaceSelected={(place) => {
-                  console.log("place", place);
                   setFormData((prevFormData) => ({
                     ...prevFormData,
                     addr: {

@@ -13,7 +13,6 @@ const OtpPage = () => {
   //
   const location = useLocation();
   const { state } = location;
-  console.log("showOtpMsg",state);
   const [otp, setOtp] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [errors, setErrors] = useState("");
@@ -42,7 +41,7 @@ const OtpPage = () => {
           `${apiUrl()}/auth/verifySignupOtp`,
           params
         );
-        console.log("resp:::", resp);
+        //console.log("resp:::", resp);
         if (resp.success) {
           setSuccessMsg(resp?.message);
         } else {
@@ -73,7 +72,7 @@ const OtpPage = () => {
       const resp = await PublicGet(
         `${apiUrl()}/auth/requestOtp`
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setMsg(resp?.message);
       } else {

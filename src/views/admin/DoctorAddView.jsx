@@ -72,7 +72,7 @@ const DoctorsAddView = ({
           formData.organization
         }`
       );
-      //console.log("fetchNurses:: resp:::", resp);
+      ////console.log("fetchNurses:: resp:::", resp);
       if (resp.success) {
         setNurses(resp?.data);
       }
@@ -95,7 +95,7 @@ const DoctorsAddView = ({
   const handleChange = (e) => {
     const { name, value, options } = e.target;
     if (name == "nurses") {
-      //console.log(options);
+      ////console.log(options);
       let selectedNurses = formData.nurses;
       for (let i = 0; i < options.length; i++) {
         if (options[i].selected) {
@@ -201,9 +201,9 @@ const DoctorsAddView = ({
   const addNewDoctor = async () => {
     try {
       //
-      //console.log("params:: add new doctor", formData);
+      ////console.log("params:: add new doctor", formData);
       const resp = await Post(`${apiUrl()}/admin/registerDoctor`, formData);
-      //console.log("resp:::", resp);
+      ////console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         addToDoctorList({ newDoc: [resp?.data] });
@@ -233,9 +233,9 @@ const DoctorsAddView = ({
   const updateDoctor = async () => {
     try {
       //
-      //console.log("params:: update doctor", formData);
+      ////console.log("params:: update doctor", formData);
       const resp = await Put(`${apiUrl()}/admin/updateDoctor`, formData);
-      //console.log("resp:::", resp);
+      ////console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         updateDoctorList({ updDoc: resp?.data });
@@ -252,7 +252,7 @@ const DoctorsAddView = ({
     }
   };
   //
-  //console.log("formdata", formData);
+  ////console.log("formdata", formData);
   return (
     <Modal
       title={selectedDoctor ? "Update Doctor" : "Add New Doctor"}
@@ -361,7 +361,7 @@ const DoctorsAddView = ({
               <label className="form-label">Find Address:</label>
               <PLaceAutoComplete
                 onPlaceSelected={(place) => {
-                  console.log("place", place);
+                  //console.log("place", place);
                   setFormData((prevFormData) => ({
                     ...prevFormData,
                     addr: {

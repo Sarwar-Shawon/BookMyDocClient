@@ -46,7 +46,7 @@ const NurseHome = () => {
         const resp = await Get(
           `${apiUrl()}/nurse/get-time-slots-by-date?date=${formattedDate}&skip_con=${true}&doc_id=${selDoc}`
         );
-        console.log("resp:::", resp?.data);
+        //console.log("resp:::", resp?.data);
         if (resp.success) {
           setTimeSlots(resp?.data);
         }

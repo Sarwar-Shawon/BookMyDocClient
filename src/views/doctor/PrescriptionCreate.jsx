@@ -48,7 +48,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
   const fetchPharmacies = async () => {
     try {
       const resp = await Get(`${apiUrl()}/doctor/get-org-pharmacy`);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setPharmacies(resp?.data);
       }
@@ -90,7 +90,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
       const resp = await Get(
         `${apiUrl()}/doctor/get-medicine-suggestions?search_text=${value}`
       );
-      console.log("resp:::", resp?.data);
+      //console.log("resp:::", resp?.data);
       if (resp.success) {
         return resp?.data;
       } else {
@@ -117,14 +117,14 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
         validDt: formatStringToDate(calculateValidDt(validDt || 1)),
         repeatOption: repeatOption == "Yes" ? true : false,
       };
-      console.log("params", params);
+      //console.log("params", params);
       //
       const resp = await Post(
         `${apiUrl()}/doctor/create-prescription`,
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         setShowPreview(false);
@@ -286,7 +286,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
                               onSuggestionsFetchRequested={({ value }) => {
                                 getSuggestions(value)
                                   .then((suggestions) => {
-                                    console.log("suggestions", suggestions);
+                                    //console.log("suggestions", suggestions);
                                     setSuggestions(suggestions);
                                   })
                                   .catch((error) => {

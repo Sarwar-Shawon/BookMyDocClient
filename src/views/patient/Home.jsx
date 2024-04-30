@@ -55,7 +55,7 @@ const PatientHome = () => {
           ? `${apiUrl()}/patient/get-doctors?skip=${skip}&dept=${selDept}&limit=15`
           : `${apiUrl()}/patient/get-all-doctors?skip=${skip}&dept=${selDept}&limit=15`
       );
-      console.log("resp::: doctors", resp);
+      //console.log("resp::: doctors", resp);
       if (resp.success) {
         setDoctors((prevDoctors) => [...prevDoctors, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -83,7 +83,7 @@ const PatientHome = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log("position", position);
+          //console.log("position", position);
           setLatitude(position.coords.latitude);
           setLongitude(position.coords.longitude);
         },
@@ -99,7 +99,7 @@ const PatientHome = () => {
   const fetchDepartments = async () => {
     try {
       const resp = await Get(`${apiUrl()}/patient/get-dept`);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setDepartments(resp.data);
       }
@@ -140,7 +140,7 @@ const PatientHome = () => {
               <label className="form-label">Location:</label>
               <PLaceAutoComplete
                 onPlaceSelected={(place) => {
-                  console.log("place", place);
+                  //console.log("place", place);
                   // setFormData((prevFormData) => ({
                   //   ...prevFormData,
                   //   addr: {

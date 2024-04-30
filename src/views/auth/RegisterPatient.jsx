@@ -50,7 +50,7 @@ const SignUp = () => {
           dob,
         };
         const resp = await PublicPost(`${apiUrl()}/auth/register`, params);
-        console.log("resp:::", resp);
+        //console.log("resp:::", resp);
         if (resp.success) {
           // const { data } = resp;
           // setItem("usr", {
@@ -104,7 +104,6 @@ const SignUp = () => {
       errorsObj.nhsId = "Nhs Id is required";
       isValid = false;
     }
-    console.log("dob", dob);
     if (!dob) {
       errorsObj.dob = "Date Of Birth is required";
       isValid = false;

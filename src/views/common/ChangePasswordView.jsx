@@ -30,7 +30,7 @@ const ChnagePasswordView = ({ onCloseModal }) => {
           params,
           "application/json"
         );
-        console.log("resp:::", resp);
+        //console.log("resp:::", resp);
         if (resp.success) {
           setShowResp({ success: true, msg: "You have successfully changed the password." });
         } else {

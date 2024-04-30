@@ -45,7 +45,7 @@ const Doctors = () => {
       const resp = await Get(
         `${apiUrl()}/admin/getAllDoctors?skip=${skip}&limit=15&dept=${selDept}&org=${selOrg}`
       );
-      // console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setDoctors((prevDoctors) => [...prevDoctors, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -61,7 +61,7 @@ const Doctors = () => {
   const fetchOrganizations = async () => {
     try {
       const resp = await Get(`${apiUrl()}/admin/getAllOrganizations`);
-      // console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setOrganizations(resp.data);
       }
@@ -76,7 +76,7 @@ const Doctors = () => {
   const fetchDepartments = async () => {
     try {
       const resp = await Get(`${apiUrl()}/admin/getAllDepartments`);
-      // console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setDepartments(resp.data);
       }

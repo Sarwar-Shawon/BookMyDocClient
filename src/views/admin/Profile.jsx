@@ -24,7 +24,7 @@ const Profile = () => {
   //   try {
   //     setLoading(true);
   //     const resp = await Get(`${apiUrl()}/admin/get-profile`);
-  //     console.log("resp:::", resp);
+  //     //console.log("resp:::", resp);
   //     if (resp.success) {
   //     }
   //   } catch (err) {
@@ -49,7 +49,7 @@ const Profile = () => {
           params,
           "application/json"
         );
-        console.log("resp:::", resp);
+        //console.log("resp:::", resp);
         if (resp.success) {
           setShowResp({ success: true, msg: "successful" });
         } else {

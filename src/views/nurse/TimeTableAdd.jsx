@@ -89,7 +89,7 @@ const TimetableAdd = ({ onCloseModal, title, setTimeSlots,selDoc }) => {
       currentSlot.setMinutes(currentSlot.getMinutes() + parseInt(duration));
     }
 
-    console.log("slots", slots);
+    //console.log("slots", slots);
     return slots;
   };
   //
@@ -112,7 +112,7 @@ const TimetableAdd = ({ onCloseModal, title, setTimeSlots,selDoc }) => {
           slot.duration
         );
       });
-      console.log("timeSlotObj::", timeSlotObj);
+      //console.log("timeSlotObj::", timeSlotObj);
       //
       if (Object.entries(timeSlotObj).length) {
         const resp = await Post(

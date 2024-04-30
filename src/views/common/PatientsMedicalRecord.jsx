@@ -22,7 +22,6 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt, updateApt }) 
     useState(diagnosesLists);
   const [showResp, setShowResp] = useState({});
   const [isBtnLoading, setIsBtnLoading] = useState(false);
-  console.log("selAptselAptselAptselAptselApt:::::",apt)
   const [formData, setFormData] = useState({
     healthInfo: {
       bloodPressure: "",
@@ -102,7 +101,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt, updateApt }) 
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+    //   //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         updateApt(medicalRecord)
@@ -143,7 +142,6 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt, updateApt }) 
             (diagnosis) =>
               diagnosis.toLowerCase().slice(0, inputLength) === inputValue
           );
-    console.log("data", data);
     setDiagnosesSuggestions(data);
   };
   //

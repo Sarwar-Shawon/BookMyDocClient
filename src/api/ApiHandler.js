@@ -20,7 +20,7 @@ export const Post = async (url, arg , ContentType) => {
       return response.data;
     }
   } catch (error) {
-    // console.log("err", error);
+    //console.log("err", error);
     return {
       success: false,
       error: error?.response?.data?.error || error?.message,
@@ -38,12 +38,12 @@ export const Put = async (url, arg , ContentType) => {
     };
     
     const response = await api.put(url, arg , config);
-    // console.log("response",response);
+    //console.log("response",response);
     if (response.data.success) {
       return response.data;
     }
   } catch (error) {
-    // console.log("err", error);
+    //console.log("err", error);
     return {
       success: false,
       error: error?.response?.data?.error || error?.message,
@@ -56,12 +56,12 @@ export const Get = async (url) => {
     const response = await api.get(url,{
       withCredentials: true, 
     });
-    // console.log('response', response.data);
+    //console.log('response', response.data);
     if (response.data.success) {
       return response.data;
     }
   } catch (error) {
-    // console.log("err", error);
+    //console.log("err", error);
     return {
       success: false,
       error: error?.response?.data?.error || error?.message,
@@ -74,12 +74,12 @@ export const Delete = async (url, arg) => {
     const response = await api.delete(url,{
       withCredentials: true, 
     });
-    // console.log("response",response);
+    //console.log("response",response);
     if (response.data.success) {
       return response.data;
     }
   } catch (error) {
-    console.log("err", error);
+    //console.log("err", error);
     return {
       success: false,
       error: error?.response?.data?.error || error?.message,
@@ -93,7 +93,7 @@ export const PublicPost = async (url, arg) => {
     const response = await axios.post(url, arg,{
       withCredentials: true, 
     });
-    // console.log("response",response);
+    //console.log("response",response);
     if (response.data.success) {
       return response.data;
     }

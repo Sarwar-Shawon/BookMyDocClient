@@ -42,7 +42,7 @@ const Home = ({ doctorId }) => {
       const resp = await Get(
         `${apiUrl()}/doctor/get-time-slots-by-date?date=${formattedDate}&skip_con=${true}`
       );
-      console.log("resp:::", resp?.data);
+      //console.log("resp:::", resp?.data);
       if (resp.success) {
         setTimeSlots(resp?.data);
       }

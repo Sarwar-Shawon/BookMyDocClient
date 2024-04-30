@@ -32,7 +32,7 @@ const Pharmacies = () => {
       const resp = await Get(
         `${apiUrl()}/admin/getAllPharmacies?skip=${skip}&limit=15`
       );
-      // console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setPharmacies((prevPharmacies) => [...prevPharmacies, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -49,7 +49,7 @@ const Pharmacies = () => {
   const fetchOrganizations = async () => {
     try {
       const resp = await Get(`${apiUrl()}/admin/getAllOrganizations`);
-      // console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setOrganizations(resp.data);
       }

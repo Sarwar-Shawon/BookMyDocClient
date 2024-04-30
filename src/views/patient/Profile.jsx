@@ -66,7 +66,7 @@ const PatientProfile = () => {
     try {
       setLoading(true);
       const resp = await Get(`${apiUrl()}/patient/get-profile`);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setFormData({
           ...formData,
@@ -85,7 +85,7 @@ const PatientProfile = () => {
     try {
       //
       setBtnLoading(true)
-      console.log("params:: update patient", formData);
+      //console.log("params:: update patient", formData);
       const params = {
         f_name: formData.f_name,
         l_name: formData.l_name,
@@ -95,9 +95,9 @@ const PatientProfile = () => {
         img: formData.img,
         addr: formData.addr,
       }
-      console.log("params",params)
+      //console.log("params",params)
       const resp = await Put(`${apiUrl()}/patient/update-profile`, params);
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         respObj.success = true;
@@ -356,7 +356,7 @@ const UpdateProfileView = ({isLoading , formData, setFormData , handleChange , u
               <label className="form-label">Find Address:</label>
               <PLaceAutoComplete
                 onPlaceSelected={(place) => {
-                  console.log("place", place);
+                  //console.log("place", place);
                   setFormData((prevFormData) => ({
                     ...prevFormData,
                     addr: {

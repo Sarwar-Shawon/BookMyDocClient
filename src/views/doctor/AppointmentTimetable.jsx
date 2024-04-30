@@ -39,7 +39,6 @@ const AppointmentsTimetable = ({ doctorId }) => {
       const resp = await Get(
         `${apiUrl()}/doctor/get-time-slots?date=${formattedDate}`
       );
-      console.log("resp:::", JSON.stringify(resp));
       if (resp.success) {
         setTimeSlots(resp?.data);
       }
@@ -59,7 +58,7 @@ const AppointmentsTimetable = ({ doctorId }) => {
         },
         "application/json"
       );
-      console.log(resp);
+      //console.log(resp);
       if (resp?.success) {
         setTimeSlots(timeSlots);
       }

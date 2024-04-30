@@ -165,9 +165,9 @@ const NursesAddView = ({
   const addNewNurse = async () => {
     try {
       //
-      //console.log("params:: add new nurse", formData);
+      ////console.log("params:: add new nurse", formData);
       const resp = await Post(`${apiUrl()}/admin/registerNurse`, formData);
-      //console.log("resp:::", resp);
+      ////console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         addToNurseList({ newNur: [resp?.data] });
@@ -187,9 +187,9 @@ const NursesAddView = ({
   const updateNurse = async () => {
     try {
       //
-      //console.log("params:: update nurse", formData);
+      ////console.log("params:: update nurse", formData);
       const resp = await Put(`${apiUrl()}/admin/updateNurse`, formData);
-      //console.log("resp:::", resp);
+      ////console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         updateNurseList({ updNur: resp?.data });

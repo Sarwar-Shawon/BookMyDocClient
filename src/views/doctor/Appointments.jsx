@@ -71,7 +71,7 @@ const AppointmentView = ({ aptType }) => {
           config.FETCH_LIMIT
         }`
       );
-      console.log("resp::: doctors", resp);
+      //console.log("resp::: doctors", resp);
       if (resp.success) {
         setAppointments((prevApts) => [...prevApts, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -95,7 +95,7 @@ const AppointmentView = ({ aptType }) => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         const updatedAppointments = appointments.filter(
           (apt) => apt._id !== selApt._id
@@ -126,7 +126,7 @@ const AppointmentView = ({ aptType }) => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         const updatedAppointments = appointments.filter(
           (apt) => apt._id !== selApt._id
@@ -159,7 +159,7 @@ const AppointmentView = ({ aptType }) => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setShowUpdateView(false);
         setShowResp({ success: true, msg: "successful" });
@@ -422,7 +422,7 @@ const UpdateModal = ({
       const resp = await Get(
         `${apiUrl()}/doctor/get-time-slots-by-date?date=${formData.apt_date}`
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setTimeSlots(resp?.data);
       }

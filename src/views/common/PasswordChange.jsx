@@ -71,7 +71,7 @@ const PasswordChange = () => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         //
         const user = await getItem("usr");

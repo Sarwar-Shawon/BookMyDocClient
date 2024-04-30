@@ -31,7 +31,7 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
     if (Object.entries(timeSlots).length) {
       Object.entries(timeSlots).map(([day, slots]) => {
         const timeSlot = Object.entries(slots);
-        console.log("slots", slots);
+        //console.log("slots", slots);
         const startTimeObj = new Date(`01/01/2024 ${timeSlot[0][0]}`);
         const nextTimeObj = new Date(`01/01/2024 ${timeSlot[1][0]}`);
         const durationInMinutes = (nextTimeObj - startTimeObj) / (1000 * 60);
@@ -50,7 +50,7 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
           duration: mint,
         };
       });
-      console.log("intObj::", intObj);
+      //console.log("intObj::", intObj);
       setDays(intObj);
     }
   }, []);
@@ -59,8 +59,8 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
     try {
       const isChecked = event.target.checked;
       const day = event.target.value;
-      console.log(isChecked);
-      console.log(day);
+      //console.log(isChecked);
+      //console.log(day);
       //
       if (isChecked) {
         setDays({
@@ -79,9 +79,9 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
     try {
       const value = event.target.value;
       const name = event.target.name;
-      console.log("value:", value);
-      console.log("name:", name);
-      console.log("name:", day);
+      //console.log("value:", value);
+      //console.log("name:", name);
+      //console.log("name:", day);
       // if (name == "duration") value = parseInt(value);
       setDays({
         ...days,
@@ -113,10 +113,10 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
       currentSlot.setMinutes(currentSlot.getMinutes() + parseInt(duration));
     }
 
-    console.log("slots", slots);
+    //console.log("slots", slots);
     return slots;
   };
-  console.log("timeSlots", timeSlots);
+  //console.log("timeSlots", timeSlots);
   //
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -137,7 +137,7 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
           slot.duration
         );
       });
-      console.log("timeSlotObj::", timeSlotObj);
+      //console.log("timeSlotObj::", timeSlotObj);
 
       if (Object.entries(timeSlotObj).length) {
         const resp = await Post(
@@ -147,7 +147,7 @@ const TimetableUpdate = ({ onCloseModal, title, timeSlots, setTimeSlots }) => {
           },
           "application/json"
         );
-        console.log(resp);
+        //console.log(resp);
         let respObj = {};
 
         if (resp?.success) {

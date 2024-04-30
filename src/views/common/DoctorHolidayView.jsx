@@ -28,7 +28,6 @@ const DoctorHolidayView = ({ onCloseModal, title , updateHolidays , selHoliday})
     });
     setSelectedRange(newRange);
   };
-  console.log("formData", formData , formData.start_date.getTime())
   //
   return (
     <Modal

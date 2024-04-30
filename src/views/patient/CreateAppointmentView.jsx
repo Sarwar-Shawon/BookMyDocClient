@@ -22,7 +22,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
   });
   //
   useEffect(() => {
-    console.log("assasa");
+    //console.log("assasa");
     fetchTimeSlots();
   }, [formData.apt_date]);
   //fetch TimeSlots
@@ -34,7 +34,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
           formData.apt_date
         }&doc_email=${doctor.doc_email}`
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setTimeSlots(resp?.data);
       }
@@ -83,13 +83,13 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
         org: doctor.organization._id,
         timeslot: formData.timeslot,
       };
-      console.log("params", params)
+      //console.log("params", params)
       const resp = await Post(
         `${apiUrl()}/patient/create-appointment`,
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         respObj.success = true;

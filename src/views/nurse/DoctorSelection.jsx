@@ -14,7 +14,7 @@ const DoctorSelection = ({selDoc, setSelDoctor}) => {
   const [isLoading, setIsLoading] = useState(true);
   //
   useEffect(() => {
-    console.log('asd::: called')
+    //console.log('asd::: called')
     fetchDoctors();
   }, []);
   //get Attatched Doctors
@@ -22,7 +22,7 @@ const DoctorSelection = ({selDoc, setSelDoctor}) => {
     try {
       setIsLoading(true);
       const resp = await Get(`${apiUrl()}/nurse/get-doctors`);
-      console.log("resp::: doctors", resp);
+      //console.log("resp::: doctors", resp);
       if (resp.success) {
         setSelDoctor(resp.data[0]?._id);
         setDoctors(resp.data);
@@ -33,7 +33,7 @@ const DoctorSelection = ({selDoc, setSelDoctor}) => {
       setIsLoading(false);
     }
   };
-  console.log("selDoc", selDoc);
+  //console.log("selDoc", selDoc);
   return (
     <div className="d-flex justify-content-between align-items-center mb-3">
       <div className="mb-3">

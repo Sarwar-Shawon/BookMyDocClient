@@ -26,7 +26,7 @@ const Departments = () => {
       setLoading(true);
       const skip = departments.length;
       const resp = await Get(`${apiUrl()}/admin/getAllDepartments?skip=${skip}`);
-      // console.log("resp:::", resp);
+      //console.log("resp:::", resp);
       if (resp.success) {
         setDepartments((prevDepartments) => [...prevDepartments, ...resp.data]);
       }
