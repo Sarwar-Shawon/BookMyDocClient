@@ -78,7 +78,7 @@ const RepeatPrescription = ({ onCloseModal, title, prescription }) => {
   ]);
   const [suggestions, setSuggestions] = useState([]);
   const [pharmacies, setPharmacies] = useState([]);
-  const [selPhr, setSelPhar] = useState({});
+  const [selPhr, setSelPhar] = useState("");
   const [showPreview, setShowPreview] = useState(false);
   const [showBtnLoader, setShowBtnLoader] = useState(false);
   const [showResp, setShowResp] = useState({});

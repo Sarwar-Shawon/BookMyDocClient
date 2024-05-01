@@ -269,3 +269,9 @@ button.btn-primary:hover {
 .apt-details .form-label {
     color: #074173;
 }
+.spinner-container {
+    position: fixed;
+    top: 60%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+}

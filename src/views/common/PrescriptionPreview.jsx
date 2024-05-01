@@ -219,19 +219,19 @@ const PrescriptionPreview = ({
                     <div className="card-header">
                       <strong>Status:</strong>{" "}
                       {
-                        prescription.repeatReq ?
+                        prescription?.repeatReq ?
                         "You have requested for repeat prescription.":
-                        prescription?.status == "New" && prescription?.phar._id
-                        ? `${prescription?.phar.name} is preparing the prescription.`
+                        prescription?.status == "New" && prescription?.phar?._id
+                        ? `${prescription?.phar?.name} is preparing the prescription.`
                         : prescription?.status == "Ready" &&
-                          prescription?.phar._id
-                        ? `${prescription?.phar.name} has prepared the prescription.`
+                          prescription?.phar?._id
+                        ? `${prescription?.phar?.name} has prepared the prescription.`
                         : prescription?.status == "Dispensed" &&
-                          prescription?.phar._id
-                        ? `${prescription?.phar.name} has Dispensed the prescription.`
+                          prescription?.phar?._id
+                        ? `${prescription?.phar?.name} has Dispensed the prescription.`
                         : prescription?.status == "Repeated"
                         ? `Request for repeat prescription.`
-                        : ""}
+                        : prescription?.status}
                     </div>
                   </div>
                 </div>

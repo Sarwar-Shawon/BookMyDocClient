@@ -37,6 +37,7 @@ const AppRoutes = {
   ],
   Pharmacy: [
     { name: "Home", path: "/home" },
+    { name: "Find Prescription", path: "/find-prescription" },
     { name: "Profile", path: "/profile" },
   ],
 };

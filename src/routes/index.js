@@ -17,7 +17,7 @@ import {PasswordChange} from '../views/common'
 import {PatientHome, PatientAppointments, PatientPrescriptions, PatientProfile} from '../views/patient'
 import { DoctorHome, DoctorAppointments, DoctorPrescriptions,AppointmentTimetable,DoctorProfile,Holidays } from '../views/doctor'
 import { NurseHome,NurseAppointments,NurseProfile, NurseAppointmentsTimetable } from '../views/nurse'
-import { PharmacyProfile,PharmacyPrescriptions } from '../views/pharmacy'
+import { PharmacyProfile,PharmacyPrescriptions,FindPrescriptions} from '../views/pharmacy'
 import Layout from "../views/layout/Layout"
 //
 const ProtectedRoute = ({ children }) => {
@@ -68,6 +68,7 @@ const AppRoutes = () => {
     ],
     Pharmacy: [
       { path: "/home", element: <PharmacyPrescriptions /> },
+      { path: "/find-prescription", element: <FindPrescriptions /> },
       { path: "/profile", element: <PharmacyProfile /> },
     ],
   };
