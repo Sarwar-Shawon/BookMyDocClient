@@ -15,6 +15,7 @@ import AppCalendar from "../../components/Calendar";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { FaCalendarAlt, FaHospitalUser,FaClipboardList } from "react-icons/fa";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
+const Interval = ["7 days", "1 month", "1 year"];
 //
 const PatientPrescriptions = () => {
   const [prescriptions, setPrescriptions] = useState([]);
@@ -26,17 +27,43 @@ const PatientPrescriptions = () => {
   const [showRepeatModal, setShowRepeatModal] = useState(false);
   const [selPC, setSelPC] = useState({});
   const [formData, setFormData] = useState({
-    start_date: new Date(),
+    start_date: new Date(new Date().setDate(new Date().getDate() - 7)),
     end_date: new Date(),
   });
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
-  //console.log("prescriptions", prescriptions);
+  const [range, setRange] = useState("7 days");
   //
   useEffect(() => {
     setPrescriptions([]);
     fetchPrescriptions({ pSkip: true });
   }, [formData.start_date, formData.end_date]);
+  
+  const updateRange = (val) =>{
+    switch (val) {
+      case "7 days":
+        setFormData({
+          ...formData,
+          start_date: new Date(new Date().setDate(new Date().getDate() - 7)),
+        });
+        break;
+      case "1 month":
+        setFormData({
+          ...formData,
+          start_date: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        });
+        break;
+      case "1 year":
+        setFormData({
+          ...formData,
+          start_date: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+        });
+        break;
+      default:
+        break;
+    }
+    setRange(val)
+  }
   //
   const fetchPrescriptions = async ({ pSkip }) => {
     try {
@@ -157,6 +184,24 @@ const PatientPrescriptions = () => {
                 </div>
               </div>
             </div>
+            <div className="row col-md-12">
+              <div className="col">
+                <div className="d-flex justify-content-between align-items-center">
+                  {Interval.map((item, index) => (
+                    <div className="button-container" key={item}>
+                      <button
+                        className={`tab-button ${
+                          range === item ? "active" : ""
+                        }`}
+                        onClick={() => updateRange(item)}
+                      >
+                        {item}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
             {showCalendar && (
               <AppCalendar
                 onCloseModal={() => setShowCalendar(false)}
@@ -182,7 +227,7 @@ const PatientPrescriptions = () => {
               <div className="spinner"></div>
             </div>
           }
-          style={{ display: "flex", flexWrap: "wrap" }}
+          style={{ display: "flex", flexWrap: "wrap", marginTop: 15  }}
         >
           {prescriptions.length > 0 ? (
             prescriptions.map((pr, index) => (
@@ -191,7 +236,14 @@ const PatientPrescriptions = () => {
                 className="doctor-card card mb-3 mx-2"
                 style={{
                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                  backgroundColor:   pr.status == "Dispensed" ? "#98D8AA" : pr.presType == "Repeated" ? "#FFF9C9" : pr.repeatReq ? "#FFF9C9" : "#fff",
+                  backgroundColor:
+                    pr.status == "Dispensed"
+                      ? "#98D8AA"
+                      : pr.presType == "Repeated"
+                      ? "#FFF9C9"
+                      : pr.repeatReq
+                      ? "#FFF9C9"
+                      : "#fff",
                 }}
               >
                 <img
@@ -270,14 +322,11 @@ const PatientPrescriptions = () => {
                 >
                   View Prescription
                 </button>
-          
-                {
-                  (pr.repeatOption &&
+
+                {pr.repeatOption &&
                   !pr.repeatReq &&
-                  pr.status === "Dispensed"&&
-                  !pr.rpid
-                  ) &&
-                 (
+                  pr.status === "Dispensed" &&
+                  !pr.rpid && (
                     <button
                       style={{
                         width: "200px",
