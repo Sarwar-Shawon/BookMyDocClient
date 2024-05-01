@@ -102,7 +102,7 @@ const AppointmentCard = ({
         See Details
       </button>
       {/* Accept Button */}
-      {aptType == "Pending" && (
+      {/* {aptType == "Pending" && (
         <button
           style={{
             width: "200px",
@@ -126,15 +126,15 @@ const AppointmentCard = ({
         >
           Accept
         </button>
-      )}
+      )} */}
       {/* Update Button */}
       {setShowCreatePresView && (
         <button
           style={{
             width: "200px",
             marginBottom: "10px",
-            backgroundColor: "#0B2447",
-            borderColor: "#0B2447",
+            backgroundColor: "#0E46A3",
+            borderColor: "#0E46A3",
             transition: "background-color 0.3s, border-color 0.3s",
           }}
           className="btn btn-primary"
@@ -143,8 +143,8 @@ const AppointmentCard = ({
             e.target.style.borderColor = "#1a4a8a";
           }}
           onMouseOut={(e) => {
-            e.target.style.backgroundColor = "#0B2447";
-            e.target.style.borderColor = "#0B2447";
+            e.target.style.backgroundColor = "#0E46A3";
+            e.target.style.borderColor = "#0E46A3";
           }}
           onClick={() => {
             setShowCreatePresView();
@@ -159,18 +159,18 @@ const AppointmentCard = ({
           style={{
             width: "200px",
             marginBottom: "10px",
-            backgroundColor: "#0B2447",
-            borderColor: "#0B2447",
+            backgroundColor: "#0D9276",
+            borderColor: "#0D9276",
             transition: "background-color 0.3s, border-color 0.3s",
           }}
           className="btn btn-primary"
           onMouseOver={(e) => {
-            e.target.style.backgroundColor = "#1a4a8a";
-            e.target.style.borderColor = "#1a4a8a";
+            e.target.style.backgroundColor = "#2D9596";
+            e.target.style.borderColor = "#2D9596";
           }}
           onMouseOut={(e) => {
-            e.target.style.backgroundColor = "#0B2447";
-            e.target.style.borderColor = "#0B2447";
+            e.target.style.backgroundColor = "#0D9276";
+            e.target.style.borderColor = "#0D9276";
           }}
           onClick={() => {
             setShowUpdateView();

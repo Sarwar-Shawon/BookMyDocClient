@@ -50,7 +50,7 @@ const AppointmentDetails = ({
       title={"Appointment Details"}
       body={
         <div className="d-flex container">
-          <div className="col-md-6" style={{ marginRight: "10px" }}>
+          <div className={apt?.pt?.medical_history ? "col-md-6" : "col-md-12"} style={{ marginRight: "10px" }}>
             {isLoading ? (
               <div className="d-flex justify-content-center align-items-center">
                 <div className="loading-container">
@@ -140,7 +140,7 @@ const AppointmentDetails = ({
                     </label>
                   </div>
                 </div>
-                <div className="col-12">
+                <div className="col-md-12">
                   {doctor && (
                     <button
                       style={{

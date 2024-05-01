@@ -126,88 +126,62 @@ const PatientHome = () => {
   //
   return (
     <div className="container-fluid">
+    <div className="row">
+  <div className="col-lg-3 col-md-6">
+    <div className="mb-3">
+      <label className="form-label">Department:</label>
+      <select
+        className="form-select"
+        name="selDept"
+        value={selDept}
+        onChange={(e) => setSelDept(e.target.value)}
+        required
+      >
+        <option value="">All Departments</option>
+        {departments.map((dept) => (
+          <option value={dept._id} key={dept._id}>
+            {dept.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+  <div className="col-lg-3 col-md-6">
+    <div className="mb-3">
+      <label className="form-label">Location:</label>
+      <PLaceAutoComplete
+        onPlaceSelected={(place) => {
+          console.log("place", place);
+          setLatitude(place?.lat_lng[0]);
+          setLongitude(place?.lat_lng[1]);
+        }}
+      />
+    </div>
+  </div>
+  <div className="col-lg-3 col-md-6">
+    <div className="mb-3">
+      <label className="form-label">Range in miles:</label>
       <div className="row">
         <div className="col">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <div className="mb-3">
-              <label className="form-label">Department:</label>
-              <select
-                className="form-select"
-                name="selDept"
-                value={selDept}
-                onChange={(e) => setSelDept(e.target.value)}
-                required
-              >
-                <option value="">All Departments</option>
-                <>
-                  {departments.length &&
-                    departments.map((dept) => (
-                      <option value={dept._id} key={dept._id}>
-                        {dept.name}
-                      </option>
-                    ))}
-                </>
-              </select>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Location:</label>
-              <PLaceAutoComplete
-                onPlaceSelected={(place) => {
-                  console.log("place", place);
-                  setLatitude(place?.lat_lng[0])
-                  setLongitude(place?.lat_lng[1])
-                  // setFormData((prevFormData) => ({
-                  //   ...prevFormData,
-                  //   addr: {
-                  //     ...prevFormData.addr,
-                  //     ...place,
-                  //   },
-                  // }));
-                }}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Range in miles:</label>
-              <div className="row">
-                <div className="col">
-                  <div className="d-flex justify-content-between align-items-center">
-                    {Range.map((item, index) => (
-                      <div className="button-container" key={item}>
-                        <button className={`tab-button ${range === item ? "active" : ""}`} onClick={() => setRange(item)}>
-                          {item}miles
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+          <div className="d-flex justify-content-between align-items-center">
+            {Range.map((item, index) => (
+              <div className="button-container" key={item}>
+                <button
+                  className={`tab-button ${
+                    range === item ? "active" : ""
+                  }`}
+                  onClick={() => setRange(item)}
+                >
+                  {item} miles
+                </button>
               </div>
-            </div>
-            {/* <div className="mb-3">
-              <button
-                style={{
-                  width: "200px",
-                  marginRight: 10,
-                  backgroundColor: "#0B2447",
-                  borderColor: "#0B2447",
-                  transition: "background-color 0.3s, border-color 0.3s",
-                }}
-                className="btn btn-primary"
-                onMouseOver={(e) => {
-                  e.target.style.backgroundColor = "#1a4a8a";
-                  e.target.style.borderColor = "#1a4a8a";
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.backgroundColor = "#0B2447";
-                  e.target.style.borderColor = "#0B2447";
-                }}
-                onClick={() => {}}
-              >
-                Search Doctor
-              </button>
-            </div> */}
+            ))}
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
       <div className="doctor-list d-flex flex-wrap">
         {isLoading ? (
           <LoadingView />

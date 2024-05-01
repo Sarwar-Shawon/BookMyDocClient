@@ -54,6 +54,7 @@ export default (props) => {
       placeholder="Search Address"
       className="form-control"
       ref={ref}
+      style={props.style}
     />
   );
 };
