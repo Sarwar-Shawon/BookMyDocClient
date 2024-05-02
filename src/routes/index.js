@@ -14,7 +14,7 @@ import { useAuthContext } from "../context/AuthContext";
 import {Home, Doctors, Nurses, Pharmacies , Departments , Profile , Organizations} from '../views/admin'
 import {Login, SignUp, Verification} from '../views/auth'
 import {PasswordChange} from '../views/common'
-import {PatientHome, PatientAppointments, PatientPrescriptions, PatientProfile} from '../views/patient'
+import {PatientHome, PatientAppointments, PatientPrescriptions, PatientProfile, CheckoutSuccess} from '../views/patient'
 import { DoctorHome, DoctorAppointments, DoctorPrescriptions,AppointmentTimetable,DoctorProfile,Holidays } from '../views/doctor'
 import { NurseHome,NurseAppointments,NurseProfile, NurseAppointmentsTimetable } from '../views/nurse'
 import { PharmacyProfile,PharmacyPrescriptions,FindPrescriptions} from '../views/pharmacy'
@@ -82,6 +82,8 @@ const AppRoutes = () => {
       <Route path="/signin" element={<Login />} />
       <Route path="/verification" element={<Verification />} />
       <Route path="/chnage-password" element={<Verification />} />
+      <Route path="/checkout-success" element={<CheckoutSuccess />} />
+      
       <Route element={<ProtectedRoute />}>
         {selectedRoutes.map((route, index) => (
           <Route key={index} path={route.path} element={<Layout>{route.element}</Layout>} />
