@@ -32,6 +32,7 @@ const PrescriptionCheckout = ({ onCloseModal, prescription }) => {
         `${apiUrl()}/stripe/make-payment`,
         {
           line_items: itemLists,
+          pres_id : prescription._id
         },
         "application/json"
       );

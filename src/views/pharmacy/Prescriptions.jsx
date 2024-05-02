@@ -219,14 +219,14 @@ const PharmacyPrescriptions = () => {
                   className="doctor-card card mb-3 mx-2"
                   style={{
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                    backgroundColor:
-                      pr.status == "Dispensed"
-                        ? "#98D8AA"
-                        : pr.presType == "Repeated"
-                        ? "#FFF9C9"
-                        : pr.repeatReq
-                        ? "#FFF9C9"
-                        : "#fff",
+                    // backgroundColor:
+                    //   pr.status == "Dispensed"
+                    //     ? "#98D8AA"
+                    //     : pr.presType == "Repeated"
+                    //     ? "#FFF9C9"
+                    //     : pr.repeatReq
+                    //     ? "#FFF9C9"
+                    //     : "#fff",
                   }}
                 >
                   <img
@@ -274,9 +274,14 @@ const PharmacyPrescriptions = () => {
                       }}
                     >
                       <FaBookmark style={{ marginRight: "5px" }} />
-                      <p className="card-text" style={{ fontWeight: "bold" }}>
-                        {pr?.status}
-                      </p>
+                      <p className="card-text" style={{ fontWeight: "bold", color: pr.status == "Dispensed"
+                      ? "#43766C"
+                      : pr.presType == "Repeated"
+                      ? "#FFF9C9"
+                      : pr.repeatReq
+                      ? "#FFF9C9" : "#000" }}>
+                      {pr?.status}
+                    </p>v 
                     </div>
                     <div
                       style={{

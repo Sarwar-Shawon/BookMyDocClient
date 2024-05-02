@@ -10,7 +10,6 @@ import noData from "../../assets/images/no-data.jpg";
 import PrescriptionPreview from "../common/PrescriptionPreview";
 import { formatDateToString } from "../../utils";
 import moment from "moment";
-import Modal from "../../components/Modal";
 import AppCalendar from "../../components/Calendar";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
@@ -20,6 +19,7 @@ import {
   FaBookmark,
   FaMoneyCheck,
 } from "react-icons/fa";
+import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import PrescriptionCheckout from './PrescriptionCheckout'
 const Interval = ["7 days", "1 month", "1 year"];
@@ -247,25 +247,29 @@ const PatientPrescriptions = () => {
                 className="doctor-card card mb-3 mx-2"
                 style={{
                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                  backgroundColor:
-                    pr.status == "Dispensed"
-                      ? "#98D8AA"
-                      : pr.presType == "Repeated"
-                      ? "#FFF9C9"
-                      : pr.repeatReq
-                      ? "#FFF9C9"
-                      : "#fff",
+                  // backgroundColor:
+                  //   pr.status == "Dispensed"
+                  //     ? "#98D8AA"
+                  //     : pr.presType == "Repeated"
+                  //     ? "#FFF9C9"
+                  //     : pr.repeatReq
+                  //     ? "#FFF9C9"
+                  //     : "#fff",
                 }}
               >
-                <img
+                {
+                  pr?.phar?.img && 
+                  <img
                   src={
-                    typeof pr?.pt.img == "string"
-                      ? `${apiUrl()}/uploads/${pr?.pt.img}`
-                      : URL.createObjectURL(pr?.pt.img)
+                    typeof pr?.phar?.img == "string"
+                      ? `${apiUrl()}/uploads/${pr?.phar?.img}`
+                      : URL.createObjectURL(pr?.phar?.img)
                   }
                   className="card-img-top"
                   alt={pr?.pt.f_name}
                 />
+                }
+                
                 <div className="card-body">
                   <h5 className="card-title">
                     {[pr?.pt.f_name, pr?.pt.l_name].join(" ")}
@@ -302,7 +306,12 @@ const PatientPrescriptions = () => {
                     }}
                   >
                     <FaBookmark style={{ marginRight: "5px" }} />
-                    <p className="card-text" style={{ fontWeight: "bold" }}>
+                    <p className="card-text" style={{ fontWeight: "bold", color: pr.status == "Dispensed"
+                      ? "#43766C"
+                      : pr.presType == "Repeated"
+                      ? "#FFF9C9"
+                      : pr.repeatReq
+                      ? "#FFF9C9" : "#000" }}>
                       {pr?.status}
                     </p>
                   </div>
@@ -442,7 +451,7 @@ const PatientPrescriptions = () => {
                 <div className="spinner"></div>
               </div>
             ) : (
-              <div>"Do you want to request for a repeat prescription?"</div>
+              <div>Do you want to request for a repeat prescription?</div>
             )
           }
           btm_btn_1_txt={"No"}
