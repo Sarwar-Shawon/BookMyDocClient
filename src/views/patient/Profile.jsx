@@ -1,7 +1,7 @@
 /*
  * @copyRight by md sarwar hoshen.
  */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Profiler } from "react";
 import { Get, Put } from "../../api";
 import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
@@ -10,7 +10,7 @@ import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import ChnagePasswordView from "../common/ChangePasswordView"
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
-
+import MedicalRecords from './MedicalRecords'
 //
 const PatientProfile = () => {
   //
@@ -32,7 +32,9 @@ const PatientProfile = () => {
   const [isBtnLoading, setBtnLoading] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showCngPassModal, setShowCngPassModal] = useState(false);
+  const [showMedRecord, setShowMedRecord] = useState(false);
   const [showResp, setShowResp] = useState({});
+  const [medicalHistory, setMedicalHistory] = useState({});
   //
   const handleChange = (e) => {
     const { name, value, options } = e.target;
@@ -66,12 +68,13 @@ const PatientProfile = () => {
     try {
       setLoading(true);
       const resp = await Get(`${apiUrl()}/patient/get-profile`);
-      //console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       if (resp.success) {
         setFormData({
           ...formData,
           ...resp?.data
         });
+        setMedicalHistory(resp?.data?.medical_history)
       }
     } catch (err) {
       setError(err?.message);
@@ -212,6 +215,7 @@ const PatientProfile = () => {
               borderColor: "#0B2447",
               transition: "background-color 0.3s, border-color 0.3s",
               boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+              margin: 10,
             }}
             className="btn btn-primary"
             onMouseOver={(e) => {
@@ -226,6 +230,28 @@ const PatientProfile = () => {
           >
             Chnage Password
           </button>
+          <button
+            style={{
+              width: "200px",
+              backgroundColor: "#0B2447",
+              borderColor: "#0B2447",
+              transition: "background-color 0.3s, border-color 0.3s",
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+              margin: 10,
+            }}
+            className="btn btn-primary"
+            onMouseOver={(e) => {
+              e.target.style.backgroundColor = "#1a4a8a";
+              e.target.style.borderColor = "#1a4a8a";
+            }}
+            onMouseOut={(e) => {
+              e.target.style.backgroundColor = "#0B2447";
+              e.target.style.borderColor = "#0B2447";
+            }}
+            onClick={() => setShowMedRecord(true)}
+          >
+            Show Medical Records
+          </button>
         </div>
       </div>
       {showUpdateModal && (
@@ -238,6 +264,12 @@ const PatientProfile = () => {
           showResp={showResp}
           setShowResp={setShowResp}
           onCloseModal={() => setShowUpdateModal(false)}
+        />
+      )}
+      {showMedRecord && (
+        <MedicalRecords
+          medical_history={medicalHistory}
+          onCloseModal={() => setShowMedRecord(false)}
         />
       )}
       {
