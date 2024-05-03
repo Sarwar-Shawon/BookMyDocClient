@@ -12,14 +12,9 @@ import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import Map from "../../components/Map";
 import Modal from "../../components/Modal";
 import {
-  FaCalendarAlt,
-  FaClock,
   FaHospitalUser,
-  FaClipboard,
   FaClinicMedical,
   FaCity,
-  FaRegUser,
-  FaRegUserCircle,
 } from "react-icons/fa";
 const Range = [5,10,25];
 //
@@ -38,6 +33,26 @@ const PatientHome = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [range, setRange] = useState(5);
+  //
+  const radians = (deg) => {
+    return deg * (Math.PI / 180);
+  };
+  //
+  const getDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of the Earth in km
+    const dLat = radians(lat2 - lat1);
+    const dLon = radians(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(radians(lat1)) *
+        Math.cos(radians(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c ;
+    console.log("distance", parseFloat(distance * 0.621371).toFixed(2));
+    return parseFloat(distance * 0.621371).toFixed(2);
+  };
   //get current location
   // useEffect(() => {
   //   getLocation();
@@ -45,6 +60,7 @@ const PatientHome = () => {
   //
   useEffect(() => {
     fetchDepartments();
+    getDistance(52.90686469999999, -1.119655, 52.93094019999999, -1.1323819);
   }, []);
   //get Departments
   const fetchDepartments = async () => {
@@ -76,7 +92,7 @@ const PatientHome = () => {
           ? `${apiUrl()}/patient/get-doctors?skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
           : `${apiUrl()}/patient/get-all-doctors?skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
       );
-      //console.log("resp::: doctors", resp);
+      // console.log("resp::: doctors", resp);
       if (resp.success) {
         setDoctors((prevDoctors) => [...prevDoctors, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -89,14 +105,13 @@ const PatientHome = () => {
   };
   //
   useEffect(() => {
-    if(latitude && longitude){
-
-      console.log("asd")
-      setLoading(true)
-      setDoctors([])
-      fetchDoctors({ pSkip: true })
+    if (latitude && longitude) {
+      console.log("asd");
+      setLoading(true);
+      setDoctors([]);
+      fetchDoctors({ pSkip: true });
     }
-  }, [latitude, longitude , range]);
+  }, [latitude, longitude, range]);
   //
   // const getLocation = async () => {
   //   if (navigator.geolocation) {
@@ -126,62 +141,65 @@ const PatientHome = () => {
   //
   return (
     <div className="container-fluid">
-    <div className="row">
-  <div className="col-lg-3 col-md-6">
-    <div className="mb-3">
-      <label className="form-label">Department:</label>
-      <select
-        className="form-select"
-        name="selDept"
-        value={selDept}
-        onChange={(e) => setSelDept(e.target.value)}
-        required
-      >
-        <option value="">All Departments</option>
-        {departments.map((dept) => (
-          <option value={dept._id} key={dept._id}>
-            {dept.name}
-          </option>
-        ))}
-      </select>
-    </div>
-  </div>
-  <div className="col-lg-3 col-md-6">
-    <div className="mb-3">
-      <label className="form-label">Location:</label>
-      <PLaceAutoComplete
-        onPlaceSelected={(place) => {
-          console.log("place", place);
-          setLatitude(place?.lat_lng[0]);
-          setLongitude(place?.lat_lng[1]);
-        }}
-      />
-    </div>
-  </div>
-  <div className="col-lg-3 col-md-6">
-    <div className="mb-3">
-      <label className="form-label">Range in miles:</label>
       <div className="row">
-        <div className="col">
-          <div className="d-flex justify-content-between align-items-center">
-            {Range.map((item, index) => (
-              <div className="button-container" key={item}>
-                <button
-                  className={`tab-button ${
-                    range === item ? "active" : ""
-                  }`}
-                  onClick={() => setRange(item)}
-                >
-                  {item} miles
-                </button>
+        <div className="col-lg-3 col-md-6">
+          <div className="mb-3">
+            <label className="form-label">Department:</label>
+            <select
+              className="form-select"
+              name="selDept"
+              value={selDept}
+              onChange={(e) => setSelDept(e.target.value)}
+              required
+            >
+              <option value="">All Departments</option>
+              {departments.map(
+                (dept) =>
+                  dept.active && (
+                    <option value={dept._id} key={dept._id}>
+                      {dept.name}
+                    </option>
+                  )
+              )}
+            </select>
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-6">
+          <div className="mb-3">
+            <label className="form-label">Location:</label>
+            <PLaceAutoComplete
+              onPlaceSelected={(place) => {
+                console.log("place", place);
+                setLatitude(place?.lat_lng[0]);
+                setLongitude(place?.lat_lng[1]);
+              }}
+            />
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-6">
+          <div className="mb-3">
+            <label className="form-label">Range in miles:</label>
+            <div className="row">
+              <div className="col">
+                <div className="d-flex justify-content-between align-items-center">
+                  {Range.map((item, index) => (
+                    <div className="button-container" key={item}>
+                      <button
+                        className={`tab-button ${
+                          range === item ? "active" : ""
+                        }`}
+                        onClick={() => setRange(item)}
+                      >
+                        {item} miles
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
       <div className="doctor-list d-flex flex-wrap">
         {isLoading ? (
           <LoadingView />
@@ -235,6 +253,15 @@ const PatientHome = () => {
                       </h5>
                       <p className="card-text">{doctor?.dept?.name}</p>
                       <p className="card-text">{doctor?.organization?.name}</p>
+                      {latitude && longitude && (
+                        <p className="card-text">
+                          Distance:{" "}
+                          <strong>
+                            {getDistance(latitude,longitude ,doctor?.organization?.addr?.lat_lng[0],doctor?.organization?.addr?.lat_lng[1] )}{" "}
+                            miles
+                          </strong>
+                        </p>
+                      )}
                     </div>
                     <button
                       style={{

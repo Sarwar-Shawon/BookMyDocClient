@@ -83,7 +83,7 @@ const PatientPrescriptions = () => {
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}`
       );
-      //console.log("resp", resp);
+      // console.log("resp", resp);
       if (resp.success) {
         setPrescriptions((prevPres) => [...prevPres, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -125,12 +125,13 @@ const PatientPrescriptions = () => {
         "application/json"
       );
       //
-      //console.log("resp", resp);
+      // console.log("resp", resp);
       const respObj = {};
       if (resp.success) {
-        setPrescriptions((prevPres) =>
-          prevPres.map((obj) => ({ ...obj, ...resp.data }))
+        const updatedPres = prescriptions.map((pres) =>
+          pres._id == resp?.data._id ? { ...pres, ...resp?.data } : pres
         );
+        setPrescriptions(updatedPres);
         respObj.success = true;
         respObj.msg = resp?.message;
         setShowResp(respObj);
