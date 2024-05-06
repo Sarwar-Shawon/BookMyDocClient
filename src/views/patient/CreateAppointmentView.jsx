@@ -9,7 +9,7 @@ import { apiUrl } from "../../config/appConfig";
 import moment from "moment";
 import TimeSlotView from '../common/TimeSlotView'
 //
-const CreateAppointmentView = ({ onCloseModal, doctor }) => {
+const CreateAppointmentView = ({ onCloseModal, doctor ,selDate}) => {
   //
   const [errors, setError] = useState({});
   const [timeSlots, setTimeSlots] = useState([]);
@@ -17,7 +17,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [formData, setFormData] = useState({
-    apt_date: new Date(),
+    apt_date: selDate ? new Date(selDate) : new Date(),
     timeslot: "",
   });
   //

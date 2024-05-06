@@ -44,13 +44,14 @@ const AppointmentDetails = ({
       setLoading(false);
     }
   };
+  console.log("apt",apt)
   //
   return (
     <Modal
       title={"Appointment Details"}
       body={
         <div className="d-flex container">
-          <div className={apt?.pt?.medical_history ? "col-md-6" : "col-md-12"} style={{ marginRight: "10px" }}>
+          <div className={  (apt?.pt?.medical_history && Object.entries(apt?.pt?.medical_history).length) ? "col-md-6" : "col-md-12"} style={{ marginRight: "10px" }}>
             {isLoading ? (
               <div className="d-flex justify-content-center align-items-center">
                 <div className="loading-container">
@@ -194,7 +195,7 @@ const AppointmentDetails = ({
               </>
             )}
           </div>
-          {apt?.pt?.medical_history && (
+          {(apt?.pt?.medical_history && Object.entries(apt?.pt?.medical_history).length) && (
             <div
               className="col-md-6 pt-record"
               style={{ borderLeft: "2px solid #074173", paddingLeft: "10px" }}
@@ -211,7 +212,7 @@ const AppointmentDetails = ({
                         </tr>
                       </thead>
                       <tbody>
-                        {apt?.pt.medical_history.healthInfoList.map(
+                        {apt?.pt?.medical_history?.healthInfoList.map(
                           (item, index) => (
                             <tr key={"h" + index}>
                               <td className="align-middle">
@@ -262,7 +263,7 @@ const AppointmentDetails = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {apt?.pt.medical_history.diagnoses.map((item, index) => (
+                      {apt?.pt?.medical_history?.diagnoses.map((item, index) => (
                         <tr key={"vd" + index}>
                           <td className="align-middle">
                             {formatDateToString(item?.date)}

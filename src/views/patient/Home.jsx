@@ -11,12 +11,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import Map from "../../components/Map";
 import Modal from "../../components/Modal";
-import {
-  FaHospitalUser,
-  FaClinicMedical,
-  FaCity,
-} from "react-icons/fa";
-const Range = [5,10,25];
+import AppCalendar from "../../components/AppCalendar";
+
+import { FaHospitalUser, FaClinicMedical, FaCity } from "react-icons/fa";
+import { formatStringToDate } from "../../utils";
+const Range = [5, 10, 25];
 //
 const PatientHome = () => {
   const [departments, setDepartments] = useState([]);
@@ -28,11 +27,12 @@ const PatientHome = () => {
   const [hasMore, setHasMore] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
   const [showAppointment, setShowAppointment] = useState(false);
+  const [selDate, setSelDate] = useState(new Date());
   //
   const [curAddr, setCurAddr] = useState("");
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [range, setRange] = useState(5);
+  const [range, setRange] = useState("");
   //
   const radians = (deg) => {
     return deg * (Math.PI / 180);
@@ -49,7 +49,7 @@ const PatientHome = () => {
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c ;
+    const distance = R * c;
     console.log("distance", parseFloat(distance * 0.621371).toFixed(2));
     return parseFloat(distance * 0.621371).toFixed(2);
   };
@@ -60,7 +60,6 @@ const PatientHome = () => {
   //
   useEffect(() => {
     fetchDepartments();
-    getDistance(52.90686469999999, -1.119655, 52.93094019999999, -1.1323819);
   }, []);
   //get Departments
   const fetchDepartments = async () => {
@@ -82,17 +81,20 @@ const PatientHome = () => {
     setLoading(true);
     setDoctors([]);
     fetchDoctors({ pSkip: true });
-  }, [selDept]);
+  }, [selDept, selDate]);
   //get doctors
   const fetchDoctors = async ({ pSkip }) => {
     try {
       const skip = pSkip ? 0 : doctors.length;
       const resp = await Get(
-        selDept
+          selDate
+          ? `${apiUrl()}/patient/get-all-doctors-date?date=${selDate}&skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
+          :
+          selDept
           ? `${apiUrl()}/patient/get-doctors?skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
-          : `${apiUrl()}/patient/get-all-doctors?skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
+          : `${apiUrl()}/patient/get-all-doctors?skip=${skip}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
       );
-      // console.log("resp::: doctors", resp);
+      console.log("resp::: doctors", resp);
       if (resp.success) {
         setDoctors((prevDoctors) => [...prevDoctors, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -106,7 +108,6 @@ const PatientHome = () => {
   //
   useEffect(() => {
     if (latitude && longitude) {
-      console.log("asd");
       setLoading(true);
       setDoctors([]);
       fetchDoctors({ pSkip: true });
@@ -166,6 +167,20 @@ const PatientHome = () => {
         </div>
         <div className="col-lg-3 col-md-6">
           <div className="mb-3">
+            <label className="form-label">Search By Date:</label>
+            <AppCalendar
+              value={selDate}
+              className="form-control me-2"
+              placeholder="Date"
+              onChange={(val) => {
+                setSelDate(val);
+              }}
+              minDate={new Date()}
+            />
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-6">
+          <div className="mb-3">
             <label className="form-label">Location:</label>
             <PLaceAutoComplete
               onPlaceSelected={(place) => {
@@ -199,6 +214,7 @@ const PatientHome = () => {
             </div>
           </div>
         </div>
+        
       </div>
       <div className="doctor-list d-flex flex-wrap">
         {isLoading ? (
@@ -257,7 +273,12 @@ const PatientHome = () => {
                         <p className="card-text">
                           Distance:{" "}
                           <strong>
-                            {getDistance(latitude,longitude ,doctor?.organization?.addr?.lat_lng[0],doctor?.organization?.addr?.lat_lng[1] )}{" "}
+                            {getDistance(
+                              latitude,
+                              longitude,
+                              doctor?.organization?.addr?.lat_lng[0],
+                              doctor?.organization?.addr?.lat_lng[1]
+                            )}{" "}
                             miles
                           </strong>
                         </p>
@@ -325,6 +346,7 @@ const PatientHome = () => {
             setShowAppointment(false);
           }}
           doctor={selDoc}
+          selDate={selDate}
         />
       )}
       {showDetails && (
