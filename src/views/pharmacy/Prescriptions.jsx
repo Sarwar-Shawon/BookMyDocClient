@@ -16,6 +16,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { FaCalendarAlt, FaHospitalUser, FaClipboardList, FaBookmark , FaMoneyCheck } from "react-icons/fa";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 const Interval = ["7 days", "1 month", "1 year"];
+const _status  = ["New", "Ready", "Dispensed"];
 
 //
 const PharmacyPrescriptions = () => {
@@ -33,6 +34,8 @@ const PharmacyPrescriptions = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
   const [range, setRange] = useState("7 days");
+  const [prStatus, setPrStatus] = useState("");
+
   useEffect(() => {
     if (formData.start_date && formData.end_date) {
       setPrescriptions([]);
@@ -43,7 +46,7 @@ const PharmacyPrescriptions = () => {
   useEffect(() => {
       setPrescriptions([]);
       fetchPrescriptions({ pSkip: true });
-  }, [range]);
+  }, [range, prStatus]);
   //
   const fetchPrescriptions = async ({ pSkip }) => {
     try {
@@ -51,7 +54,7 @@ const PharmacyPrescriptions = () => {
       const resp = await Get(
         `${apiUrl()}/pharmacy/get-prescriptions?skip=${skip}&limit=${
           config.FETCH_LIMIT
-        }&startDay=${formData.start_date}&endDay=${formData.end_date}&interval=${range}`
+        }&startDay=${formData.start_date}&endDay=${formData.end_date}&interval=${range}&prStatus=${prStatus}`
       );
       console.log("resp", resp);
       if (resp.success) {
@@ -199,6 +202,30 @@ const PharmacyPrescriptions = () => {
               </div>
             </div>
           </div>
+          <div className="row col-md-12" style={{marginTop:10}}>
+              <div className="col">
+                <div className="d-flex justify-content align-items-center">
+                  <div className="mb-3">
+                    <label className="form-label">Prescriptions Status:</label>
+                    <select
+                      className="form-select"
+                      name="selDept"
+                      value={prStatus}
+                      onChange={(e) => setPrStatus(e.target.value)}
+
+                    >
+                      <option value="">All</option>
+                      {_status.map(
+                        (item) =>
+                            <option value={item} key={item}>
+                              {item}
+                            </option>
+                      )}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
         <div style={{ marginTop: 15 }}>
           <InfiniteScroll
@@ -281,7 +308,7 @@ const PharmacyPrescriptions = () => {
                       : pr.repeatReq
                       ? "#FFF9C9" : "#000" }}>
                       {pr?.status}
-                    </p>v 
+                    </p>
                     </div>
                     <div
                       style={{

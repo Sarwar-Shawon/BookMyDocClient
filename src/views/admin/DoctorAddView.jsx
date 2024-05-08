@@ -16,6 +16,8 @@ import { Regex, formatDateToString } from "../../utils";
 import { Post, Put, Get } from "../../api";
 import { apiUrl } from "../../config/appConfig";
 import AppCalendar from "../../components/Calendar";
+import { FaMale, FaFemale } from "react-icons/fa";
+
 const DoctorsAddView = ({
   onCloseModal,
   addToDoctorList,
@@ -46,6 +48,7 @@ const DoctorsAddView = ({
       lat_lng: "",
       formatted_address: "",
     },
+    gender: "Male",
     dept: "",
     active: true,
     organization: "",
@@ -94,6 +97,9 @@ const DoctorsAddView = ({
   //
   const handleChange = (e) => {
     const { name, value, options } = e.target;
+    console.log("namenamenamenamenamename",name)
+    console.log("namenamenamenamenamename",value)
+
     if (name == "nurses") {
       ////console.log(options);
       let selectedNurses = formData.nurses;
@@ -160,6 +166,10 @@ const DoctorsAddView = ({
     }
     if (!formData.l_name) {
       errorsObj.l_name = "Last Name is required";
+      isValid = false;
+    }
+    if (!formData.gender) {
+      errorsObj.gender = "Gender is required";
       isValid = false;
     }
     if (!formData.dob) {
@@ -252,7 +262,7 @@ const DoctorsAddView = ({
     }
   };
   //
-  ////console.log("formdata", formData);
+  console.log("formdata", formData);
   return (
     <Modal
       title={selectedDoctor ? "Update Doctor" : "Add New Doctor"}
@@ -456,6 +466,52 @@ const DoctorsAddView = ({
                     ))}
                 </>
               </select>
+            </div>
+            <div className="mb-3">
+              <label>Gender</label>
+              {errors.gender && (
+                <p style={{ fontSize: 16, color: "red", marginBottom: 2 }}>
+                  *{errors.gender}
+                </p>
+              )}
+              <div className="radio-row">
+                <div className="radio">
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value={formData.gender}
+                      checked={formData.gender == "Male" ? true : false}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          ["gender"]: "Male",
+                        });
+                      }}
+                    />
+                    <span style={{ marginLeft: "4px" }}>Male</span>
+                    <FaMale style={{ fontSize: "16px" }} />
+                  </label>
+                </div>
+                <div className="radio">
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value={formData.gender}
+                      checked={formData.gender == "Female" ? true : false}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          ["gender"]: "Female",
+                        });
+                      }}
+                    />
+                    <span style={{ marginLeft: "4px" }}>Female</span>
+                    <FaFemale style={{ fontSize: "16px" }} />
+                  </label>
+                </div>
+              </div>
             </div>
             <div className="mb-3">
               <label className="form-label">Organization:</label>

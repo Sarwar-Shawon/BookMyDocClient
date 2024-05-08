@@ -17,6 +17,7 @@ import { Regex, formatDateToString } from "../../utils";
 import { Post, Put } from "../../api";
 import { apiUrl } from "../../config/appConfig";
 import AppCalendar from "../../components/Calendar";
+import { FaMale, FaFemale } from "react-icons/fa";
 
 const NursesAddView = ({
   onCloseModal,
@@ -48,6 +49,7 @@ const NursesAddView = ({
     //   formatted_address: "",
     // },
     dept: "",
+    gender: "Male",
     active: true,
     organization: "BookMyDoc",
   });
@@ -132,6 +134,10 @@ const NursesAddView = ({
     }
     if (!formData.phone) {
       errorsObj.phone = "Phone is required";
+      isValid = false;
+    }
+    if (!formData.gender) {
+      errorsObj.gender = "Gender is required";
       isValid = false;
     }
     if (!formData.dept) {
@@ -319,6 +325,52 @@ const NursesAddView = ({
           </div>
           {/* Address View */}
           <div className="col-md-6">
+            <div className="mb-3">
+              <label>Gender</label>
+              {errors.gender && (
+                <p style={{ fontSize: 16, color: "red", marginBottom: 2 }}>
+                  *{errors.gender}
+                </p>
+              )}
+              <div className="radio-row">
+                <div className="radio">
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value={formData.gender}
+                      checked={formData.gender == "Male" ? true : false}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          ["gender"]: "Male",
+                        });
+                      }}
+                    />
+                    <span style={{ marginLeft: "4px" }}>Male</span>
+                    <FaMale style={{ fontSize: "16px" }} />
+                  </label>
+                </div>
+                <div className="radio">
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value={formData.gender}
+                      checked={formData.gender == "Female" ? true : false}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          ["gender"]: "Female",
+                        });
+                      }}
+                    />
+                    <span style={{ marginLeft: "4px" }}>Female</span>
+                    <FaFemale style={{ fontSize: "16px" }} />
+                  </label>
+                </div>
+              </div>
+            </div>
             <div className="mb-3">
               <label className="form-label">Department:</label>
               <select

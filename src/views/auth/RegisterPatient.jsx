@@ -19,7 +19,7 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [dob, setDob] = useState();
-  const [gender, setGender] = useState("male");
+  const [gender, setGender] = useState("Male");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [nhsId, setNhsId] = useState("");
@@ -202,8 +202,8 @@ const SignUp = () => {
                           type="radio"
                           name="gender"
                           value={gender}
-                          checked={true}
-                          onChange={() => setGender("male")}
+                          checked={gender == "Male" ? true : false}
+                          onChange={() => setGender("Male")}
                         />
                         <span style={{ marginLeft: "4px" }}>Male</span>
                         <FaMale style={{ fontSize: "16px" }} />
@@ -215,7 +215,8 @@ const SignUp = () => {
                           type="radio"
                           name="gender"
                           value={gender}
-                          onChange={() => setGender("male")}
+                          checked={gender == "Female" ? true : false}
+                          onChange={() => setGender("Female")}
                         />
                         <span style={{ marginLeft: "4px" }}>Female</span>
                         <FaFemale style={{ fontSize: "16px" }} />

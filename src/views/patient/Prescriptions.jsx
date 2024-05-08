@@ -23,6 +23,8 @@ import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import PrescriptionCheckout from './PrescriptionCheckout'
 const Interval = ["7 days", "1 month", "1 year"];
+const _status  = ["New", "Ready", "Dispensed"];
+const _type  = ["Old", "Repeated"];
 //
 const PatientPrescriptions = () => {
   const [prescriptions, setPrescriptions] = useState([]);
@@ -41,11 +43,14 @@ const PatientPrescriptions = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
   const [range, setRange] = useState("7 days");
+  const [prType, setPrType] = useState("");
+  const [prStatus, setPrStatus] = useState("");
+
   //
   useEffect(() => {
     setPrescriptions([]);
     fetchPrescriptions({ pSkip: true });
-  }, [formData.start_date, formData.end_date]);
+  }, [formData.start_date, formData.end_date , prStatus , prType]);
 
   const updateRange = (val) => {
     switch (val) {
@@ -81,7 +86,7 @@ const PatientPrescriptions = () => {
       const resp = await Get(
         `${apiUrl()}/patient/get-prescriptions?skip=${skip}&limit=${
           config.FETCH_LIMIT
-        }&startDay=${formData.start_date}&endDay=${formData.end_date}`
+        }&startDay=${formData.start_date}&endDay=${formData.end_date}&prStatus=${prStatus}&prType=${prType== "Old" ? "New" : prType}`
       );
       // console.log("resp", resp);
       if (resp.success) {
@@ -214,6 +219,47 @@ const PatientPrescriptions = () => {
                 </div>
               </div>
             </div>
+            <div className="row col-md-12" style={{marginTop:10}}>
+              <div className="col">
+                <div className="d-flex justify-content align-items-center">
+                  <div className="mb-3">
+                    <label className="form-label">Prescriptions Type:</label>
+                    <select
+                      className="form-select"
+                      name="selDept"
+                      value={prType}
+                      onChange={(e) => setPrType(e.target.value)}
+                    >
+                      <option value="">All Prescriptions</option>
+                      {_type.map(
+                        (item) =>
+                            <option value={item} key={item}>
+                              {item}
+                            </option>
+                      )}
+                    </select>
+                  </div>
+                  <div className="mb-3" style={{marginLeft: 15}}>
+                    <label className="form-label">Prescriptions Status:</label>
+                    <select
+                      className="form-select"
+                      name="selDept"
+                      value={prStatus}
+                      onChange={(e) => setPrStatus(e.target.value)}
+
+                    >
+                      <option value="">All</option>
+                      {_status.map(
+                        (item) =>
+                            <option value={item} key={item}>
+                              {item}
+                            </option>
+                      )}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
             {showCalendar && (
               <AppCalendar
                 onCloseModal={() => setShowCalendar(false)}
@@ -258,19 +304,18 @@ const PatientPrescriptions = () => {
                   //     : "#fff",
                 }}
               >
-                {
-                  pr?.phar?.img && 
+                {pr?.phar?.img && (
                   <img
-                  src={
-                    typeof pr?.phar?.img == "string"
-                      ? `${apiUrl()}/uploads/${pr?.phar?.img}`
-                      : URL.createObjectURL(pr?.phar?.img)
-                  }
-                  className="card-img-top"
-                  alt={pr?.pt.f_name}
-                />
-                }
-                
+                    src={
+                      typeof pr?.phar?.img == "string"
+                        ? `${apiUrl()}/uploads/${pr?.phar?.img}`
+                        : URL.createObjectURL(pr?.phar?.img)
+                    }
+                    className="card-img-top"
+                    alt={pr?.pt.f_name}
+                  />
+                )}
+
                 <div className="card-body">
                   <h5 className="card-title">
                     {[pr?.pt.f_name, pr?.pt.l_name].join(" ")}
@@ -307,12 +352,20 @@ const PatientPrescriptions = () => {
                     }}
                   >
                     <FaBookmark style={{ marginRight: "5px" }} />
-                    <p className="card-text" style={{ fontWeight: "bold", color: pr.status == "Dispensed"
-                      ? "#43766C"
-                      : pr.presType == "Repeated"
-                      ? "#FFF9C9"
-                      : pr.repeatReq
-                      ? "#FFF9C9" : "#000" }}>
+                    <p
+                      className="card-text"
+                      style={{
+                        fontWeight: "bold",
+                        color:
+                          pr.status == "Dispensed"
+                            ? "#43766C"
+                            : pr.presType == "Repeated"
+                            ? "#FFF9C9"
+                            : pr.repeatReq
+                            ? "#FFF9C9"
+                            : "#000",
+                      }}
+                    >
                       {pr?.status}
                     </p>
                   </div>
@@ -465,10 +518,12 @@ const PatientPrescriptions = () => {
           onCloseModal={() => setShowRepeatModal(false)}
         />
       )}
-      {
-        showCheckout && 
-        <PrescriptionCheckout prescription={selPC} onCloseModal={()=>setShowCheckout(false)}/>
-      }
+      {showCheckout && (
+        <PrescriptionCheckout
+          prescription={selPC}
+          onCloseModal={() => setShowCheckout(false)}
+        />
+      )}
       {showResp?.msg && (
         <Modal
           title={"Response"}

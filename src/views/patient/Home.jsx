@@ -13,7 +13,7 @@ import Map from "../../components/Map";
 import Modal from "../../components/Modal";
 import AppCalendar from "../../components/AppCalendar";
 
-import { FaHospitalUser, FaClinicMedical, FaCity } from "react-icons/fa";
+import { FaHospitalUser, FaClinicMedical, FaMapMarker } from "react-icons/fa";
 import { formatStringToDate } from "../../utils";
 const Range = [5, 10, 25];
 //
@@ -397,6 +397,14 @@ const DoctorDetails = ({ doctor, onCloseModal }) => {
             </div>
             <div className="mb-3">
               <label className="form-label">Address:</label>
+              <label
+                className="form-control"
+                style={{ display: "flex", alignItems: "center" ,marginTop: 10 , marginBottom: 15}}
+              >
+                <FaMapMarker style={{ marginRight: "5px" }} />
+
+                {doctor?.organization?.addr?.formatted_address}
+              </label>
               <div className="container-fluid">
                 <div className="row">
                   <div className="col-12 d-flex justify-content-center">

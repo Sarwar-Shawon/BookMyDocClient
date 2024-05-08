@@ -14,7 +14,7 @@ const MedicalRecords = ({ medical_history, onCloseModal }) => {
       title={"Medical Details"}
       body={
         <div className="container">
-          {Object.keys(medical_history).length ? (
+          { (medical_history && Object.keys(medical_history).length) ? (
             <div className="col-md-12 pt-record">
               <div>
                 <h3 style={{ color: "#074173" }}>Previous Medical Records</h3>

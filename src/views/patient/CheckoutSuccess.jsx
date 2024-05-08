@@ -28,9 +28,9 @@ const CheckoutSuccess = () => {
         const resp = await Post(
           `${apiUrl()}/stripe/update-transaction-details`,
           {
-            // sessionId: sessionId,
-            sessionId:
-              "cs_test_a1XK0tbhmWuPY2xvkYVSwGaDU4aCCM7ScjByXeUrmUptqzAuBNEZzgeQ4Y",
+            sessionId: sessionId,
+            // sessionId:
+            //   "cs_test_a1XK0tbhmWuPY2xvkYVSwGaDU4aCCM7ScjByXeUrmUptqzAuBNEZzgeQ4Y",
           },
           "application/json"
         );
