@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { Get, Put, Post } from "../../api";
+import { Get, Put, Post } from "../../services";
 import { apiUrl, config } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";

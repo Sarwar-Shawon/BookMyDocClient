@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { formatDateToString, calculateAge } from "../../utils";
 import Modal from "../../components/Modal";
 import { apiUrl } from "../../config/appConfig";
-import { Post } from "../../api";
+import { Post } from "../../services";
 //
 const PrescriptionCheckout = ({ onCloseModal, prescription }) => {
   //

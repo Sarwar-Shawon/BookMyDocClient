@@ -14,7 +14,7 @@ import {
 import { apiUrl } from "../../config/appConfig";
 import { formatDateToString } from "../../utils";
 import Modal from "../../components/Modal";
-import { Get } from "../../api";
+import { Get } from "../../services";
 //appointment details view
 const AppointmentDetails = ({
   selApt,

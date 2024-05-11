@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { FaPlusSquare, FaSearch } from "react-icons/fa";
 import DoctorsAddView from "./DoctorAddView";
-import { Get } from "../../api";
+import { Get } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import doctorDummy from "../../assets/images/doctor-dummy.jpg";

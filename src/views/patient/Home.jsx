@@ -2,7 +2,7 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { Get, getAddressFromLatLng } from "../../api";
+import { Get, getAddressFromLatLng } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";

@@ -9,7 +9,7 @@ import { Regex } from "../../utils";
 import { ErrorAlert } from "../../components/Alert";
 import { PasswordInput } from "../../components/Password";
 import { setItem, getItem } from "../../utils";
-import { Put } from "../../api";
+import { Put } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 import Header from "../layout/Header";
 

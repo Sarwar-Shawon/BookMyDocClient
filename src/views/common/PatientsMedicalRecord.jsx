@@ -7,7 +7,7 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import { Regex, formatDateToString } from "../../utils";
-import { Post, Put, Get } from "../../api";
+import { Post, Put, Get } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 import AppCalendar from "../../components/AppCalendar";
 import Autosuggest from "react-autosuggest";

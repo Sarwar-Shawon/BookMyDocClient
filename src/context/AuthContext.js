@@ -3,7 +3,7 @@
  */
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { PublicPost, Post, Delete } from "../api";
+import { PublicPost, Post, Delete } from "../services";
 import { apiUrl } from "../config/appConfig";
 import { setItem, getItem, removeItem } from "../utils";
 import { useNavigate, useLocation } from "react-router-dom";

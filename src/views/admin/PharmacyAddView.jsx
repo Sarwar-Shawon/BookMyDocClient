@@ -14,7 +14,7 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import { Regex } from "../../utils";
-import { Post, Put } from "../../api";
+import { Post, Put } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 
 const PharmacyAddView = ({
@@ -88,6 +88,7 @@ const PharmacyAddView = ({
   };
   //@to-do need to do work here
   const handleSubmit = async (e) => {
+
     setIsLoading(true);
     e.preventDefault();
     try {
@@ -125,10 +126,11 @@ const PharmacyAddView = ({
       errorsObj.licence = "Licence is required";
       isValid = false;
     }
-    if (!formData.active) {
-      errorsObj.active = "Status is required";
-      isValid = false;
-    }
+    console.log("formData",formData)
+    // if (!formData.active) {
+    //   errorsObj.active = "Status is required";
+    //   isValid = false;
+    // }
     if (!formData.addr.line1) {
       errorsObj.addr_line1 = "Address Line 1 is required";
       isValid = false;
@@ -141,6 +143,7 @@ const PharmacyAddView = ({
       errorsObj.addr_postal_code = "Postal Code is required";
       isValid = false;
     }
+    console.log("errorsObj",errorsObj)
     setError(errorsObj);
     return isValid;
   };
@@ -170,7 +173,7 @@ const PharmacyAddView = ({
     try {
       //
       const resp = await Put(`${apiUrl()}/admin/updatePharmacy`, formData);
-      //console.log("resp:::", resp);
+      console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         updatePharmacyList({ updNur: resp?.data });

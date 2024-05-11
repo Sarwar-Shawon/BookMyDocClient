@@ -14,7 +14,7 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import { Regex } from "../../utils";
-import { Post, Put } from "../../api";
+import { Post, Put } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 
 const DepartmentsAddView = ({

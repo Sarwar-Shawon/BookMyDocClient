@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { FaCalendarAlt, FaClock, FaHospitalUser,FaClipboard } from 'react-icons/fa';
 
-import { Get, Put } from "../../api";
+import { Get, Put } from "../../services";
 import { apiUrl, config } from "../../config/appConfig";
 import { formatDateToString } from "../../utils";
 
@@ -489,7 +489,7 @@ const UpdateModal = ({
   //
   return (
     <Modal
-      title={"Create New Appointment"}
+      title={"Update Appointment"}
       body={
         <div>
           {isLoading && (

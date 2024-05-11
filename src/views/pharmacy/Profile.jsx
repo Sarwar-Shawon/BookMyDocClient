@@ -2,7 +2,7 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { Get, Put } from "../../api";
+import { Get, Put } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import Modal from "../../components/Modal";

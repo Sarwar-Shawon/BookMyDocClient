@@ -2,7 +2,7 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { Put } from "../../api";
+import { Put } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 import { PasswordInput } from "../../components/Password";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";

@@ -13,7 +13,7 @@ import {
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import { Regex, formatDateToString } from "../../utils";
-import { Post, Put, Get } from "../../api";
+import { Post, Put, Get } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 import AppCalendar from "../../components/Calendar";
 import { FaMale, FaFemale } from "react-icons/fa";
@@ -188,10 +188,10 @@ const DoctorsAddView = ({
       errorsObj.gmc_licence = "GMC Licence is required";
       isValid = false;
     }
-    if (!formData.active) {
-      errorsObj.active = "Status is required";
-      isValid = false;
-    }
+    // if (!formData.active) {
+    //   errorsObj.active = "Status is required";
+    //   isValid = false;
+    // }
     if (!formData.addr.line1) {
       errorsObj.addr_line1 = "Address Line 1 is required";
       isValid = false;

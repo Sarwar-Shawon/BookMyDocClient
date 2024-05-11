@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
-import { Post, Get } from "../../api";
+import { Post, Get } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 import moment from "moment";
 import TimeSlotView from '../common/TimeSlotView'

@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation , useNavigate} from "react-router-dom";
 import { apiUrl } from "../../config/appConfig";
-import { Post } from "../../api";
+import { Post } from "../../services";
 import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import LoadingView from "../../components/Loading";

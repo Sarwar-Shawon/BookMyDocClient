@@ -2,7 +2,7 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { Get, Put } from "../../api";
+import { Get, Put } from "../../services";
 import { apiUrl, config } from "../../config/appConfig";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
@@ -490,7 +490,7 @@ const UpdateModal = ({
   //
   return (
     <Modal
-      title={"Create New Appointment"}
+      title={"Update Appointment"}
       body={
         <div>
           {isLoading && (

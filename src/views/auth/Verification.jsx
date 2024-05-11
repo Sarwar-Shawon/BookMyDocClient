@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../../css/login.css";
 import { apiUrl } from "../../config/appConfig";
-import { PublicPost, PublicGet } from "../../api";
+import { PublicPost, PublicGet } from "../../services";
 
 //
 const OtpPage = () => {

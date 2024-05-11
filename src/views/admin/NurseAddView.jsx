@@ -14,7 +14,7 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import { Regex, formatDateToString } from "../../utils";
-import { Post, Put } from "../../api";
+import { Post, Put } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 import AppCalendar from "../../components/Calendar";
 import { FaMale, FaFemale } from "react-icons/fa";
@@ -148,10 +148,10 @@ const NursesAddView = ({
       errorsObj.gmc_licence = "GMC Licence is required";
       isValid = false;
     }
-    if (!formData.active) {
-      errorsObj.active = "Status is required";
-      isValid = false;
-    }
+    // if (!formData.active) {
+    //   errorsObj.active = "Status is required";
+    //   isValid = false;
+    // }
     if (!formData.addr.line1) {
       errorsObj.addr_line1 = "Address Line 1 is required";
       isValid = false;

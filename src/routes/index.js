@@ -83,7 +83,6 @@ const AppRoutes = () => {
       <Route path="/verification" element={<Verification />} />
       <Route path="/chnage-password" element={<Verification />} />
       <Route path="/checkout-success" element={<CheckoutSuccess />} />
-      
       <Route element={<ProtectedRoute />}>
         {selectedRoutes.map((route, index) => (
           <Route key={index} path={route.path} element={<Layout>{route.element}</Layout>} />

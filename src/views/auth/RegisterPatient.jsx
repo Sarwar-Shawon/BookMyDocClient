@@ -10,7 +10,7 @@ import { PasswordInput } from "../../components/Password";
 import AppCalendar from "../../components/Calendar";  
 import moment from "moment";
 import { formatDateToString, setItem, Regex } from "../../utils";
-import { PublicPost } from "../../api";
+import { PublicPost } from "../../services";
 import { apiUrl } from "../../config/appConfig";
 
 //
