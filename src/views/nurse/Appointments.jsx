@@ -2,12 +2,10 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { FaCalendarAlt, FaClock, FaHospitalUser,FaClipboard } from 'react-icons/fa';
-
 import { Get, Put } from "../../services";
-import { apiUrl, config } from "../../config/appConfig";
+import { config } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import { formatDateToString } from "../../utils";
-
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import Modal from "../../components/Modal";
@@ -112,7 +110,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
     try {
       const skip = appointments.length;
       const resp = await Get(
-        `${apiUrl()}/nurse/get-appointments?skip=${skip}&status=${aptType}&doc_id=${selDoc}&limit=${config.FETCH_LIMIT}`
+        `${apiEndpoints.nurse.getAppointments}?skip=${skip}&status=${aptType}&doc_id=${selDoc}&limit=${config.FETCH_LIMIT}`
       );
       //console.log("fetchAppointments resp:::", resp);
       if (resp.success) {
@@ -135,7 +133,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
         apt_id: selApt._id,
       };
       const resp = await Put(
-        `${apiUrl()}/nurse/accept-appointments?doc_id=${selDoc}`,
+        `${apiEndpoints.nurse.acceptAppointments}?doc_id=${selDoc}`,
         params,
         "application/json"
       );
@@ -166,7 +164,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
         apt_id: selApt._id,
       };
       const resp = await Put(
-        `${apiUrl()}/nurse/cancel-appointments?doc_id=${selDoc}`,
+        `${apiEndpoints.nurse.cancelAppointments}?doc_id=${selDoc}`,
         params,
         "application/json"
       );
@@ -199,7 +197,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
         timeslot: formData.timeslot,
       };
       const resp = await Put(
-        `${apiUrl()}/nurse/update-appointments?doc_id=${selDoc}`,
+        `${apiEndpoints.nurse.updateAppointments}?doc_id=${selDoc}`,
         params,
         "application/json"
       );
@@ -457,7 +455,7 @@ const UpdateModal = ({
     try {
       setIsLoading(true);
       const resp = await Get(
-        `${apiUrl()}/nurse/get-time-slots-by-date?date=${
+        `${apiEndpoints.nurse.getTimeSlotsByDate}?date=${
           formData.apt_date
         }&doc_id=${selDoc}`
       );
@@ -576,7 +574,7 @@ const HistoryView = ({ aptType,selDoc }) => {
     try {
       const skip = appointments.length;
       const resp = await Get(
-        `${apiUrl()}/nurse/get-appointments-history?skip=${skip}&doc_id=${selDoc}&startDay=${
+        `${apiEndpoints.nurse.getAppointmentsHistory}?skip=${skip}&doc_id=${selDoc}&startDay=${
           formData.start_date
         }&endDay=${formData.end_date}&limit=${config.FETCH_LIMIT}`
       );

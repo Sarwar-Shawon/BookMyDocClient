@@ -10,7 +10,8 @@ import { ErrorAlert } from "../../components/Alert";
 import { PasswordInput } from "../../components/Password";
 import { setItem, getItem } from "../../utils";
 import { Put } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
+
 import Header from "../layout/Header";
 
 //
@@ -67,7 +68,7 @@ const PasswordChange = () => {
         new_password: newPassword,
       };
       const resp = await Put(
-        `${apiUrl()}/auth/changePassword`,
+        apiEndpoints.auth.changePassword,
         params,
         "application/json"
       );

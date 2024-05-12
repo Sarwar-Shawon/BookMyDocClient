@@ -15,7 +15,7 @@ import Modal from "../../components/Modal";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import { Regex } from "../../utils";
 import { Post, Put } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 
 const OrganizationsAddView = ({
   onCloseModal,
@@ -103,7 +103,7 @@ const OrganizationsAddView = ({
   const addNewOrganization = async () => {
     try {
       //
-      const resp = await Post(`${apiUrl()}/admin/createOrganization`, formData);
+      const resp = await Post(apiEndpoints.admin.createOrganization, formData);
       const respObj = {};
       if (resp.success) {
         addToOrganizationList({ newDept: [resp?.data] });
@@ -123,7 +123,7 @@ const OrganizationsAddView = ({
   const updateOrganization = async () => {
     try {
       //
-      const resp = await Put(`${apiUrl()}/admin/updadteOrganization`, formData);
+      const resp = await Put(apiEndpoints.admin.updadteOrganization, formData);
       //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -235,7 +235,7 @@ const OrganizationsAddView = ({
                 <img
                   src={
                     typeof formData.img == "string"
-                      ? `${apiUrl()}/uploads/${formData.img}`
+                      ? `${apiEndpoints.upload.url}/${formData.img}`
                       : URL.createObjectURL(formData.img)
                   }
                   style={{

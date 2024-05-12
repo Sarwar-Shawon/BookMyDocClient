@@ -4,7 +4,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { PublicPost, Post, Delete } from "../services";
-import { apiUrl } from "../config/appConfig";
+import apiEndpoints from "../config/apiEndpoints";
 import { setItem, getItem, removeItem } from "../utils";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoadingView from "../components/Loading";
@@ -71,7 +71,7 @@ const AuthProvider = ({ children }) => {
   const signIn = async (params) => {
     try {
       setAuthError("");
-      const resp = await PublicPost(`${apiUrl()}/auth/login`, params);
+      const resp = await PublicPost(apiEndpoints.auth.login, params);
       //console.log("resp:::", resp);
       if (resp.success) {
         const { data } = resp;

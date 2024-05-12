@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { FaPlusSquare, FaSearch } from "react-icons/fa";
 import DepartmentsAddView from "./DepartmentAddView";
 import { Get } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 const Departments = () => {
@@ -25,7 +25,7 @@ const Departments = () => {
     try {
       setLoading(true);
       const skip = departments.length;
-      const resp = await Get(`${apiUrl()}/admin/getAllDepartments?skip=${skip}`);
+      const resp = await Get(`${apiEndpoints.admin.getAllDepartments}?skip=${skip}`);
       //console.log("resp:::", resp);
       if (resp.success) {
         setDepartments((prevDepartments) => [...prevDepartments, ...resp.data]);
@@ -145,7 +145,7 @@ const Departments = () => {
               {/* <img
                 src={
                   typeof department.img == "string"
-                    ? `${apiUrl()}/uploads/${department.img}`
+                    ? `${apiEndpoints.upload.url}/${department.img}`
                     : URL.createObjectURL(department.img)
                 }
                 className="card-img-top"

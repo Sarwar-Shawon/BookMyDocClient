@@ -8,7 +8,7 @@ import {
   FaHospitalUser,
   FaClipboard,
 } from "react-icons/fa";
-import { apiUrl, config } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import { formatDateToString } from "../../utils";
 
 //appointment card view
@@ -31,7 +31,7 @@ const AppointmentCard = ({
       <img
         src={
           typeof apt?.pt.img == "string"
-            ? `${apiUrl()}/uploads/${apt?.pt.img}`
+            ? `${apiEndpoints.upload.url}/${apt?.pt.img}`
             : URL.createObjectURL(apt?.pt.img)
         }
         className="card-img-top"

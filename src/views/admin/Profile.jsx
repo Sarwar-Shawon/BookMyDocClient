@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { Put } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import { PasswordInput } from "../../components/Password";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 
@@ -14,26 +14,6 @@ const Profile = () => {
   const [showResp, setShowResp] = useState({});
   const [showPass, setShowPass] = useState(false);
   const [showNewPass, setShowNewPass] = useState(false);
-
-  //
-  // useEffect(() => {
-  //   fetchProfile();
-  // }, []);
-  //  //
-  //  const fetchProfile = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const resp = await Get(`${apiUrl()}/admin/get-profile`);
-  //     //console.log("resp:::", resp);
-  //     if (resp.success) {
-  //     }
-  //   } catch (err) {
-  //     // console.error('err:', err);
-  //     setError(err?.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   //
   const handleSubmit = async (e) => {
     setIsLoading(true);
@@ -45,7 +25,7 @@ const Profile = () => {
           new_password: newPassword,
         };
         const resp = await Put(
-          `${apiUrl()}/auth/changePassword`,
+          apiEndpoints.auth.changePassword,
           params,
           "application/json"
         );

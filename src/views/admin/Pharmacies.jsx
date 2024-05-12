@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { FaPlusSquare, FaSearch } from "react-icons/fa";
 import PharmacyAddView from "./PharmacyAddView";
 import { Get } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -30,7 +30,7 @@ const Pharmacies = () => {
     try {
       const skip = pharmacies.length;
       const resp = await Get(
-        `${apiUrl()}/admin/getAllPharmacies?skip=${skip}&limit=15`
+        `${apiEndpoints.admin.getAllPharmacies}?skip=${skip}&limit=15`
       );
       //console.log("resp:::", resp);
       if (resp.success) {
@@ -48,7 +48,7 @@ const Pharmacies = () => {
   //
   const fetchOrganizations = async () => {
     try {
-      const resp = await Get(`${apiUrl()}/admin/getAllOrganizations`);
+      const resp = await Get(apiEndpoints.admin.getAllOrganizations);
       //console.log("resp:::", resp);
       if (resp.success) {
         setOrganizations(resp.data);
@@ -180,7 +180,7 @@ const Pharmacies = () => {
                 <img
                   src={
                     typeof pharmacy.img == "string"
-                      ? `${apiUrl()}/uploads/${pharmacy.img}`
+                      ? `${apiEndpoints.upload.url}/${pharmacy.img}`
                       : URL.createObjectURL(pharmacy.img)
                   }
                   className="card-img-top"

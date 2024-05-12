@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { Get, Put  } from "../../services";
-import { apiUrl, config } from "../../config/appConfig";
+import { config } from "../../config/appConfig";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import { formatDateToString } from "../../utils";
@@ -18,6 +18,7 @@ import AppointmentCard from "../common/AppointmentCard"
 import AppointmentDetails from "../common/AppointmentDetails";
 import PrescriptionCreateView from './PrescriptionCreate'
 import PatientsMedicalRecord from '../common/PatientsMedicalRecord'
+import apiEndpoints from "../../config/apiEndpoints";
 
 //
 const DoctorAppointments = () => {
@@ -67,7 +68,7 @@ const AppointmentView = ({ aptType }) => {
     try {
       const skip = appointments.length;
       const resp = await Get(
-        `${apiUrl()}/doctor/get-appointments?skip=${skip}&status=${aptType}&limit=${
+        `${apiEndpoints.doctor.getAppointments}?skip=${skip}&status=${aptType}&limit=${
           config.FETCH_LIMIT
         }`
       );
@@ -91,7 +92,7 @@ const AppointmentView = ({ aptType }) => {
         apt_id: selApt._id,
       };
       const resp = await Put(
-        `${apiUrl()}/doctor/accept-appointments`,
+        apiEndpoints.doctor.acceptAppointments,
         params,
         "application/json"
       );
@@ -122,7 +123,7 @@ const AppointmentView = ({ aptType }) => {
         apt_id: selApt._id,
       };
       const resp = await Put(
-        `${apiUrl()}/doctor/cancel-appointments`,
+        apiEndpoints.doctor.cancelAppointments,
         params,
         "application/json"
       );
@@ -155,7 +156,7 @@ const AppointmentView = ({ aptType }) => {
         timeslot: formData.timeslot,
       };
       const resp = await Put(
-        `${apiUrl()}/doctor/update-appointments`,
+        apiEndpoints.doctor.updateAppointments,
         params,
         "application/json"
       );
@@ -420,7 +421,7 @@ const UpdateModal = ({
     try {
       setIsLoading(true);
       const resp = await Get(
-        `${apiUrl()}/doctor/get-time-slots-by-date?date=${formData.apt_date}`
+        `${apiEndpoints.doctor.getTimeSlotsByDate}?date=${formData.apt_date}`
       );
       //console.log("resp:::", resp);
       if (resp.success) {
@@ -537,7 +538,7 @@ const HistoryView = ({ aptType }) => {
     try {
       const skip = appointments.length;
       const resp = await Get(
-        `${apiUrl()}/doctor/get-appointments-history?skip=${skip}&startDay=${
+        `${apiEndpoints.doctor.getAppointmentsHistory}?skip=${skip}&startDay=${
           formData.start_date
         }&endDay=${formData.end_date}&limit=${config.FETCH_LIMIT}`
       );

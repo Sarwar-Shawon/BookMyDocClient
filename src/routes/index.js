@@ -25,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  if (isAuthenticated || user_type == "Admin") {
+  if (isAuthenticated) {
     return children || <Outlet />;
   } else {
     return <Navigate to="/signin" replace />;

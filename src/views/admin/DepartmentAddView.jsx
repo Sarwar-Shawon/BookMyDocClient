@@ -2,20 +2,11 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { useAuthContext } from "../../context/AuthContext";
-import {
-  FaAlignJustify,
-  FaHome,
-  FaUser,
-  FaCog,
-  FaSignOutAlt,
-} from "react-icons/fa";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
-import { Regex } from "../../utils";
 import { Post, Put } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 
 const DepartmentsAddView = ({
   onCloseModal,
@@ -94,7 +85,7 @@ const DepartmentsAddView = ({
   const addNewDepartment = async () => {
     try {
       //
-      const resp = await Post(`${apiUrl()}/admin/createDepartment`, formData);
+      const resp = await Post(apiEndpoints.admin.createDepartment, formData);
       //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -115,7 +106,7 @@ const DepartmentsAddView = ({
   const updateDepartment = async () => {
     try {
       //
-      const resp = await Put(`${apiUrl()}/admin/updadteDepartment`, formData);
+      const resp = await Put(apiEndpoints.admin.updadteDepartment, formData);
       //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -207,7 +198,7 @@ const DepartmentsAddView = ({
                 <img
                   src={
                     typeof formData.img == "string"
-                      ? `${apiUrl()}/uploads/${formData.img}`
+                      ? `${apiEndpoints.upload.url}/${formData.img}`
                       : URL.createObjectURL(formData.img)
                   }
                   style={{

@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { formatDateToString, calculateAge } from "../../utils";
 import Modal from "../../components/Modal";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import { Post } from "../../services";
 //
 const PrescriptionCheckout = ({ onCloseModal, prescription }) => {
@@ -29,7 +29,7 @@ const PrescriptionCheckout = ({ onCloseModal, prescription }) => {
         })
       );
       const resp = await Post(
-        `${apiUrl()}/stripe/make-payment`,
+        apiEndpoints.stripe.makePayment,
         {
           line_items: itemLists,
           pres_id : prescription._id

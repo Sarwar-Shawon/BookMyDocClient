@@ -4,7 +4,6 @@
 
 import React, { useState, useEffect } from "react";
 import { Get, Post } from "../../services";
-import { apiUrl } from "../../config/appConfig";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import { formatDateToString } from "../../utils";
@@ -12,6 +11,7 @@ import AppCalendar from "../../components/Calendar";
 import AppointmentDetails from "../common/AppointmentDetails";
 import PrescriptionCreateView from './PrescriptionCreate'
 import PatientsMedicalRecord from '../common/PatientsMedicalRecord'
+import apiEndpoints from "../../config/apiEndpoints";
 
 //
 const Home = ({ doctorId }) => {
@@ -40,7 +40,7 @@ const Home = ({ doctorId }) => {
       setLoading(true);
       const formattedDate = new Date(selDate).toISOString();
       const resp = await Get(
-        `${apiUrl()}/doctor/get-time-slots-by-date?date=${formattedDate}&skip_con=${true}`
+        `${apiEndpoints.doctor.getTimeSlotsByDate}?date=${formattedDate}&skip_con=${true}`
       );
       //console.log("resp:::", resp?.data);
       if (resp.success) {

@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { Get, Put } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import Modal from "../../components/Modal";
@@ -80,7 +80,7 @@ const NurseProfile = () => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      const resp = await Get(`${apiUrl()}/nurse/get-profile`);
+      const resp = await Get(apiEndpoints.nurse.getProfile);
       //console.log("resp:::", resp);
       if (resp.success) {
         setProfile(resp?.data);
@@ -106,7 +106,7 @@ const NurseProfile = () => {
         active: formData.active,
         img: formData.img,
       }
-      const resp = await Put(`${apiUrl()}/nurse/update-profile`, params);
+      const resp = await Put(apiEndpoints.nurse.updateProfile, params);
       //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -190,7 +190,7 @@ const NurseProfile = () => {
                 <img
                   src={
                     typeof profile?.img === "string"
-                      ? `${apiUrl()}/uploads/${profile?.img}`
+                      ? `${apiEndpoints.upload.url}/${profile?.img}`
                       : URL.createObjectURL(profile?.img)
                   }
                   style={{
@@ -380,7 +380,7 @@ const UpdateProfileView = ({isLoading , formData, setFormData , handleChange , u
                 <img
                   src={
                     typeof formData.img == "string"
-                      ? `${apiUrl()}/uploads/${formData.img}`
+                      ? `${apiEndpoints.upload.url}/${formData.img}`
                       : URL.createObjectURL(formData.img)
                   }
                   style={{

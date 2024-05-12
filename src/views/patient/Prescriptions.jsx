@@ -4,7 +4,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Get, Put, Post } from "../../services";
-import { apiUrl, config } from "../../config/appConfig";
+import { config } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import PrescriptionPreview from "../common/PrescriptionPreview";
@@ -84,7 +85,7 @@ const PatientPrescriptions = () => {
     try {
       const skip = pSkip ? 0 : prescriptions.length;
       const resp = await Get(
-        `${apiUrl()}/patient/get-prescriptions?skip=${skip}&limit=${
+        `${apiEndpoints.patient.getPrescriptions}?skip=${skip}&limit=${
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}&prStatus=${prStatus}&prType=${prType== "Old" ? "New" : prType}`
       );
@@ -125,7 +126,7 @@ const PatientPrescriptions = () => {
         pres_id: selPC._id,
       };
       const resp = await Post(
-        `${apiUrl()}/patient/request-prescription`,
+        apiEndpoints.patient.requestPrescription,
         params,
         "application/json"
       );
@@ -308,7 +309,7 @@ const PatientPrescriptions = () => {
                   <img
                     src={
                       typeof pr?.phar?.img == "string"
-                        ? `${apiUrl()}/uploads/${pr?.phar?.img}`
+                        ? `${apiEndpoints.upload.url}/${pr?.phar?.img}`
                         : URL.createObjectURL(pr?.phar?.img)
                     }
                     className="card-img-top"

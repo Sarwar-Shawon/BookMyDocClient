@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { Get, getAddressFromLatLng } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import CreateAppointmentView from "./CreateAppointmentView";
@@ -64,7 +64,7 @@ const PatientHome = () => {
   //get Departments
   const fetchDepartments = async () => {
     try {
-      const resp = await Get(`${apiUrl()}/patient/get-dept`);
+      const resp = await Get(apiEndpoints.patient.getDept);
       //console.log("resp:::", resp);
       if (resp.success) {
         setDepartments(resp.data);
@@ -88,11 +88,11 @@ const PatientHome = () => {
       const skip = pSkip ? 0 : doctors.length;
       const resp = await Get(
           selDate
-          ? `${apiUrl()}/patient/get-all-doctors-date?date=${selDate}&skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
+          ? `${apiEndpoints.patient.getAllDoctorsDate}?date=${selDate}&skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
           :
           selDept
-          ? `${apiUrl()}/patient/get-doctors?skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
-          : `${apiUrl()}/patient/get-all-doctors?skip=${skip}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
+          ? `${apiEndpoints.patient.getDoctors}?skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
+          : `${apiEndpoints.patient.getAllDoctors}?skip=${skip}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
       );
       console.log("resp::: doctors", resp);
       if (resp.success) {
@@ -257,7 +257,7 @@ const PatientHome = () => {
                     <img
                       src={
                         typeof doctor.img == "string"
-                          ? `${apiUrl()}/uploads/${doctor.img}`
+                          ? `${apiEndpoints.upload.url}/${doctor.img}`
                           : URL.createObjectURL(doctor.img)
                       }
                       className="card-img-top"

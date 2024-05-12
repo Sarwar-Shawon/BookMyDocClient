@@ -3,7 +3,8 @@
  */
 import React, { useState, useEffect } from "react";
 import { Get, Put } from "../../services";
-import { apiUrl, config } from "../../config/appConfig";
+import { config } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import noData from "../../assets/images/no-data.jpg";
 import LoadingView from "../../components/Loading";
 import { formatDateToString } from "../../utils";
@@ -94,7 +95,7 @@ const AppointmentView = ({ selType }) => {
     try {
       const skip = appointments.length;
       const resp = await Get(
-        `${apiUrl()}/patient/get-appointments?skip=${skip}&status=${selType}&limit=${
+        `${apiEndpoints.patient.getAppointments}?skip=${skip}&status=${selType}&limit=${
           config.FETCH_LIMIT
         }`
       );
@@ -121,7 +122,7 @@ const AppointmentView = ({ selType }) => {
         return;
       }
       const resp = await Put(
-        `${apiUrl()}/patient/cancel-appointments`,
+        apiEndpoints.patient.cancelAppointments,
         params,
         "application/json"
       );
@@ -154,7 +155,7 @@ const AppointmentView = ({ selType }) => {
         timeslot: formData.timeslot,
       };
       const resp = await Put(
-        `${apiUrl()}/patient/update-appointments`,
+        apiEndpoints.patient.updateAppointments,
         params,
         "application/json"
       );
@@ -304,7 +305,7 @@ const AppointmentCard = ({
       <img
         src={
           typeof apt?.doc.img == "string"
-            ? `${apiUrl()}/uploads/${apt?.doc.img}`
+            ? `${apiEndpoints.upload.url}/${apt?.doc.img}`
             : URL.createObjectURL(apt?.doc.img)
         }
         className="card-img-top"
@@ -458,7 +459,7 @@ const UpdateModal = ({
     try {
       setIsLoading(true);
       const resp = await Get(
-        `${apiUrl()}/patient/get-time-slots?date=${
+        `${apiEndpoints.patient.getTimeSlots}?date=${
           formData.apt_date
         }&doc_email=${apt?.doc?.doc_email}`
       );
@@ -577,7 +578,7 @@ const HistoryView = ({ selType }) => {
     try {
       const skip = appointments.length;
       const resp = await Get(
-        `${apiUrl()}/patient/get-appointments-history?skip=${skip}&startDay=${
+        `${apiEndpoints.patient.getAppointmentsHistory}?skip=${skip}&startDay=${
           formData.start_date
         }&endDay=${formData.end_date}&limit=${config.FETCH_LIMIT}`
       );

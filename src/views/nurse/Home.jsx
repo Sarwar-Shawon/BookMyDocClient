@@ -2,9 +2,8 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { FaPlusSquare, FaSearch } from "react-icons/fa";
 import { Get } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import doctorDummy from "../../assets/images/doctor-dummy.jpg";
 import noData from "../../assets/images/no-data.jpg";
@@ -44,7 +43,7 @@ const NurseHome = () => {
         setLoading(true)
         const formattedDate = new Date(selDate).toISOString();
         const resp = await Get(
-          `${apiUrl()}/nurse/get-time-slots-by-date?date=${formattedDate}&skip_con=${true}&doc_id=${selDoc}`
+          `${apiEndpoints.nurse.getTimeSlotsByDate}?date=${formattedDate}&skip_con=${true}&doc_id=${selDoc}`
         );
         //console.log("resp:::", resp?.data);
         if (resp.success) {

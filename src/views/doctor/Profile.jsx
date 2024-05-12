@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { Get, Put } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import Modal from "../../components/Modal";
@@ -87,7 +87,7 @@ const DoctorProfile = () => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      const resp = await Get(`${apiUrl()}/doctor/get-profile`);
+      const resp = await Get(apiEndpoints.doctor.getProfile);
       //console.log("resp:::", resp);
       if (resp.success) {
         setProfile(resp?.data);
@@ -114,7 +114,7 @@ const DoctorProfile = () => {
         img: formData.img,
         pSign: formData.pSign,
       }
-      const resp = await Put(`${apiUrl()}/doctor/update-profile`, params);
+      const resp = await Put(apiEndpoints.doctor.updateProfile, params);
       //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -199,7 +199,7 @@ const DoctorProfile = () => {
                   <img
                     src={
                       typeof profile?.img === "string"
-                        ? `${apiUrl()}/uploads/${profile?.img}`
+                        ? `${apiEndpoints.upload.url}/${profile?.img}`
                         : URL.createObjectURL(profile?.img)
                     }
                     style={{
@@ -218,7 +218,7 @@ const DoctorProfile = () => {
                   <img
                     src={
                       typeof profile?.pSign === "string"
-                        ? `${apiUrl()}/uploads/${profile?.pSign}`
+                        ? `${apiEndpoints.upload.url}/${profile?.pSign}`
                         : URL.createObjectURL(profile?.pSign)
                     }
                     style={{
@@ -408,7 +408,7 @@ const UpdateProfileView = ({isLoading , formData, setFormData , handleChange , u
                 <img
                   src={
                     typeof formData.img == "string"
-                      ? `${apiUrl()}/uploads/${formData.img}`
+                      ? `${apiEndpoints.upload.url}/${formData.img}`
                       : URL.createObjectURL(formData.img)
                   }
                   style={{
@@ -434,7 +434,7 @@ const UpdateProfileView = ({isLoading , formData, setFormData , handleChange , u
                 <img
                   src={
                     typeof formData.pSign == "string"
-                      ? `${apiUrl()}/uploads/${formData.pSign}`
+                      ? `${apiEndpoints.upload.url}/${formData.pSign}`
                       : URL.createObjectURL(formData.pSign)
                   }
                   style={{

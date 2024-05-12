@@ -14,7 +14,7 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import { Regex, formatDateToString } from "../../utils";
 import { Post, Put, Get } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import AppCalendar from "../../components/Calendar";
 import { FaMale, FaFemale } from "react-icons/fa";
 
@@ -71,7 +71,7 @@ const DoctorsAddView = ({
         return;
       }
       const resp = await Get(
-        `${apiUrl()}/admin/getAllNursesByDeptOrg?dept=${formData.dept}&org=${
+        `${apiEndpoints.admin.getAllNursesByDeptOrg}?dept=${formData.dept}&org=${
           formData.organization
         }`
       );
@@ -212,7 +212,7 @@ const DoctorsAddView = ({
     try {
       //
       ////console.log("params:: add new doctor", formData);
-      const resp = await Post(`${apiUrl()}/admin/registerDoctor`, formData);
+      const resp = await Post(apiEndpoints.admin.registerDoctor, formData);
       ////console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -244,7 +244,7 @@ const DoctorsAddView = ({
     try {
       //
       ////console.log("params:: update doctor", formData);
-      const resp = await Put(`${apiUrl()}/admin/updateDoctor`, formData);
+      const resp = await Put(apiEndpoints.admin.updateDoctor, formData);
       ////console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -580,7 +580,7 @@ const DoctorsAddView = ({
                 <img
                   src={
                     typeof formData.img == "string"
-                      ? `${apiUrl()}/uploads/${formData.img}`
+                      ? `${apiEndpoints.upload.url}/${formData.img}`
                       : URL.createObjectURL(formData.img)
                   }
                   style={{

@@ -3,12 +3,13 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { Get, Post } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import {  Post } from "../../services";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
+import api from "../../services/api";
 
 //
 const _days = {
@@ -116,7 +117,7 @@ const TimetableAdd = ({ onCloseModal, title, setTimeSlots,selDoc }) => {
       //
       if (Object.entries(timeSlotObj).length) {
         const resp = await Post(
-          `${apiUrl()}/nurse/create-time-slots?doc_id=${selDoc}`,
+          `${apiEndpoints.nurse.createTimeSlots}?doc_id=${selDoc}`,
           {
             timeSlots: timeSlotObj,
           },

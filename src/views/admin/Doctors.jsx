@@ -5,12 +5,12 @@ import React, { useState, useEffect } from "react";
 import { FaPlusSquare, FaSearch } from "react-icons/fa";
 import DoctorsAddView from "./DoctorAddView";
 import { Get } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
+
 import LoadingView from "../../components/Loading";
 import doctorDummy from "../../assets/images/doctor-dummy.jpg";
 import noData from "../../assets/images/no-data.jpg";
 import InfiniteScroll from "react-infinite-scroll-component";
-
 //
 const Doctors = () => {
   const [searchText, setSearchText] = useState("");
@@ -43,7 +43,7 @@ const Doctors = () => {
     try {
       const skip = pSkip ? 0 : doctors.length;
       const resp = await Get(
-        `${apiUrl()}/admin/getAllDoctors?skip=${skip}&limit=15&dept=${selDept}&org=${selOrg}`
+        `${apiEndpoints.admin.getAllDoctors}?skip=${skip}&limit=15&dept=${selDept}&org=${selOrg}`
       );
       //console.log("resp:::", resp);
       if (resp.success) {
@@ -60,7 +60,7 @@ const Doctors = () => {
   //
   const fetchOrganizations = async () => {
     try {
-      const resp = await Get(`${apiUrl()}/admin/getAllOrganizations`);
+      const resp = await Get(apiEndpoints.admin.getAllOrganizations);
       //console.log("resp:::", resp);
       if (resp.success) {
         setOrganizations(resp.data);
@@ -75,7 +75,7 @@ const Doctors = () => {
   //
   const fetchDepartments = async () => {
     try {
-      const resp = await Get(`${apiUrl()}/admin/getAllDepartments`);
+      const resp = await Get(apiEndpoints.admin.getAllDepartments);
       //console.log("resp:::", resp);
       if (resp.success) {
         setDepartments(resp.data);
@@ -277,7 +277,7 @@ const Doctors = () => {
                 <img
                   src={
                     typeof doctor.img == "string"
-                      ? `${apiUrl()}/uploads/${doctor.img}`
+                      ? `${apiEndpoints.upload.url}/${doctor.img}`
                       : URL.createObjectURL(doctor.img)
                   }
                   className="card-img-top"

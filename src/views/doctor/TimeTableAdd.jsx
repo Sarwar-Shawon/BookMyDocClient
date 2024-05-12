@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Get, Post } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import Modal from "../../components/Modal";
@@ -116,7 +116,7 @@ const TimetableAdd = ({ onCloseModal, title, setTimeSlots }) => {
       //
       if (Object.entries(timeSlotObj).length) {
         const resp = await Post(
-          `${apiUrl()}/doctor/create-time-slots`,
+          apiEndpoints.doctor.createTimeSlots,
           {
             timeSlots: timeSlotObj,
           },

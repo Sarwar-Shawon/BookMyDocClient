@@ -4,7 +4,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Get, Put } from "../../services";
-import { apiUrl, config } from "../../config/appConfig";
+import {config } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import PrescriptionPreview from "../common/PrescriptionPreview";
@@ -75,7 +76,7 @@ const PrescriptionViews = () => {
     try {
       const skip = pSkip ? 0 : prescriptions.length;
       const resp = await Get(
-        `${apiUrl()}/doctor/get-prescriptions?skip=${skip}&limit=${
+        `${apiEndpoints.doctor.getPrescriptions}?skip=${skip}&limit=${
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}`
       );
@@ -239,7 +240,7 @@ const PrescriptionViews = () => {
                 <img
                   src={
                     typeof pr?.pt.img == "string"
-                      ? `${apiUrl()}/uploads/${pr?.pt.img}`
+                      ? `${apiEndpoints.upload.url}/${pr?.pt.img}`
                       : URL.createObjectURL(pr?.pt.img)
                   }
                   className="card-img-top"
@@ -380,7 +381,7 @@ const RequestPrescription = () => {
     try {
       const skip = pSkip ? 0 : prescriptions.length;
       const resp = await Get(
-        `${apiUrl()}/doctor/get-prescriptions?skip=${skip}&limit=${
+        `${apiEndpoints.doctor.getPrescriptions}?skip=${skip}&limit=${
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}&repeated=${true}`
       );
@@ -495,7 +496,7 @@ const RequestPrescription = () => {
                 <img
                   src={
                     typeof pr?.pt.img == "string"
-                      ? `${apiUrl()}/uploads/${pr?.pt.img}`
+                      ? `${apiEndpoints.upload.url}/${pr?.pt.img}`
                       : URL.createObjectURL(pr?.pt.img)
                   }
                   className="card-img-top"

@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect, Profiler } from "react";
 import { Get, Put } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import Modal from "../../components/Modal";
@@ -67,7 +67,7 @@ const PatientProfile = () => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      const resp = await Get(`${apiUrl()}/patient/get-profile`);
+      const resp = await Get(apiEndpoints.patient.getProfile);
       // console.log("resp:::", resp);
       if (resp.success) {
         setFormData({
@@ -99,7 +99,7 @@ const PatientProfile = () => {
         addr: formData.addr,
       }
       //console.log("params",params)
-      const resp = await Put(`${apiUrl()}/patient/update-profile`, params);
+      const resp = await Put(apiEndpoints.patient.updateProfile, params);
       //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -168,7 +168,7 @@ const PatientProfile = () => {
                 <img
                   src={
                     typeof formData?.img === "string"
-                      ? `${apiUrl()}/uploads/${formData?.img}`
+                      ? `${apiEndpoints.upload.url}/${formData?.img}`
                       : URL.createObjectURL(formData?.img)
                   }
                   style={{
@@ -371,7 +371,7 @@ const UpdateProfileView = ({isLoading , formData, setFormData , handleChange , u
                 <img
                   src={
                     typeof formData.img == "string"
-                      ? `${apiUrl()}/uploads/${formData.img}`
+                      ? `${apiEndpoints.upload.url}/${formData.img}`
                       : URL.createObjectURL(formData.img)
                   }
                   style={{

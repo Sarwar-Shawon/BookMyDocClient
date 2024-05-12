@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Get, Post } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import noData from "../../assets/images/no-data.jpg";
 import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
@@ -47,7 +47,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
   //
   const fetchPharmacies = async () => {
     try {
-      const resp = await Get(`${apiUrl()}/doctor/get-org-pharmacy`);
+      const resp = await Get(apiEndpoints.doctor.getOrgPharmacy);
       //console.log("resp:::", resp);
       if (resp.success) {
         setPharmacies(resp?.data);
@@ -88,7 +88,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
     try {
       //
       const resp = await Get(
-        `${apiUrl()}/doctor/get-medicine-suggestions?search_text=${value}`
+        `${apiEndpoints.doctor.getMedicineSuggestions}?search_text=${value}`
       );
       //console.log("resp:::", resp?.data);
       if (resp.success) {
@@ -120,7 +120,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
       //console.log("params", params);
       //
       const resp = await Post(
-        `${apiUrl()}/doctor/create-prescription`,
+        apiEndpoints.doctor.createPrescription,
         params,
         "application/json"
       );
@@ -542,7 +542,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
                     <strong>Doctor Signature:</strong>
                     {
                       <img
-                        src={`${apiUrl()}/uploads/${apt?.doc?.pSign}`}
+                        src={`${apiEndpoints.upload.url}/${apt?.doc?.pSign}`}
                         style={{
                           width: 250,
                           height: 80,

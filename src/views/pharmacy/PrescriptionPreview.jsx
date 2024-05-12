@@ -262,7 +262,7 @@ const PrescriptionPreview = ({
                     <strong>Doctor Signature:</strong>
                     {
                       <img
-                        src={`${apiUrl()}/uploads/${prescription?.doc?.pSign}`}
+                        src={`${apiEndpoints.upload.url}/${prescription?.doc?.pSign}`}
                         style={{
                           width: 250,
                           height: 80,

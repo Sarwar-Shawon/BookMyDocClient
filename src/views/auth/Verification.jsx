@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../../css/login.css";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import { PublicPost, PublicGet } from "../../services";
 
 //
@@ -38,7 +38,7 @@ const OtpPage = () => {
           otp,
         };
         const resp = await PublicPost(
-          `${apiUrl()}/auth/verifySignupOtp`,
+          apiEndpoints.auth.verifySignupOtp,
           params
         );
         //console.log("resp:::", resp);
@@ -70,7 +70,7 @@ const OtpPage = () => {
     setLoading(true);
     try {
       const resp = await PublicGet(
-        `${apiUrl()}/auth/requestOtp`
+        apiEndpoints.auth.requestOtp
       );
       //console.log("resp:::", resp);
       if (resp.success) {

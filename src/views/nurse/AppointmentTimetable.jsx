@@ -4,13 +4,12 @@
 
 import React, { useState, useEffect } from "react";
 import { Get, Post } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import TimetableAdd from "./TimeTableAdd";
 import TimetableUpdate from "./TimeTableUpdate";
 import DoctorSelection from "./DoctorSelection";
-
 //
 const _days = {
   monday: false,
@@ -50,7 +49,7 @@ const AppointmentsTimetable = ({selDoc}) => {
   const UpdateActive = async () => {
     try {
       const resp = await Post(
-        `${apiUrl()}/nurse/update-time-slots?doc_id=${selDoc}`,
+        `${apiEndpoints.nurse.updateTimeSlots}?doc_id=${selDoc}`,
         {
           timeSlots: timeSlots,
         },
@@ -70,7 +69,7 @@ const AppointmentsTimetable = ({selDoc}) => {
       setLoading(true);
       const formattedDate = new Date().toISOString();
       const resp = await Get(
-        `${apiUrl()}/nurse/get-time-slots?date=${formattedDate}&doc_id=${selDoc}`
+        `${apiEndpoints.nurse.getTimeSlots}?date=${formattedDate}&doc_id=${selDoc}`
       );
       //console.log("resp:::111111", JSON.stringify(resp));
       if (resp.success) {

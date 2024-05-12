@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Get, Put } from "../../services";
-import { apiUrl, config } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import PrescriptionPreview from "../common/PrescriptionPreview";
@@ -24,7 +24,7 @@ const FindPrescriptions = ({ doctorId }) => {
     try {
       setLoading(true);
       const resp = await Get(
-        `${apiUrl()}/pharmacy/find-prescriptions?searchText=${searchText}`
+        `${apiEndpoints.pharmacy.findPrescriptions}?searchText=${searchText}`
       );
       console.log("resp", resp);
       if (resp.success) {
@@ -93,7 +93,7 @@ const FindPrescriptions = ({ doctorId }) => {
                 <img
                   src={
                     typeof pr?.pt.img == "string"
-                      ? `${apiUrl()}/uploads/${pr?.pt.img}`
+                      ? `${apiEndpoints.upload.url}/${pr?.pt.img}`
                       : URL.createObjectURL(pr?.pt.img)
                   }
                   className="card-img-top"

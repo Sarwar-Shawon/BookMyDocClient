@@ -2,17 +2,15 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { useAuthContext } from "../../context/AuthContext";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
-import { Regex, formatDateToString } from "../../utils";
-import { Post, Put, Get } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import { formatDateToString } from "../../utils";
+import {  Put } from "../../services";
+import apiEndpoints from "../../config/apiEndpoints";
 import AppCalendar from "../../components/AppCalendar";
 import Autosuggest from "react-autosuggest";
 import { allergiesLists, diagnosesLists } from "../../utils";
-
 //
 const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt, updateApt }) => {
   //
@@ -97,7 +95,7 @@ const PatientsMedicalRecord = ({ onCloseModal, medicalRecord, apt, updateApt }) 
         medical_history: medicalRecord,
       };
       const resp = await Put(
-        `${apiUrl()}/nurse/update-patient-record`,
+        apiEndpoints.nurse.updatePatientRecord,
         params,
         "application/json"
       );

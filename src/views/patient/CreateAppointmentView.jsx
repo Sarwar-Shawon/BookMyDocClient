@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import { Post, Get } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import moment from "moment";
 import TimeSlotView from '../common/TimeSlotView'
 //
@@ -30,7 +30,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor ,selDate}) => {
     try {
       setIsLoading(true);
       const resp = await Get(
-        `${apiUrl()}/patient/get-time-slots?date=${
+        `${apiEndpoints.patient.getTimeSlots}?date=${
           formData.apt_date
         }&doc_email=${doctor.doc_email}`
       );
@@ -85,7 +85,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor ,selDate}) => {
       };
       //console.log("params", params)
       const resp = await Post(
-        `${apiUrl()}/patient/create-appointment`,
+        apiEndpoints.patient.createAppointment,
         params,
         "application/json"
       );

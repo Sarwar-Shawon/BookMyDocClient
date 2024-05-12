@@ -11,7 +11,7 @@ import {
   FaRegUser,
   FaRegUserCircle,
 } from "react-icons/fa";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import { formatDateToString } from "../../utils";
 import Modal from "../../components/Modal";
 import { Get } from "../../services";
@@ -33,7 +33,7 @@ const AppointmentDetails = ({
   const loadDetails = async () => {
     try {
       const resp = await Get(
-        `${apiUrl()}/apt/get-appointments-details?apt_id=${selApt._id}`
+        `${apiEndpoints.apt.getAppointmentsDetails}?apt_id=${selApt._id}`
       );
       if (resp.success) {
         setApt(resp.data);

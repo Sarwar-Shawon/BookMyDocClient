@@ -5,7 +5,8 @@ import React, { useState, useEffect } from "react";
 import { FaPlusSquare, FaSearch } from "react-icons/fa";
 import OrganizationsAddView from "./OrganizationAddView";
 import { Get } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
+
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 const Organizations = () => {
@@ -25,7 +26,7 @@ const Organizations = () => {
     try {
       setLoading(true);
       const skip = organizations.length;
-      const resp = await Get(`${apiUrl()}/admin/getAllOrganizations?skip=${skip}`);
+      const resp = await Get(`${apiEndpoints.admin.getAllOrganizations}?skip=${skip}`);
       //console.log("resp:::", resp);
       if (resp.success) {
         setOrganizations((prevOrganizations) => [...prevOrganizations, ...resp.data]);
@@ -112,7 +113,7 @@ const Organizations = () => {
               {/* <img
                 src={
                   typeof organization.img == "string"
-                    ? `${apiUrl()}/uploads/${organization.img}`
+                    ? `${apiEndpoints.upload.url}/${organization.img}`
                     : URL.createObjectURL(organization.img)
                 }
                 className="card-img-top"

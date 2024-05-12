@@ -11,7 +11,7 @@ import AppCalendar from "../../components/Calendar";
 import moment from "moment";
 import { formatDateToString, setItem, Regex } from "../../utils";
 import { PublicPost } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 
 //
 const SignUp = () => {
@@ -49,7 +49,7 @@ const SignUp = () => {
           nhsId,
           dob,
         };
-        const resp = await PublicPost(`${apiUrl()}/auth/register`, params);
+        const resp = await PublicPost(apiEndpoints.auth.register, params);
         //console.log("resp:::", resp);
         if (resp.success) {
           // const { data } = resp;

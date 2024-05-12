@@ -5,7 +5,8 @@ import React, { useState, useEffect } from "react";
 import { FaPlusSquare, FaSearch } from "react-icons/fa";
 import NursesAddView from "./NurseAddView";
 import { Get } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
+
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -43,7 +44,7 @@ const Nurses = () => {
       const limit = 5;
       const skip = pSkip ? 0 : nurses.length;
       const resp = await Get(
-        `${apiUrl()}/admin/getAllNurses?skip=${skip}&limit=15&dept=${selDept}&org=${selOrg}`
+        `${apiEndpoints.admin.getAllNurses}?skip=${skip}&limit=15&dept=${selDept}&org=${selOrg}`
       );
       ////console.log("resp:::", resp);
       if (resp.success) {
@@ -61,7 +62,7 @@ const Nurses = () => {
   //
   const fetchOrganizations = async () => {
     try {
-      const resp = await Get(`${apiUrl()}/admin/getAllOrganizations`);
+      const resp = await Get(apiEndpoints.admin.getAllOrganizations);
       ////console.log("resp:::", resp);
       if (resp.success) {
         setOrganizations(resp.data);
@@ -75,7 +76,7 @@ const Nurses = () => {
   };
   const fetchDepartments = async () => {
     try {
-      const resp = await Get(`${apiUrl()}/admin/getAllDepartments`);
+      const resp = await Get(apiEndpoints.admin.getAllDepartments);
       ////console.log("resp:::", resp);
       if (resp.success) {
         setDepartments(resp.data);
@@ -277,7 +278,7 @@ const Nurses = () => {
                 <img
                   src={
                     typeof nurse.img == "string"
-                      ? `${apiUrl()}/uploads/${nurse.img}`
+                      ? `${apiEndpoints.upload.url}/${nurse.img}`
                       : URL.createObjectURL(nurse.img)
                   }
                   className="card-img-top"

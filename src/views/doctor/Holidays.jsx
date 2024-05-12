@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Get, Put } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import DoctorHolidayView from "../common/DoctorHolidayView";
@@ -30,7 +30,7 @@ const Holidays = ({ doctorId }) => {
   const fetchHolidays = async () => {
     try {
       setLoading(true);
-      const resp = await Get(`${apiUrl()}/doctor/get-holidays`);
+      const resp = await Get(apiEndpoints.doctor.getHolidays);
       //console.log("resp:::", JSON.stringify(resp));
       if (resp.success) {
         setHolidays(resp?.data);
@@ -72,7 +72,7 @@ const Holidays = ({ doctorId }) => {
         newHolidays = newHolidays.filter((item) => item._id !== selHoliday?._id);
       }
       const resp = await Put(
-        `${apiUrl()}/doctor/update-holidays`,
+        apiEndpoints.doctor.updateHolidays,
         {
             holidays: newHolidays,
         },

@@ -4,7 +4,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Get, Put, Post } from "../../services";
-import { apiUrl, config } from "../../config/appConfig";
+import { config } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import PrescriptionUpdate from "./PrescriptionUpdate";
@@ -52,7 +53,7 @@ const PharmacyPrescriptions = () => {
     try {
       const skip = pSkip ? 0 : prescriptions.length;
       const resp = await Get(
-        `${apiUrl()}/pharmacy/get-prescriptions?skip=${skip}&limit=${
+        `${apiEndpoints.pharmacy.getPrescriptions}?skip=${skip}&limit=${
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}&interval=${range}&prStatus=${prStatus}`
       );
@@ -96,7 +97,7 @@ const PharmacyPrescriptions = () => {
       //console.log("params", params);
       //
       const resp = await Put(
-        `${apiUrl()}/pharmacy/update-prescription`,
+        apiEndpoints.pharmacy.updatePrescription,
         params,
         "application/json"
       );
@@ -259,7 +260,7 @@ const PharmacyPrescriptions = () => {
                   <img
                     src={
                       typeof pr?.pt.img == "string"
-                        ? `${apiUrl()}/uploads/${pr?.pt.img}`
+                        ? `${apiEndpoints.upload.url}/${pr?.pt.img}`
                         : URL.createObjectURL(pr?.pt.img)
                     }
                     className="card-img-top"

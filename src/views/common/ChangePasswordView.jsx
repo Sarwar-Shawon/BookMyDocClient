@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { Put } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import { PasswordInput } from "../../components/Password";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
@@ -26,7 +26,7 @@ const ChnagePasswordView = ({ onCloseModal }) => {
           new_password: newPassword,
         };
         const resp = await Put(
-          `${apiUrl()}/auth/changePassword`,
+          apiEndpoints.auth.changePassword,
           params,
           "application/json"
         );

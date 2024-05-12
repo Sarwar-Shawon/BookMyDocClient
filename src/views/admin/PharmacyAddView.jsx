@@ -15,7 +15,7 @@ import Modal from "../../components/Modal";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import { Regex } from "../../utils";
 import { Post, Put } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 
 const PharmacyAddView = ({
   onCloseModal,
@@ -151,7 +151,7 @@ const PharmacyAddView = ({
   const addNewPharmacy = async () => {
     try {
       //
-      const resp = await Post(`${apiUrl()}/admin/registerPharmacy`, formData);
+      const resp = await Post(apiEndpoints.admin.registerPharmacy, formData);
       //console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -172,7 +172,7 @@ const PharmacyAddView = ({
   const updatePharmacy = async () => {
     try {
       //
-      const resp = await Put(`${apiUrl()}/admin/updatePharmacy`, formData);
+      const resp = await Put(apiEndpoints.admin.updatePharmacy, formData);
       console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
@@ -314,7 +314,7 @@ const PharmacyAddView = ({
                 <img
                   src={
                     typeof formData.img == "string"
-                      ? `${apiUrl()}/uploads/${formData.img}`
+                      ? `${apiEndpoints.upload.url}/${formData.img}`
                       : URL.createObjectURL(formData.img)
                   }
                   style={{

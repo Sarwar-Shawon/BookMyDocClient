@@ -8,7 +8,7 @@ import {
   calculateValidDt,
 } from "../../utils";
 import Modal from "../../components/Modal";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 const repeatVal = ["Yes", "No"];
 const validSel = [
   "1",
@@ -286,7 +286,7 @@ const PrescriptionUpdate = ({
                   <strong>Doctor Signature:</strong>
                   {
                     <img
-                      src={`${apiUrl()}/uploads/${prescription?.doc?.pSign}`}
+                      src={`${apiEndpoints.upload.url}/${prescription?.doc?.pSign}`}
                       style={{
                         width: 250,
                         height: 80,

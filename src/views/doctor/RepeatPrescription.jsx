@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Get, Post } from "../../services";
-import { apiUrl } from "../../config/appConfig";
+import apiEndpoints from "../../config/apiEndpoints";
 import LoadingView from "../../components/Loading";
 import noData from "../../assets/images/no-data.jpg";
 import Modal from "../../components/Modal";
@@ -100,7 +100,7 @@ const RepeatPrescription = ({ onCloseModal, title, prescription }) => {
       setVdt(monthDiff)
       prescription.medications.map(async (item)=>{
           const resp = await await Get(
-            `${apiUrl()}/doctor/get-medicine-suggestions?search_text=${item.name}`
+            `${apiEndpoints.doctor.getMedicineSuggestions}?search_text=${item.name}`
           )
           item.suggestions = resp?.data[0]
       })
@@ -113,7 +113,7 @@ const RepeatPrescription = ({ onCloseModal, title, prescription }) => {
   //
   const fetchPharmacies = async () => {
     try {
-      const resp = await Get(`${apiUrl()}/doctor/get-org-pharmacy`);
+      const resp = await Get(apiEndpoints.doctor.getOrgPharmacy);
       if (resp.success) {
         setPharmacies(resp?.data);
         setSelPhar(prescription.phar?._id)
@@ -154,7 +154,7 @@ const RepeatPrescription = ({ onCloseModal, title, prescription }) => {
     try {
       //
       const resp = await Get(
-        `${apiUrl()}/doctor/get-medicine-suggestions?search_text=${value}`
+        `${apiEndpoints.doctor.getMedicineSuggestions}?search_text=${value}`
       );
       //console.log("resp:::", resp?.data);
       if (resp.success) {
@@ -187,7 +187,7 @@ const RepeatPrescription = ({ onCloseModal, title, prescription }) => {
       //console.log("params", params);
       //
       const resp = await Post(
-        `${apiUrl()}/doctor/create-repeat-prescription`,
+        apiEndpoints.doctor.createRepeatPrescription,
         params,
         "application/json"
       );
@@ -595,7 +595,7 @@ const RepeatPrescription = ({ onCloseModal, title, prescription }) => {
                   <strong>Doctor Signature:</strong>
                   {
                     <img
-                      src={`${apiUrl()}/uploads/${prescription?.doc?.pSign}`}
+                      src={`${apiEndpoints.upload.url}/${prescription?.doc?.pSign}`}
                       style={{
                         width: 250,
                         height: 80,
