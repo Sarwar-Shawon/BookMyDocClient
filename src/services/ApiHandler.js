@@ -101,13 +101,16 @@ export const PublicPost = async (url, arg) => {
     return {
       success: false,
       error: error?.response?.data?.error || error?.message,
+      status: error?.response?.data?.status || ""
     };
   }
 };
 // Unauth Get method
 export const PublicGet = async (url) => {
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url,{
+      withCredentials: true, 
+    });
     if (response?.data.success)
        return response.data;;
   } catch (error) {

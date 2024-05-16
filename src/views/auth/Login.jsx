@@ -30,6 +30,7 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      setErrors({});
       if (validateForm()) {
         setLoading(true);
         await signIn({ username, password });
@@ -128,9 +129,9 @@ const Login = () => {
                     SignIn
                   </button>
                 </div>
-                {/* <p className="forgot-password text-right">
-                  <a href="#">Forgot password?</a>
-                </p> */}
+                <p className="forgot-password text-right">
+                  <a href="/chnage-password">Forgot password!</a>
+                </p>
                 <p className="forgot-password text-center">
                   Don't have an account! <a href="/signup">Sign Up</a>
                 </p>

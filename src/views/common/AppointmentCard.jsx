@@ -7,6 +7,7 @@ import {
   FaClock,
   FaHospitalUser,
   FaClipboard,
+  FaInfo
 } from "react-icons/fa";
 import apiEndpoints from "../../config/apiEndpoints";
 import { formatDateToString } from "../../utils";
@@ -38,6 +39,18 @@ const AppointmentCard = ({
         alt={apt?.pt.f_name}
       />
       <div className="card-body">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "8px",
+          }}
+        >
+          <FaInfo style={{ marginRight: "5px" }} />
+          <p className="card-text" style={{ fontSize: 12, fontWeight: "bold" }}>
+            {apt?._id}
+          </p>
+        </div>
         <h5 className="card-title">
           {[apt?.pt.f_name, apt?.pt.l_name].join(" ")}
         </h5>

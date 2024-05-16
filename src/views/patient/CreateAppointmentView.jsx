@@ -13,6 +13,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor ,selDate}) => {
   //
   const [errors, setError] = useState({});
   const [timeSlots, setTimeSlots] = useState([]);
+  const [notes, setNotes] = useState("");
   const [showResp, setShowResp] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
@@ -82,6 +83,7 @@ const CreateAppointmentView = ({ onCloseModal, doctor ,selDate}) => {
         dept: doctor.dept._id,
         org: doctor.organization._id,
         timeslot: formData.timeslot,
+        notes: notes
       };
       //console.log("params", params)
       const resp = await Post(
@@ -132,6 +134,16 @@ const CreateAppointmentView = ({ onCloseModal, doctor ,selDate}) => {
               setFormData={setFormData}
               errors={errors}
             />
+            <div className="mb-3">
+              <label className="form-label">Notes:</label>
+              <textarea
+                className="form-control"
+                name="details"
+                value={notes}
+                onChange={(e)=>setNotes(e.target.value)}
+                rows={3} 
+              />
+            </div>
             <div className="col-12">
               <div className="d-grid">
                 {isBtnLoading ? (

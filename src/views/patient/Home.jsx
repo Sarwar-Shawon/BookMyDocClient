@@ -223,7 +223,7 @@ const PatientHome = () => {
           <>
             {!doctors.length && (
               <div className="container-fluid d-flex justify-content-center align-items-center">
-                <img src={noData} className="no-data-img" alt="No data found" />
+                <img src={noData} className="no-data-img" alt="No data found" loading="lazy"/>
               </div>
             )}
             <InfiniteScroll
@@ -262,6 +262,7 @@ const PatientHome = () => {
                       }
                       className="card-img-top"
                       alt={doctor.f_name}
+                      loading="lazy"
                     />
                     <div className="card-body">
                       <h5 className="card-title">

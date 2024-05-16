@@ -17,12 +17,12 @@ const OtpPage = () => {
   const [isLoading, setLoading] = useState(false);
   const [errors, setErrors] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-  const [msg, setMsg] = useState( state?.showOtpMsg ? "An Otp has sent to your email address." : "");
+  const [msg, setMsg] = useState( (state?.showOtpMsg && state?.msg) ? state?.msg : state?.showOtpMsg ? "An Otp has sent to your email address." : "");
   const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
       setMsg("");
-    }, 5000);
+    }, 10000);
     //
     return () => {
       clearTimeout(timer);

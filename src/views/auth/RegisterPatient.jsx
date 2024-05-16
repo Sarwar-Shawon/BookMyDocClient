@@ -7,11 +7,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "../../css/login.css";
 import { FaMale, FaFemale, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { PasswordInput } from "../../components/Password";
-import AppCalendar from "../../components/Calendar";  
+import AppCalendar from "../../components/Calendar";
 import moment from "moment";
 import { formatDateToString, setItem, Regex } from "../../utils";
 import { PublicPost } from "../../services";
 import apiEndpoints from "../../config/apiEndpoints";
+import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 
 //
 const SignUp = () => {
@@ -25,6 +26,7 @@ const SignUp = () => {
   const [nhsId, setNhsId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const minDate = moment().subtract(18, "years").format("DD-MM-YYYY");
+  const [showResp, setShowResp] = useState({});
 
   //
   const [showPass, setShowPass] = useState(false);
@@ -38,7 +40,8 @@ const SignUp = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      setIsLoading(true)
+      setErrors({});
+      setIsLoading(true);
       if (validateForm()) {
         const params = {
           username,
@@ -50,23 +53,20 @@ const SignUp = () => {
           dob,
         };
         const resp = await PublicPost(apiEndpoints.auth.register, params);
-        //console.log("resp:::", resp);
+        // console.log("resp:::", resp);
+        const respObj = {};
         if (resp.success) {
-          // const { data } = resp;
-          // setItem("usr", {
-          //   email: data.email,
-          // });
-          navigate("/verification" , { state: { showOtpMsg: true } });
+          navigate("/verification", { state: { showOtpMsg: true } });
         } else {
-          //handle err
+          respObj.success = false;
+          respObj.msg = resp?.error;
+          setShowResp(respObj);
         }
       }
       // navigate("/about");
     } catch {
-      
-    }
-    finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
   //validate signup form
@@ -104,6 +104,10 @@ const SignUp = () => {
       errorsObj.nhsId = "Nhs Id is required";
       isValid = false;
     }
+    if (nhsId.length <10 ) {
+      errorsObj.nhsId = "Nhs Id is length doesn't match";
+      isValid = false;
+    }
     if (!dob) {
       errorsObj.dob = "Date Of Birth is required";
       isValid = false;
@@ -114,7 +118,11 @@ const SignUp = () => {
   //
   const calculateMinDate = () => {
     const today = new Date();
-    const maxDate = new Date(today.getFullYear() - 16, today.getMonth(), today.getDate());
+    const maxDate = new Date(
+      today.getFullYear() - 16,
+      today.getMonth(),
+      today.getDate()
+    );
     return maxDate;
   };
   //
@@ -128,6 +136,14 @@ const SignUp = () => {
           <div className="login d-flex align-items-center py-5">
             <div className="auth-inner">
               <form onSubmit={handleSubmit} disabled={!isFormValid}>
+                <ErrorAlert
+                  msg={!showResp?.success ? showResp?.msg : ""}
+                  hideMsg={() => setShowResp({})}
+                />
+                <SuccessAlert
+                  msg={showResp?.success ? showResp?.msg : ""}
+                  hideMsg={() => setShowResp({})}
+                />
                 <h3>Create Patient Account</h3>
                 <div className="mb-2">
                   <label>Email address</label>
@@ -151,7 +167,7 @@ const SignUp = () => {
                       *{errors.password}
                     </p>
                   )}
-                  
+
                   <PasswordInput
                     password={password}
                     showPass={showPass}
@@ -185,7 +201,9 @@ const SignUp = () => {
                     className="form-control"
                     placeholder="Enter Last Name"
                     value={lastName}
-                    onChange={(e) => setLastName(e.target.value.replace(/[^a-zA-Z\s]/g, ""))}
+                    onChange={(e) =>
+                      setLastName(e.target.value.replace(/[^a-zA-Z\s]/g, ""))
+                    }
                   />
                 </div>
                 <div className="mb-2">
@@ -236,7 +254,10 @@ const SignUp = () => {
                     className="form-control"
                     placeholder="Enter NHS Id"
                     value={nhsId}
-                    onChange={(e) => setNhsId(e.target.value)}
+                    onChange={(e) => {
+                      const numericInput = e.target.value.replace(/\D/g, "");
+                      setNhsId(numericInput.slice(0, 10));
+                    }}
                     required
                   />
                 </div>

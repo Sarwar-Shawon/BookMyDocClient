@@ -312,6 +312,17 @@ const AppointmentCard = ({
         alt={apt?.doc.f_name}
       />
       <div className="card-body">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "8px",
+          }}
+        >
+          <p className="card-text" style={{ fontSize: 12, fontWeight: "bold" }}>
+            {apt?._id}
+          </p>
+        </div>
         <h5 className="card-title">
           {[apt?.doc.f_name, apt?.doc.l_name].join(" ")}
         </h5>

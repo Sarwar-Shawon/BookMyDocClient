@@ -89,7 +89,7 @@ const PatientPrescriptions = () => {
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}&prStatus=${prStatus}&prType=${prType== "Old" ? "New" : prType}`
       );
-      // console.log("resp", resp);
+      console.log("resp", resp);
       if (resp.success) {
         setPrescriptions((prevPres) => [...prevPres, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -422,7 +422,7 @@ const PatientPrescriptions = () => {
                 >
                   View Prescription
                 </button>
-                {pr?.payStatus == "Unpaid" && (
+                {pr?.payStatus == "Unpaid" && pr?.phar && (
                   <button
                     style={{
                       width: "200px",

@@ -40,7 +40,8 @@ const AuthProvider = ({ children }) => {
           location.pathname == "/signin" ||
           location.pathname == "/" ||
           location.pathname == "/signup" ||
-          location.pathname == "/verification"
+          location.pathname == "/verification"||
+          location.pathname == "/chnage-password"
         ) {
           navigate("/home", { replace: true });
         } else {
@@ -53,7 +54,8 @@ const AuthProvider = ({ children }) => {
           location.pathname == "/signin" ||
           location.pathname == "/" ||
           location.pathname == "/signup" ||
-          location.pathname == "/verification"
+          location.pathname == "/verification"||
+          location.pathname == "/chnage-password"
         )
           navigate(from, { replace: true, state: { search: location.search } });
         else navigate("/signin", { replace: true });
@@ -91,6 +93,11 @@ const AuthProvider = ({ children }) => {
         }
         navigate("/home", { replace: true });
       } else {
+        console.log("resp",resp);
+        if(resp?.status && resp?.status === "not-verified"){
+          navigate("/verification", { state: { showOtpMsg: true , msg: resp?.error } });
+          return ;
+        }
         setAuthError(resp?.error);
         setIsAuthenticated(false);
         return;

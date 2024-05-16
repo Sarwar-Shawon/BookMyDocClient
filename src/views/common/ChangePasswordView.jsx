@@ -46,7 +46,7 @@ const ChnagePasswordView = ({ onCloseModal }) => {
   //
   return (
     <Modal
-      title={"Appointment Details"}
+      title={"Change Password"}
       body={
         <div className="container">
          

@@ -25,7 +25,7 @@ const Header = ({ toggleSidebar }) => {
           </button>
         )}
 
-        <div className="title">BookMyDoc</div>
+        <div className="title">BookMyDoctor</div>
         <button
           style={{
             width: "200px",

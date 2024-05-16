@@ -15,7 +15,9 @@ import moment from "moment";
 import Modal from "../../components/Modal";
 import AppCalendar from "../../components/Calendar";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { FaCalendarAlt, FaHospitalUser,FaClipboardList } from "react-icons/fa";
+import { FaCalendarAlt, FaHospitalUser,FaClipboardList,FaInfo } from "react-icons/fa";
+const Interval = ["7 days", "1 month", "1 year"];
+
 //
 const DoctorPrescriptions = ({ doctorId }) => {
   const [selType, setSelType] = useState("created");
@@ -59,12 +61,14 @@ const PrescriptionViews = () => {
   const [hasMore, setHasMore] = useState(true);
   const [selPC, setSelPC] = useState({});
   const [formData, setFormData] = useState({
-    start_date: new Date(),
+    start_date:  new Date(new Date().setDate(new Date().getDate() - 7)),
     end_date: new Date(),
   });
   const [ptnhs, setPtnhs] = useState("")
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
+  const [range, setRange] = useState("7 days");
+
   //console.log("prescriptions",prescriptions)
   //
   useEffect(() => {
@@ -106,7 +110,33 @@ const PrescriptionViews = () => {
     }
     setShowCalendar(false);
   };
-  
+  const updateRange = (val) => {
+    switch (val) {
+      case "7 days":
+        setFormData({
+          ...formData,
+          start_date: new Date(new Date().setDate(new Date().getDate() - 7)),
+        });
+        break;
+      case "1 month":
+        setFormData({
+          ...formData,
+          start_date: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        });
+        break;
+      case "1 year":
+        setFormData({
+          ...formData,
+          start_date: new Date(
+            new Date().setFullYear(new Date().getFullYear() - 1)
+          ),
+        });
+        break;
+      default:
+        break;
+    }
+    setRange(val);
+  };
   //
   if (isLoading) {
     return <LoadingView />;
@@ -154,48 +184,25 @@ const PrescriptionViews = () => {
                     />
                   </div>
                 </div>
+                <div className="row col-md-12">
+            </div>
               </div>
               <div className="col">
-                <div className="d-flex">
-                  <div
-                    className="button-container"
-                    style={{ marginRight: "10px"}}
-                  >
-                    <label>Enter Nhs Id:</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={ptnhs}
-                      onChange={(e) => setPtnhs(e.target.value)}
-                    />
-                  </div>
-                  <div className="button-container" >
-                  
-                    <button
-                      style={{
-                        width: "200px",
-                        marginTop: "24px",
-                        marginBottom: "10px",
-                        backgroundColor: "#0B2447",
-                        borderColor: "#0B2447",
-                        transition: "background-color 0.3s, border-color 0.3s",
-                      }}
-                      className="btn btn-primary"
-                      onMouseOver={(e) => {
-                        e.target.style.backgroundColor = "#1a4a8a";
-                        e.target.style.borderColor = "#1a4a8a";
-                      }}
-                      onMouseOut={(e) => {
-                        e.target.style.backgroundColor = "#0B2447";
-                        e.target.style.borderColor = "#0B2447";
-                      }}
-                      onClick={() => {
-                        
-                      }}
-                    >
-                      Find Prescription
-                    </button>
-                  </div>
+              <label>Select Range</label>
+              <div className="d-flex justify-content-between align-items-center">
+              
+                  {Interval.map((item, index) => (
+                    <div className="button-container" key={item}>
+                      <button
+                        className={`tab-button ${
+                          range === item ? "active" : ""
+                        }`}
+                        onClick={() => updateRange(item)}
+                      >
+                        {item}
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -232,7 +239,7 @@ const PrescriptionViews = () => {
                 key={pr._id}
                 className="doctor-card card mb-3 mx-2"
                 style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" ,
-                backgroundColor:  pr.presType == "Repeated" ? "#FFF9C9" : pr.repeatReq ? "#FFF9C9" : "#fff",
+                backgroundColor:  pr.presType == "Repeated" ? "#FFF9C9" : "#fff",
                 
                 }}
                 
@@ -284,6 +291,18 @@ const PrescriptionViews = () => {
                     <FaClipboardList style={{ marginRight: "5px" }} />
                     <p className="card-text" style={{ fontWeight: "bold" }}>
                       {pr?.presType}
+                    </p>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <FaInfo style={{ marginRight: "5px" }} />
+                    <p className="card-text" style={{fontSize: 12,fontWeight: "bold"}}>
+                      {pr?._id}
                     </p>
                   </div>
                 </div>
@@ -365,12 +384,40 @@ const RequestPrescription = () => {
   const [hasMore, setHasMore] = useState(true);
   const [selPC, setSelPC] = useState({});
   const [formData, setFormData] = useState({
-    start_date: new Date(),
+    start_date: new Date(new Date().setMonth(new Date().getMonth() - 1)),
     end_date: new Date(),
   });
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
   const [showBtnLoader, setShowBtnLoader] = useState(false);
+  const [range, setRange] = useState("1 month");
+  const updateRange = (val) => {
+    switch (val) {
+      case "7 days":
+        setFormData({
+          ...formData,
+          start_date: new Date(new Date().setDate(new Date().getDate() - 7)),
+        });
+        break;
+      case "1 month":
+        setFormData({
+          ...formData,
+          start_date: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+        });
+        break;
+      case "1 year":
+        setFormData({
+          ...formData,
+          start_date: new Date(
+            new Date().setFullYear(new Date().getFullYear() - 1)
+          ),
+        });
+        break;
+      default:
+        break;
+    }
+    setRange(val);
+  };
   //
   useEffect(() => {
     setPrescriptions([])
@@ -460,6 +507,24 @@ const RequestPrescription = () => {
                   </div>
                 </div>
               </div>
+              <div className="col">
+              <label>Select Range</label>
+              <div className="d-flex justify-content-between align-items-center">
+              
+                  {Interval.map((item, index) => (
+                    <div className="button-container" key={item}>
+                      <button
+                        className={`tab-button ${
+                          range === item ? "active" : ""
+                        }`}
+                        onClick={() => updateRange(item)}
+                      >
+                        {item}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
             {showCalendar && (
               <AppCalendar
@@ -528,6 +593,18 @@ const RequestPrescription = () => {
                     <FaHospitalUser style={{ marginRight: "5px" }} />
                     <p className="card-text" style={{ fontWeight: "bold" }}>
                       {pr?.pt?.nhs}
+                    </p>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <FaInfo style={{ marginRight: "5px" }} />
+                    <p className="card-text" style={{fontSize: 12,fontWeight: "bold"}}>
+                      {pr?._id}
                     </p>
                   </div>
                 </div>
