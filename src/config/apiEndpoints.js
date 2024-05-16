@@ -19,12 +19,15 @@ const apiEndpoints = {
     registerDoctor: `${apiUrl()}/admin/registerDoctor`,
     getAllDoctors: `${apiUrl()}/admin/getAllDoctors`,
     updateDoctor: `${apiUrl()}/admin/updateDoctor`,
+    deleteDoctor: `${apiUrl()}/admin/deleteDoctor`,
     registerNurse: `${apiUrl()}/admin/registerNurse`,
     updateNurse: `${apiUrl()}/admin/updateNurse`,
+    deleteNurse: `${apiUrl()}/admin/deleteNurse`,
     getAllNurses: `${apiUrl()}/admin/getAllNurses`,
     getAllNursesByDeptOrg: `${apiUrl()}/admin/getAllNursesByDeptOrg`,
     registerPharmacy: `${apiUrl()}/admin/registerPharmacy`,
     updatePharmacy: `${apiUrl()}/admin/updatePharmacy`,
+    deletePharmacy: `${apiUrl()}/admin/deletePharmacy`,
     getAllPharmacies: `${apiUrl()}/admin/getAllPharmacies`,
     createDepartment: `${apiUrl()}/admin/createDepartment`,
     getAllDepartments: `${apiUrl()}/admin/getAllDepartments`,
@@ -80,6 +83,7 @@ const apiEndpoints = {
   stripe: {
     makePayment: `${apiUrl()}/stripe/make-payment`,
     updateTransactionDetails: `${apiUrl()}/stripe/update-transaction-details`,
+    makeRefund: `${apiUrl()}/stripe/make-refund`,
   },
   apt: {
     getAppointmentsDetails: `${apiUrl()}/apt/get-appointments-details`,

@@ -20,17 +20,19 @@ const Pharmacies = () => {
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [selOrg, setSelOrg] = useState("");
+
   //
   useEffect(() => {
     fetchOrganizations();
-    fetchPharmacies();
+    // fetchPharmacies();
   }, []);
   //
-  const fetchPharmacies = async () => {
+  const fetchPharmacies = async (pSkip) => {
     try {
-      const skip = pharmacies.length;
+      const skip = pSkip ? 0 : pharmacies.length;
       const resp = await Get(
-        `${apiEndpoints.admin.getAllPharmacies}?skip=${skip}&limit=15`
+        `${apiEndpoints.admin.getAllPharmacies}?skip=${skip}&limit=15&org=${selOrg}`
       );
       //console.log("resp:::", resp);
       if (resp.success) {
@@ -60,7 +62,14 @@ const Pharmacies = () => {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setPharmacies([]);
+      await fetchPharmacies(true);
+    };
+    fetchData();
+  }, [selOrg]);
   //
   const addToPharmacyList = async ({ newNur }) => {
     try {
@@ -81,6 +90,15 @@ const Pharmacies = () => {
     }
   };
   //
+  const delteFromPharmacyList = async ({del_id}) => {
+    try {
+      const updatedPharmacies = pharmacies.filter((pharmacy) => pharmacy._id !== del_id);
+      setPharmacies(updatedPharmacies);
+    } catch (err) {
+      //
+    }
+  };
+  //
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
@@ -93,39 +111,26 @@ const Pharmacies = () => {
       <div className="row">
         <div className="col">
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <div
-              className="input-group flex-grow-1"
-              style={{ marginRight: "10px" }}
-            >
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search Pharmacy"
-                onChange={handleSearchChange}
-                style={{ height: "38px" }}
-              />
+          <div className="mb-3">
+              <label className="form-label">Organization:</label>
+              <select
+                className="form-select"
+                name="selOrg"
+                value={selOrg}
+                onChange={(e) => setSelOrg(e.target.value)}
+                required
+              >
+                <option value="">All Organizations</option>
+                <>
+                  {organizations.length &&
+                    organizations.map((org) => (
+                      <option value={org._id} key={org._id}>
+                        {org.name}
+                      </option>
+                    ))}
+                </>
+              </select>
             </div>
-            <button
-              style={{
-                width: "100px",
-                marginRight: 10,
-                backgroundColor: "#0B2447",
-                borderColor: "#0B2447",
-                transition: "background-color 0.3s, border-color 0.3s",
-              }}
-              className="btn btn-primary"
-              onClick={() => {}}
-              onMouseOver={(e) => {
-                e.target.style.backgroundColor = "#1a4a8a";
-                e.target.style.borderColor = "#1a4a8a";
-              }}
-              onMouseOut={(e) => {
-                e.target.style.backgroundColor = "#0B2447";
-                e.target.style.borderColor = "#0B2447";
-              }}
-            >
-              Search
-            </button>
             <button
               style={{
                 width: "200px",
@@ -208,6 +213,7 @@ const Pharmacies = () => {
           updatePharmacyList={updatePharmacyList}
           selectedPharmacy={selectedPharmacy}
           organizations={organizations}
+          delteFromPharmacyList={delteFromPharmacyList}
         />
       )}
     </div>

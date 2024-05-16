@@ -124,6 +124,46 @@ const PharmacyPrescriptions = () => {
     }
   };
   //
+  const refundPrescription = async () => {
+    try {
+      //
+      if(selPC?._id){
+
+      }
+      seBtntLoading(true);
+      const params = {
+        pres_id: selPC?._id,
+        payment_intent: selPC?.transObj?.payment_intent,
+        amount: selPC?.transObj?.amount,
+      };
+      //console.log("params", params);
+      //
+      const resp = await Post(
+        apiEndpoints.stripe.makeRefund,
+        params,
+        "application/json"
+      );
+      console.log("resp:::", resp);
+      const respObj = {};
+      if (resp?.success) {
+        setShowPresUpd(false);
+        respObj.success = true;
+        respObj.msg = resp?.message;
+        const updatedPres = prescriptions.map((pres) =>
+          pres._id == resp?.data._id ? { ...pres, ...resp?.data } : pres
+        );
+        setPrescriptions(updatedPres);
+      } else {
+        respObj.success = false;
+        respObj.msg = resp?.error;
+      }
+      setShowResp(respObj);
+    } catch (err) {
+    } finally {
+      seBtntLoading(false);
+    }
+  };
+  //
   if (isLoading) {
     return <LoadingView />;
   }
@@ -405,6 +445,7 @@ const PharmacyPrescriptions = () => {
           medicineList={selPC?.medications}
           title={"Prescription View"}
           updatePrescription={updatePrescription}
+          refundPrescription={refundPrescription}
           showBtnLoader={isBtnLoading}
         />
       )}

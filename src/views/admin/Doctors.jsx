@@ -107,6 +107,15 @@ const Doctors = () => {
     }
   };
   //
+  const delteFromDoctorList = async ({del_id}) => {
+    try {
+      const updatedNewDoc = doctors.filter((doctor) => doctor._id !== del_id);
+      setDoctors(updatedNewDoc);
+    } catch (err) {
+      //
+    }
+  };
+  //
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
@@ -311,8 +320,10 @@ const Doctors = () => {
           selectedDoctor={selectedDoctor}
           departments={departments}
           organizations={organizations}
+          delteFromDoctorList={delteFromDoctorList}
         />
       )}
+      
     </div>
   );
 };

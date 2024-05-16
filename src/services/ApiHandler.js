@@ -72,7 +72,8 @@ export const Get = async (url) => {
 export const Delete = async (url, arg) => {
   try {
     const response = await api.delete(url,{
-      withCredentials: true, 
+      data: arg,
+      withCredentials: true,
     });
     //console.log("response",response);
     if (response.data.success) {

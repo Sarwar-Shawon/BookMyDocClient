@@ -31,7 +31,7 @@ const Profile = () => {
         );
         //console.log("resp:::", resp);
         if (resp.success) {
-          setShowResp({ success: true, msg: "successful" });
+          setShowResp({ success: true, msg: resp?.message });
         } else {
           setShowResp({ success: false, msg: resp?.error });
         }

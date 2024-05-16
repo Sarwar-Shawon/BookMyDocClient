@@ -78,7 +78,7 @@ const PasswordChange = () => {
         const user = await getItem("usr");
         user.pas_cg_rq = false;
         setItem("usr", user);
-        setRespMsg({ success: true, msg: "successful" });
+        setRespMsg({ success: true, msg: resp?.message });
       } else {
         setRespMsg({ success: false, msg: resp?.error });
       }

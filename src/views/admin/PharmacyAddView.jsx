@@ -2,19 +2,11 @@
  * @copyRight by md sarwar hoshen.
  */
 import React, { useState, useEffect } from "react";
-import { useAuthContext } from "../../context/AuthContext";
-import {
-  FaAlignJustify,
-  FaHome,
-  FaUser,
-  FaCog,
-  FaSignOutAlt,
-} from "react-icons/fa";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import { Regex } from "../../utils";
-import { Post, Put } from "../../services";
+import { Post, Put, Delete } from "../../services";
 import apiEndpoints from "../../config/apiEndpoints";
 
 const PharmacyAddView = ({
@@ -22,10 +14,12 @@ const PharmacyAddView = ({
   addToPharmacyList,
   selectedPharmacy,
   updatePharmacyList,
+  delteFromPharmacyList,
   organizations,
 }) => {
   //
   const [errors, setError] = useState({});
+  const [showDeleteView, setShowDeleteView] = useState(false);
   const [formData, setFormData] = useState({
     phar_email: "",
     name: "",
@@ -189,6 +183,30 @@ const PharmacyAddView = ({
     } finally {
     }
   };
+  //
+  const deletePharmacy = async () => {
+    try {
+      //
+      if(selectedPharmacy?._id){
+        const resp = await Delete(apiEndpoints.admin.deletePharmacy, {_id: selectedPharmacy._id});
+        console.log("resp:::", resp);
+        const respObj = {};
+        if (resp.success) {
+          delteFromPharmacyList({ del_id: resp?.data });
+          respObj.success = true;
+          respObj.msg = resp?.message;
+          setShowResp(respObj);
+        } else {
+          respObj.success = false;
+          respObj.msg = resp?.error;
+          setShowResp(respObj);
+        }
+      }
+    } catch (err) {
+    } finally {
+    }
+  };
+  //
   return (
     <Modal
       title={selectedPharmacy ? "Update Pharmacy" : "Add New Pharmacy"}
@@ -198,11 +216,6 @@ const PharmacyAddView = ({
             msg={!showResp?.success ? showResp?.msg : ""}
             hideMsg={() => setShowResp({})}
           />
-          <SuccessAlert
-            msg={showResp?.success ? showResp?.msg : ""}
-            hideMsg={() => setShowResp({})}
-          />
-
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Email:</label>
@@ -408,7 +421,7 @@ const PharmacyAddView = ({
               />
             </div>
           </div>
-          <div className="col-12">
+          <div className="col-12" style={{ marginTop: 10 }}>
             <div className="d-grid">
               {isLoading ? (
                 <button className="btn btn-primary" disabled>
@@ -426,6 +439,62 @@ const PharmacyAddView = ({
               )}
             </div>
           </div>
+          {selectedPharmacy && (
+            <div className="col-12" style={{ marginTop: 10 }}>
+              <div className="d-grid">
+                {isLoading ? (
+                  <button className="btn btn-primary" disabled>
+                    <div
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                    >
+                      {/* <span className="visually-hidden">Loading...</span> */}
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => setShowDeleteView(true)}
+                  >
+                    Delete Pharmacy
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+          {showDeleteView && (
+            <Modal
+              title={"Logout"}
+              body={"Do you want to delete this pharmacy?"}
+              btm_btn_1_txt={"No"}
+              btm_btn_2_txt={"Yes"}
+              btn1Click={() => {
+                setShowDeleteView(false);
+              }}
+              btn2Click={() => deletePharmacy()}
+              showFooter={true}
+              onCloseModal={() => setShowDeleteView(false)}
+            />
+          )}
+            {showResp?.success && (
+            <Modal
+              title={"Response"}
+              body={
+                <div>
+                  <ErrorAlert msg={!showResp?.success ? showResp?.msg : ""} />
+                  <SuccessAlert msg={showResp?.success ? showResp?.msg : ""} />
+                </div>
+              }
+              btm_btn_2_txt={"Ok"}
+              btn2Click={() => {
+                setShowResp({});
+                onCloseModal();
+              }}
+              showFooter={true}
+              onCloseModal={() => setShowResp({})}
+            />
+          )}
         </form>
       }
       onCloseModal={onCloseModal}

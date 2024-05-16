@@ -30,9 +30,9 @@ const PrescriptionUpdate = ({
   onCloseModal,
   medicineList,
   prescription,
-  prescriptionRepeat,
   showBtnLoader,
-  updatePrescription
+  updatePrescription,
+  refundPrescription
 }) => {
     const [status, setStatus] = useState(prescription?.status);
     const [payStatus, setPayStatus] = useState(prescription?.payStatus);
@@ -159,9 +159,9 @@ const PrescriptionUpdate = ({
                           ) : null}
                         </div>
                         <div>
-                            <p>
-                              <strong>Price:</strong> {"£9.65"}
-                            </p>
+                          <p>
+                            <strong>Price:</strong> {"£9.65"}
+                          </p>
                         </div>
                       </div>
                     ))
@@ -176,9 +176,8 @@ const PrescriptionUpdate = ({
             <div className="col-lg-12">
               <div className="card">
                 <div className="card-header">
-                  <strong>
-                    {"Total Amount:"}
-                  </strong>{" £"}
+                  <strong>{"Total Amount:"}</strong>
+                  {" £"}
                   {prescription?.amount}
                 </div>
               </div>
@@ -188,9 +187,7 @@ const PrescriptionUpdate = ({
             <div className="col-lg-12">
               <div className="card">
                 <div className="card-header">
-                  <strong>
-                    {"Created Date:"}
-                  </strong>{" "}
+                  <strong>{"Created Date:"}</strong>{" "}
                   {formatDateToString(prescription?.createdAt || new Date())}
                 </div>
               </div>
@@ -216,7 +213,7 @@ const PrescriptionUpdate = ({
                     className="form-select"
                     name="active"
                     value={status}
-                    onChange={(e)=>setStatus(e.target.value)}
+                    onChange={(e) => setStatus(e.target.value)}
                     required
                   >
                     <option value="">Select Status</option>
@@ -237,12 +234,13 @@ const PrescriptionUpdate = ({
                     className="form-select"
                     name="active"
                     value={payStatus}
-                    onChange={(e)=>setPayStatus(e.target.value)}
+                    onChange={(e) => setPayStatus(e.target.value)}
                     required
                   >
                     <option value="">Select Status</option>
                     <option value={"Paid"}>Paid</option>
                     <option value={"Unpaid"}>Unpaid</option>
+                    <option value={"Refunded"}>Refunded</option>
                   </select>
                 </div>
               </div>
@@ -257,7 +255,7 @@ const PrescriptionUpdate = ({
                     className="form-select"
                     name="active"
                     value={paidBy}
-                    onChange={(e)=>setPaidBy(e.target.value)}
+                    onChange={(e) => setPaidBy(e.target.value)}
                     required
                   >
                     <option value="">Select Status</option>
@@ -312,7 +310,9 @@ const PrescriptionUpdate = ({
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={() => {updatePrescription({status, payStatus, paidBy})}}
+                    onClick={() => {
+                      updatePrescription({ status, payStatus, paidBy });
+                    }}
                   >
                     Update Prescription
                   </button>
@@ -320,6 +320,32 @@ const PrescriptionUpdate = ({
               </div>
             </div>
           </div>
+          {(prescription?.transObj && prescription.payStatus === "Paid") && (
+            <div className="row mt-1">
+            <div className="col-lg-12">
+              <div className="d-grid">
+                {showBtnLoader ? (
+                  <button className="btn btn-primary" disabled>
+                    <div
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                    ></div>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => {
+                      refundPrescription();
+                    }}
+                  >
+                    Refund Prescription
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+          )}
         </div>
       }
       onCloseModal={onCloseModal}

@@ -111,6 +111,16 @@ const Nurses = () => {
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
+  //
+  const delteFromNurseList = async ({del_id}) => {
+    try {
+      const updatedNurses = nurses.filter((nurse) => nurse._id !== del_id);
+      setNurses(updatedNurses);
+    } catch (err) {
+      //
+    }
+  };
+  //
   if (isLoading) {
     return <LoadingView />;
   }
@@ -312,6 +322,7 @@ const Nurses = () => {
           selectedNurse={selectedNurse}
           departments={departments}
           organizations={organizations}
+          delteFromNurseList={delteFromNurseList}
         />
       )}
     </div>
