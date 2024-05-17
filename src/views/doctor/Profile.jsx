@@ -361,7 +361,7 @@ const UpdateProfileView = ({isLoading , formData, setFormData , handleChange , u
                   const numericInput = e.target.value.replace(/\D/g, "");
                   setFormData({
                     ...formData,
-                    ["phone"]: numericInput,
+                    ["phone"]: numericInput.slice(0, 11),
                   });
                 }}
                 required
