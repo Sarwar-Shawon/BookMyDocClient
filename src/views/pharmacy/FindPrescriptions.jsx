@@ -90,6 +90,8 @@ const FindPrescriptions = ({ doctorId }) => {
                 className="doctor-card card mb-3 mx-2"
                 style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" }}
               >
+                {
+                pr?.pt.img && 
                 <img
                   src={
                     typeof pr?.pt.img == "string"
@@ -99,6 +101,8 @@ const FindPrescriptions = ({ doctorId }) => {
                   className="card-img-top"
                   alt={pr?.pt.f_name}
                 />
+                }
+                
                 <div className="card-body">
                   <h5 className="card-title">
                     {[pr?.pt.f_name, pr?.pt.l_name].join(" ")}

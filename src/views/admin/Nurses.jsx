@@ -112,7 +112,7 @@ const Nurses = () => {
     setSearchText(event.target.value);
   };
   //
-  const delteFromNurseList = async ({del_id}) => {
+  const delteFromNurseList = async ({ del_id }) => {
     try {
       const updatedNurses = nurses.filter((nurse) => nurse._id !== del_id);
       setNurses(updatedNurses);
@@ -232,30 +232,29 @@ const Nurses = () => {
               </select>
             </div>
             <div className="mb-3">
-            <button
-              style={{
-                width: "200px",
-                marginRight: 10,
-                backgroundColor: "#0B2447",
-                borderColor: "#0B2447",
-                transition: "background-color 0.3s, border-color 0.3s",
-              }}
-              className="btn btn-primary"
-              onMouseOver={(e) => {
-                e.target.style.backgroundColor = "#1a4a8a";
-                e.target.style.borderColor = "#1a4a8a";
-              }}
-              onMouseOut={(e) => {
-                e.target.style.backgroundColor = "#0B2447";
-                e.target.style.borderColor = "#0B2447";
-              }}
-              onClick={() => setOpenAddView(true)}
-            >
-              Add New Nurse
-            </button>
+              <button
+                style={{
+                  width: "200px",
+                  marginRight: 10,
+                  backgroundColor: "#0B2447",
+                  borderColor: "#0B2447",
+                  transition: "background-color 0.3s, border-color 0.3s",
+                }}
+                className="btn btn-primary"
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = "#1a4a8a";
+                  e.target.style.borderColor = "#1a4a8a";
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = "#0B2447";
+                  e.target.style.borderColor = "#0B2447";
+                }}
+                onClick={() => setOpenAddView(true)}
+              >
+                Add New Nurse
+              </button>
             </div>
           </div>
-          
         </div>
       </div>
       <div className="doctor-list d-flex flex-wrap">
@@ -285,23 +284,24 @@ const Nurses = () => {
                   setOpenAddView(true);
                 }}
               >
-                <img
-                  src={
-                    typeof nurse.img == "string"
-                      ? `${apiEndpoints.upload.url}/${nurse.img}`
-                      : URL.createObjectURL(nurse.img)
-                  }
-                  className="card-img-top"
-                  alt={nurse.f_name}
-                />
+                {nurse.img && (
+                  <img
+                    src={
+                      typeof nurse.img == "string"
+                        ? `${apiEndpoints.upload.url}/${nurse.img}`
+                        : URL.createObjectURL(nurse.img)
+                    }
+                    className="card-img-top"
+                    alt={nurse.f_name}
+                  />
+                )}
+
                 <div className="card-body">
                   <h5 className="card-title">
                     {[nurse.f_name, nurse.l_name].join(" ")}
                   </h5>
                   <p className="card-text">{nurse?.dept?.name}</p>
-                  <p className="card-text">
-                    {nurse?.organization?.name}
-                  </p>
+                  <p className="card-text">{nurse?.organization?.name}</p>
                   <p className="card-text">
                     {nurse.active ? "Active" : "Inactive"}
                   </p>

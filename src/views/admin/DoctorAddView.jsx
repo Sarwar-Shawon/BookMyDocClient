@@ -299,6 +299,7 @@ const DoctorsAddView = ({
                 value={formData.doc_email}
                 onChange={handleChange}
                 required
+                disabled={selectedDoctor ? true : false}
               />
             </div>
             <div className="mb-3">

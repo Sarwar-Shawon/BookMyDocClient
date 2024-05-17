@@ -19,6 +19,7 @@ import {
   FaClipboardList,
   FaBookmark,
   FaMoneyCheck,
+  FaBookMedical
 } from "react-icons/fa";
 import Modal from "../../components/Modal";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
@@ -220,7 +221,7 @@ const PatientPrescriptions = () => {
                 </div>
               </div>
             </div>
-            <div className="row col-md-12" style={{marginTop:10}}>
+            <div className="row col-md-12" style={{ marginTop: 10 }}>
               <div className="col">
                 <div className="d-flex justify-content align-items-center">
                   <div className="mb-3">
@@ -232,30 +233,27 @@ const PatientPrescriptions = () => {
                       onChange={(e) => setPrType(e.target.value)}
                     >
                       <option value="">All Prescriptions</option>
-                      {_type.map(
-                        (item) =>
-                            <option value={item} key={item}>
-                              {item}
-                            </option>
-                      )}
+                      {_type.map((item) => (
+                        <option value={item} key={item}>
+                          {item}
+                        </option>
+                      ))}
                     </select>
                   </div>
-                  <div className="mb-3" style={{marginLeft: 15}}>
+                  <div className="mb-3" style={{ marginLeft: 15 }}>
                     <label className="form-label">Prescriptions Status:</label>
                     <select
                       className="form-select"
                       name="selDept"
                       value={prStatus}
                       onChange={(e) => setPrStatus(e.target.value)}
-
                     >
                       <option value="">All</option>
-                      {_status.map(
-                        (item) =>
-                            <option value={item} key={item}>
-                              {item}
-                            </option>
-                      )}
+                      {_status.map((item) => (
+                        <option value={item} key={item}>
+                          {item}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -295,14 +293,15 @@ const PatientPrescriptions = () => {
                 className="doctor-card card mb-3 mx-2"
                 style={{
                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                  // backgroundColor:
-                  //   pr.status == "Dispensed"
-                  //     ? "#98D8AA"
-                  //     : pr.presType == "Repeated"
-                  //     ? "#FFF9C9"
-                  //     : pr.repeatReq
-                  //     ? "#FFF9C9"
-                  //     : "#fff",
+                  backgroundColor:
+                    // pr.status == "Dispensed"
+                    //   ? "#98D8AA"
+                    //   : pr.presType == "Repeated"
+                    //   ? "#FFF9C9"
+                    //   : pr.repeatReq
+                    //   ? "#FFF9C9"
+                    //   : "#fff",
+                    pr.presType == "Repeated" ? "#FFF9C9" : "#fff",
                 }}
               >
                 {pr?.phar?.img && (
@@ -357,19 +356,42 @@ const PatientPrescriptions = () => {
                       className="card-text"
                       style={{
                         fontWeight: "bold",
-                        color:
-                          pr.status == "Dispensed"
-                            ? "#43766C"
-                            : pr.presType == "Repeated"
-                            ? "#FFF9C9"
-                            : pr.repeatReq
-                            ? "#FFF9C9"
-                            : "#000",
+                        color: pr.status == "Dispensed"
+                      ? "#43766C"
+                      : "#000"
                       }}
                     >
                       {pr?.status}
                     </p>
                   </div>
+                  {
+                  pr.presType == "Repeated" && 
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      <FaBookMedical style={{ marginRight: "5px" }} />
+                      <p
+                        className="card-text"
+                        style={{
+                          fontWeight: "bold",
+                          // color:
+                          //   pr.status == "Dispensed"
+                          //     ? "#43766C"
+                          //     : pr.presType == "Repeated"
+                          //     ? "#FFF9C9"
+                          //     : pr.repeatReq
+                          //     ? "#FFF9C9"
+                          //     : "#000",
+                        }}
+                      >
+                        { pr.presType}
+                      </p>
+                    </div>
+                  }
                   <div
                     style={{
                       display: "flex",

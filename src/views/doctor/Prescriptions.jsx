@@ -184,13 +184,11 @@ const PrescriptionViews = () => {
                     />
                   </div>
                 </div>
-                <div className="row col-md-12">
-            </div>
+                <div className="row col-md-12"></div>
               </div>
               <div className="col">
-              <label>Select Range</label>
-              <div className="d-flex justify-content-between align-items-center">
-              
+                <label>Select Range</label>
+                <div className="d-flex justify-content-between align-items-center">
                   {Interval.map((item, index) => (
                     <div className="button-container" key={item}>
                       <button
@@ -238,21 +236,24 @@ const PrescriptionViews = () => {
               <div
                 key={pr._id}
                 className="doctor-card card mb-3 mx-2"
-                style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" ,
-                backgroundColor:  pr.presType == "Repeated" ? "#FFF9C9" : "#fff",
-                
+                style={{
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                  backgroundColor:
+                    pr.presType == "Repeated" ? "#FFF9C9" : "#fff",
                 }}
-                
               >
-                <img
-                  src={
-                    typeof pr?.pt.img == "string"
-                      ? `${apiEndpoints.upload.url}/${pr?.pt.img}`
-                      : URL.createObjectURL(pr?.pt.img)
-                  }
-                  className="card-img-top"
-                  alt={pr?.pt.f_name}
-                />
+                {pr?.pt.img && (
+                  <img
+                    src={
+                      typeof pr?.pt.img == "string"
+                        ? `${apiEndpoints.upload.url}/${pr?.pt.img}`
+                        : URL.createObjectURL(pr?.pt.img)
+                    }
+                    className="card-img-top"
+                    alt={pr?.pt.f_name}
+                  />
+                )}
+
                 <div className="card-body">
                   <h5 className="card-title">
                     {[pr?.pt.f_name, pr?.pt.l_name].join(" ")}
@@ -301,7 +302,10 @@ const PrescriptionViews = () => {
                     }}
                   >
                     <FaInfo style={{ marginRight: "5px" }} />
-                    <p className="card-text" style={{fontSize: 12,fontWeight: "bold"}}>
+                    <p
+                      className="card-text"
+                      style={{ fontSize: 12, fontWeight: "bold" }}
+                    >
                       {pr?._id}
                     </p>
                   </div>
@@ -558,7 +562,8 @@ const RequestPrescription = () => {
                 className="doctor-card card mb-3 mx-2"
                 style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" }}
               >
-                <img
+              {pr?.pt.img && (
+                   <img
                   src={
                     typeof pr?.pt.img == "string"
                       ? `${apiEndpoints.upload.url}/${pr?.pt.img}`
@@ -567,6 +572,8 @@ const RequestPrescription = () => {
                   className="card-img-top"
                   alt={pr?.pt.f_name}
                 />
+                )}
+               
                 <div className="card-body">
                   <h5 className="card-title">
                     {[pr?.pt.f_name, pr?.pt.l_name].join(" ")}

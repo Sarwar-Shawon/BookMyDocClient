@@ -594,6 +594,7 @@ const RepeatPrescription = ({ onCloseModal, title, prescription }) => {
                 <div className="card-header">
                   <strong>Doctor Signature:</strong>
                   {
+                  prescription?.doc?.pSign &&
                     <img
                       src={`${apiEndpoints.upload.url}/${prescription?.doc?.pSign}`}
                       style={{

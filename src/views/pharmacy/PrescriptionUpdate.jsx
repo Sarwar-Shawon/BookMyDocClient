@@ -283,6 +283,7 @@ const PrescriptionUpdate = ({
                 <div className="card-header">
                   <strong>Doctor Signature:</strong>
                   {
+                  prescription?.doc?.pSign &&
                     <img
                       src={`${apiEndpoints.upload.url}/${prescription?.doc?.pSign}`}
                       style={{
@@ -320,7 +321,7 @@ const PrescriptionUpdate = ({
               </div>
             </div>
           </div>
-          {(prescription?.transObj && prescription.payStatus === "Paid") && (
+          {(prescription?.transObj && prescription.payStatus === "Paid" && prescription.status !== "Dispensed") && (
             <div className="row mt-1">
             <div className="col-lg-12">
               <div className="d-grid">

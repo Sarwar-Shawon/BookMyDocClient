@@ -11,6 +11,8 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import ChnagePasswordView from "../common/ChangePasswordView"
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import MedicalRecords from './MedicalRecords'
+import { formatDateToString } from "../../utils";
+
 //
 const PatientProfile = () => {
   //
@@ -141,7 +143,7 @@ const PatientProfile = () => {
           </div>
           <div className="mb-3">
             <label className="form-label">Date Of Birth:</label>
-            <label className="form-control">{formData?.dob}</label>
+            <label className="form-control">{formatDateToString(formData?.dob)}</label>
           </div>
           <div className="mb-3">
             <label className="form-label">Phone:</label>
@@ -324,7 +326,7 @@ const UpdateProfileView = ({isLoading , formData, setFormData , handleChange , u
                 type="text"
                 className="form-control"
                 name="dob"
-                value={formData.dob}
+                value={formatDateToString(formData.dob)}
                 onChange={handleChange}
               />
             </div>

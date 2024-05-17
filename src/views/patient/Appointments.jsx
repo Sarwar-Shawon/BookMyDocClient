@@ -162,7 +162,7 @@ const AppointmentView = ({ selType }) => {
       //console.log("resp:::", resp);
       if (resp.success) {
         setShowUpdateView(false);
-        setShowResp({ success: true, msg: "successful" });
+        setShowResp({ success: true, msg: "Apoointment has updated successfully" });
         const updatedApt = appointments.map((apnt) =>
           apnt._id == resp?.data._id ? { ...apnt, ...resp?.data } : apnt
         );
@@ -301,8 +301,10 @@ const AppointmentCard = ({
         // setSelectedDoctor(doctor);
         // setOpenAddView(true);
       }}
-    >
-      <img
+    > 
+    {
+    apt?.doc.img && 
+    <img
         src={
           typeof apt?.doc.img == "string"
             ? `${apiEndpoints.upload.url}/${apt?.doc.img}`
@@ -311,6 +313,8 @@ const AppointmentCard = ({
         className="card-img-top"
         alt={apt?.doc.f_name}
       />
+    }
+      
       <div className="card-body">
         <div
           style={{

@@ -190,7 +190,7 @@ const OrganizationsAddView = ({
               <label className="form-label">Email:</label>
               {errors.email && <p className="text-danger">{errors.email}</p>}
               <input
-                type="text"
+                type="email"
                 className="form-control"
                 name="email"
                 value={formData.email}

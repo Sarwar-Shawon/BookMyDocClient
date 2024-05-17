@@ -226,6 +226,7 @@ const PharmacyAddView = ({
                 name="phar_email"
                 value={formData.phar_email}
                 onChange={handleChange}
+                disabled={selectedPharmacy ? true : false}
                 required
               />
             </div>

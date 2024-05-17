@@ -268,6 +268,7 @@ const NursesAddView = ({
                 name="nur_email"
                 value={formData.nur_email}
                 onChange={handleChange}
+                disabled={selectedNurse ? true : false}
                 required
               />
             </div>

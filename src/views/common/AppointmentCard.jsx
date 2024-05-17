@@ -23,21 +23,25 @@ const AppointmentCard = ({
   aptType,
   setShowPatientRecordView,
 }) => {
+console.log("apt",apt)
   return (
     <div
       key={apt._id}
       className="doctor-card card mb-3 mx-2"
       style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" }}
     >
-      <img
-        src={
-          typeof apt?.pt.img == "string"
-            ? `${apiEndpoints.upload.url}/${apt?.pt.img}`
-            : URL.createObjectURL(apt?.pt.img)
-        }
-        className="card-img-top"
-        alt={apt?.pt.f_name}
-      />
+      {apt?.pt.img && (
+        <img
+          src={
+            typeof apt?.pt.img == "string"
+              ? `${apiEndpoints.upload.url}/${apt?.pt.img}`
+              : URL.createObjectURL(apt?.pt.img)
+          }
+          className="card-img-top"
+          alt={apt?.pt.f_name}
+        />
+      )}
+
       <div className="card-body">
         <div
           style={{

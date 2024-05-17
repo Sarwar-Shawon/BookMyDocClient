@@ -254,7 +254,9 @@ const PatientHome = () => {
                       // setOpenAddView(true);
                     }}
                   >
-                    <img
+                    {
+                      doctor?.img && 
+                      <img
                       src={
                         typeof doctor.img == "string"
                           ? `${apiEndpoints.upload.url}/${doctor.img}`
@@ -264,6 +266,8 @@ const PatientHome = () => {
                       alt={doctor.f_name}
                       loading="lazy"
                     />
+                    }
+                    
                     <div className="card-body">
                       <h5 className="card-title">
                         {[doctor.f_name, doctor.l_name].join(" ")}

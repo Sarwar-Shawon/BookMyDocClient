@@ -541,6 +541,7 @@ const PrescriptionCreateView = ({ onCloseModal, title, apt }) => {
                   <div className="card-header">
                     <strong>Doctor Signature:</strong>
                     {
+                      apt?.doc?.pSign &&
                       <img
                         src={`${apiEndpoints.upload.url}/${apt?.doc?.pSign}`}
                         style={{

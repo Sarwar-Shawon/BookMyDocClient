@@ -14,7 +14,7 @@ import moment from "moment";
 import Modal from "../../components/Modal";
 import AppCalendar from "../../components/Calendar";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { FaCalendarAlt, FaHospitalUser, FaClipboardList, FaBookmark , FaMoneyCheck } from "react-icons/fa";
+import { FaCalendarAlt, FaHospitalUser, FaClipboardList, FaBookmark , FaMoneyCheck, FaBookMedical } from "react-icons/fa";
 import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 const Interval = ["7 days", "1 month", "1 year"];
 const _status  = ["New", "Ready", "Dispensed"];
@@ -287,7 +287,7 @@ const PharmacyPrescriptions = () => {
                   className="doctor-card card mb-3 mx-2"
                   style={{
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                    // backgroundColor:
+                    backgroundColor:
                     //   pr.status == "Dispensed"
                     //     ? "#98D8AA"
                     //     : pr.presType == "Repeated"
@@ -295,8 +295,12 @@ const PharmacyPrescriptions = () => {
                     //     : pr.repeatReq
                     //     ? "#FFF9C9"
                     //     : "#fff",
+                    pr.presType == "Repeated"
+                       ? "#FFF9C9" : "#fff"
                   }}
                 >
+                  {
+                  pr?.pt.img && 
                   <img
                     src={
                       typeof pr?.pt.img == "string"
@@ -306,6 +310,8 @@ const PharmacyPrescriptions = () => {
                     className="card-img-top"
                     alt={pr?.pt.f_name}
                   />
+                  }
+                  
                   <div className="card-body">
                     <h5 className="card-title">
                       {[pr?.pt.f_name, pr?.pt.l_name].join(" ")}
@@ -344,13 +350,38 @@ const PharmacyPrescriptions = () => {
                       <FaBookmark style={{ marginRight: "5px" }} />
                       <p className="card-text" style={{ fontWeight: "bold", color: pr.status == "Dispensed"
                       ? "#43766C"
-                      : pr.presType == "Repeated"
-                      ? "#FFF9C9"
-                      : pr.repeatReq
-                      ? "#FFF9C9" : "#000" }}>
+                      : "#000" }}>
                       {pr?.status}
                     </p>
                     </div>
+                    {
+                  pr.presType == "Repeated" && 
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      <FaBookMedical style={{ marginRight: "5px" }} />
+                      <p
+                        className="card-text"
+                        style={{
+                          fontWeight: "bold",
+                          // color:
+                          //   pr.status == "Dispensed"
+                          //     ? "#43766C"
+                          //     : pr.presType == "Repeated"
+                          //     ? "#FFF9C9"
+                          //     : pr.repeatReq
+                          //     ? "#FFF9C9"
+                          //     : "#000",
+                        }}
+                      >
+                        { pr.presType}
+                      </p>
+                    </div>
+                  }
                     <div
                       style={{
                         display: "flex",
@@ -406,18 +437,18 @@ const PharmacyPrescriptions = () => {
                     style={{
                       width: "200px",
                       marginBottom: "10px",
-                      backgroundColor: "#0B2447",
-                      borderColor: "#0B2447",
+                      backgroundColor: "#387ADF",
+                      borderColor: "#387ADF",
                       transition: "background-color 0.3s, border-color 0.3s",
                     }}
                     className="btn btn-primary"
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = "#1a4a8a";
-                      e.target.style.borderColor = "#1a4a8a";
+                      e.target.style.backgroundColor = "#0B60B0";
+                      e.target.style.borderColor = "#0B60B0";
                     }}
                     onMouseOut={(e) => {
-                      e.target.style.backgroundColor = "#0B2447";
-                      e.target.style.borderColor = "#0B2447";
+                      e.target.style.backgroundColor = "#387ADF";
+                      e.target.style.borderColor = "#387ADF";
                     }}
                     onClick={() => {
                       setSelPC(pr);

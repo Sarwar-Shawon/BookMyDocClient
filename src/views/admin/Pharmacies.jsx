@@ -182,15 +182,18 @@ const Pharmacies = () => {
                   setOpenAddView(true);
                 }}
               >
-                <img
-                  src={
-                    typeof pharmacy.img == "string"
-                      ? `${apiEndpoints.upload.url}/${pharmacy.img}`
-                      : URL.createObjectURL(pharmacy.img)
-                  }
-                  className="card-img-top"
-                  alt={pharmacy.name}
-                />
+                {pharmacy.img && (
+                  <img
+                    src={
+                      typeof pharmacy.img == "string"
+                        ? `${apiEndpoints.upload.url}/${pharmacy.img}`
+                        : URL.createObjectURL(pharmacy.img)
+                    }
+                    className="card-img-top"
+                    alt={pharmacy.name}
+                  />
+                )}
+
                 <div className="card-body">
                   <h5 className="card-title">{pharmacy.name}</h5>
                   <p className="card-text">{pharmacy?.org?.name}</p>

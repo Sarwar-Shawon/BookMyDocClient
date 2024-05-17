@@ -204,7 +204,7 @@ const AppointmentView = ({ aptType, selDoc }) => {
       //console.log("resp:::", resp);
       if (resp.success) {
         setShowUpdateView(false);
-        setShowResp({ success: true, msg: "successful" });
+        setShowResp({ success: true, msg: "Apoointment has updated successfully" });
         const updatedApt = appointments.map((apnt) =>
           apnt._id == resp?.data._id ? { ...apnt, ...resp?.data } : apnt
         );
