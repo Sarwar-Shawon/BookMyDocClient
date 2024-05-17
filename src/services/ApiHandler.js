@@ -131,3 +131,12 @@ export const getAddressFromLatLng = async (latitude, longitude) => {
     return "";
   }
 };
+export const getAddressLatLngFromAddress = async (address) => {
+  try{
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address==${address}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
+    const response = await axios.get(url);
+    return response?.data?.results[0].geometry.location || ""
+  }catch (error) {
+    return "";
+  }
+};

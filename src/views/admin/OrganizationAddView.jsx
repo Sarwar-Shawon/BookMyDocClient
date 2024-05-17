@@ -14,7 +14,7 @@ import { ErrorAlert, SuccessAlert } from "../../components/Alert";
 import Modal from "../../components/Modal";
 import PLaceAutoComplete from "../../components/PlaceAutoComplete";
 import { Regex } from "../../utils";
-import { Post, Put } from "../../services";
+import { Post, Put, getAddressLatLngFromAddress } from "../../services";
 import apiEndpoints from "../../config/apiEndpoints";
 
 const OrganizationsAddView = ({
@@ -103,6 +103,21 @@ const OrganizationsAddView = ({
   const addNewOrganization = async () => {
     try {
       //
+      // await getAddressLatLngFromAddress(
+      //   "1 Blackbird Crescent , NG12 4JN"
+      // );
+      if(!formData?.addr?.lat_lng){
+        const lat_lng = await getAddressLatLngFromAddress(
+          [
+            formData?.addr.line1 , 
+            formData?.addr.line2 , 
+            formData?.addr.city , 
+            formData?.addr.county , 
+            formData?.addr.postal_code , 
+          ].join (" ")
+        );
+        formData.addr.lat_lng = lat_lng
+      }
       const resp = await Post(apiEndpoints.admin.createOrganization, formData);
       const respObj = {};
       if (resp.success) {
@@ -143,7 +158,9 @@ const OrganizationsAddView = ({
   //
   return (
     <Modal
-      title={selectedOrganization ? "Update Organization"  : "Add New Organization" }
+      title={
+        selectedOrganization ? "Update Organization" : "Add New Organization"
+      }
       body={
         <form onSubmit={handleSubmit} className="row">
           <ErrorAlert
@@ -252,13 +269,23 @@ const OrganizationsAddView = ({
               <label className="form-label">Find Address:</label>
               <PLaceAutoComplete
                 onPlaceSelected={(place) => {
-                  setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    addr: {
-                      ...prevFormData.addr,
-                      ...place,
-                    },
-                  }));
+                  if (place?.lat_lng) {
+                    setFormData((prevFormData) => ({
+                      ...prevFormData,
+                      addr: {
+                        ...prevFormData.addr,
+                        ...place,
+                      },
+                    }));
+                  } else {
+                    setFormData((prevFormData) => ({
+                      ...prevFormData,
+                      addr: {
+                        ...prevFormData.addr,
+                        ...{lat_lng: ""}
+                      },
+                    }));
+                  }
                 }}
               />
             </div>
@@ -327,7 +354,6 @@ const OrganizationsAddView = ({
                 required
               />
             </div>
-          
           </div>
           <div className="col-12">
             <div className="d-grid">

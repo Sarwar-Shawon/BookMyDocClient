@@ -95,10 +95,6 @@ const PatientHome = () => {
       }
     } catch (err) {
       // console.error('err:', err);
-      // 6647496167e8f8f8f763cbe0
-      // 6647490267e8f8f8f763cbd8
-      // 6647487067e8f8f8f763cbba
-      // 6646bee4b50dcf677261ae3a
     } finally {
       setLoading(false);
     }
