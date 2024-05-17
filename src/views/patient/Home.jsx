@@ -76,12 +76,6 @@ const PatientHome = () => {
       setLoading(false);
     }
   };
-  //get data when change department
-  useEffect(() => {
-    setLoading(true);
-    setDoctors([]);
-    fetchDoctors({ pSkip: true });
-  }, [selDept, selDate]);
   //get doctors
   const fetchDoctors = async ({ pSkip }) => {
     try {
@@ -94,7 +88,7 @@ const PatientHome = () => {
           ? `${apiEndpoints.patient.getDoctors}?skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
           : `${apiEndpoints.patient.getAllDoctors}?skip=${skip}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
       );
-      // console.log("resp::: doctors", resp);
+      console.log("resp::: doctors", resp);
       if (resp.success) {
         setDoctors((prevDoctors) => [...prevDoctors, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -107,12 +101,10 @@ const PatientHome = () => {
   };
   //
   useEffect(() => {
-    if (latitude && longitude) {
       setLoading(true);
       setDoctors([]);
       fetchDoctors({ pSkip: true });
-    }
-  }, [latitude, longitude, range]);
+  }, [latitude, longitude, range , selDept, selDate]);
   //
   // const getLocation = async () => {
   //   if (navigator.geolocation) {
@@ -184,9 +176,15 @@ const PatientHome = () => {
             <label className="form-label">Location:</label>
             <PLaceAutoComplete
               onPlaceSelected={(place) => {
-                // console.log("place", place);
-                setLatitude(place?.lat_lng[0]);
-                setLongitude(place?.lat_lng[1]);
+                console.log("place", place);
+                if(place?.lat_lng){
+                  setLatitude(place?.lat_lng[0]);
+                  setLongitude(place?.lat_lng[1]);
+                }else{
+                  setLatitude(null);
+                  setLongitude(null);
+                }
+                
               }}
             />
           </div>

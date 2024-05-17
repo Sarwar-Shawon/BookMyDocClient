@@ -7,7 +7,7 @@ export default (props) => {
   const { ref } = usePlacesWidget({
     apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     onPlaceSelected: (place) => {
-    //   //console.log(place);
+      // console.log(place);
       const obj = {
         line1: "",
         line2: "",
@@ -46,14 +46,20 @@ export default (props) => {
     options: {
       types:["geocode", "establishment"],
       componentRestrictions: { country: "uk" },
-    },
+    }
   });
-
+  const handleInputChange = (event) => {
+    const addr = {}
+    addr.lat_lng = [0,0]
+    if(!event.target.value.length)
+      props.onPlaceSelected({})
+  };
   return (
     <input
       placeholder="Search Address"
       className="form-control"
       ref={ref}
+      onChange={handleInputChange}
       style={props.style}
     />
   );

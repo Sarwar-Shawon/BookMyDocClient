@@ -647,6 +647,7 @@ const HistoryView = ({ selType }) => {
                   ? formData.start_date
                   : formData.end_date
               }
+              minDate={ selectedField === "start_date" ? null : formData.start_date}
               onChange={(val) => handleDateChange(new Date(val))}
             />
           )}

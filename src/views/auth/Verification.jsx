@@ -22,12 +22,13 @@ const OtpPage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setMsg("");
+      setErrors("");
     }, 10000);
     //
     return () => {
       clearTimeout(timer);
     };
-  }, [msg]);
+  }, [msg,errors]);
   //
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -46,11 +47,11 @@ const OtpPage = () => {
           setSuccessMsg(resp?.message);
         } else {
           //handle err
-          setMsg(resp?.error);
+          setErrors(resp?.error);
         }
       }
     } catch {
-      setErrors("Invalid username or password");
+      // setErrors("Invalid username or password");
     } finally {
       setLoading(false);
     }
@@ -63,7 +64,7 @@ const OtpPage = () => {
       newErrors.otp = "OTP is required";
       isValid = false;
     }
-    setErrors(newErrors);
+    setErrors("OTP is required");
     return isValid;
   };
   //
@@ -77,8 +78,7 @@ const OtpPage = () => {
       if (resp.success) {
         setMsg(resp?.message);
       } else {
-        //handle err
-        setMsg(resp?.error);
+        setErrors(resp?.error);
       }
     } catch {
       setErrors("Invalid username or password");
@@ -112,8 +112,13 @@ const OtpPage = () => {
               ) : (
                 <form onSubmit={handleSubmit}>
                   <h3>Verification</h3>
-                  {msg && (
+                  {errors && (
                     <div className="alert alert-danger" role="alert">
+                      {errors}
+                    </div>
+                  )}
+                  {msg && (
+                    <div className="alert alert-success" role="alert">
                       {msg}
                     </div>
                   )}
@@ -170,9 +175,9 @@ const OtpPage = () => {
                       Resend
                     </button>
                   </p>
-                  {/* <p className="forgot-password text-center">
-                  Don't have an account! <a href="/signup">Sign Up</a>
-                </p> */}
+                  <p className="forgot-password text-center">
+                    Already have an account! <a href="/signin">Sign In</a>
+                  </p>
                 </form>
               )}
             </div>
