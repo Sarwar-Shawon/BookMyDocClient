@@ -36,7 +36,7 @@ const PrescriptionCheckout = ({ onCloseModal, prescription }) => {
         },
         "application/json"
       );
-      console.log("resp", resp.data);
+      // console.log("resp", resp.data);
       if (resp.success) {
         window.location.href = resp.data?.url;
       }

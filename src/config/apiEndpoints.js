@@ -16,6 +16,7 @@ const apiEndpoints = {
     requestOtp: `${apiUrl()}/auth/requestOtp`,
   },
   admin: {
+    adminDashboard: `${apiUrl()}/admin/admin-dashboard`,
     registerDoctor: `${apiUrl()}/admin/registerDoctor`,
     getAllDoctors: `${apiUrl()}/admin/getAllDoctors`,
     updateDoctor: `${apiUrl()}/admin/updateDoctor`,

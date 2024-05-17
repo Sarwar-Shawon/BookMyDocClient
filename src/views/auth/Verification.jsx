@@ -41,11 +41,12 @@ const OtpPage = () => {
           apiEndpoints.auth.verifySignupOtp,
           params
         );
-        //console.log("resp:::", resp);
+        // console.log("resp:::", resp);
         if (resp.success) {
           setSuccessMsg(resp?.message);
         } else {
           //handle err
+          setMsg(resp?.error);
         }
       }
     } catch {
@@ -112,7 +113,7 @@ const OtpPage = () => {
                 <form onSubmit={handleSubmit}>
                   <h3>Verification</h3>
                   {msg && (
-                    <div className="alert alert-success" role="alert">
+                    <div className="alert alert-danger" role="alert">
                       {msg}
                     </div>
                   )}

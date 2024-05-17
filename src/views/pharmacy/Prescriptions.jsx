@@ -57,7 +57,7 @@ const PharmacyPrescriptions = () => {
           config.FETCH_LIMIT
         }&startDay=${formData.start_date}&endDay=${formData.end_date}&interval=${range}&prStatus=${prStatus}`
       );
-      console.log("resp", resp);
+      // console.log("resp", resp);
       if (resp.success) {
         setPrescriptions((prevPres) => [...prevPres, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -101,7 +101,7 @@ const PharmacyPrescriptions = () => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       const respObj = {};
       if (resp?.success) {
         setShowPresUpd(false);
@@ -110,7 +110,7 @@ const PharmacyPrescriptions = () => {
         const updatedPres = prescriptions.map((pres) =>
           pres._id == resp?.data._id ? { ...pres, ...resp?.data } : pres
         );
-        console.log("updatedPres",updatedPres)
+        // console.log("updatedPres",updatedPres)
         setPrescriptions(updatedPres);
 
       } else {
@@ -143,7 +143,7 @@ const PharmacyPrescriptions = () => {
         params,
         "application/json"
       );
-      console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       const respObj = {};
       if (resp?.success) {
         setShowPresUpd(false);

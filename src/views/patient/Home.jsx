@@ -50,7 +50,7 @@ const PatientHome = () => {
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
-    console.log("distance", parseFloat(distance * 0.621371).toFixed(2));
+    // console.log("distance", parseFloat(distance * 0.621371).toFixed(2));
     return parseFloat(distance * 0.621371).toFixed(2);
   };
   //get current location
@@ -94,7 +94,7 @@ const PatientHome = () => {
           ? `${apiEndpoints.patient.getDoctors}?skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
           : `${apiEndpoints.patient.getAllDoctors}?skip=${skip}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`
       );
-      console.log("resp::: doctors", resp);
+      // console.log("resp::: doctors", resp);
       if (resp.success) {
         setDoctors((prevDoctors) => [...prevDoctors, ...resp.data]);
         setHasMore(resp.data.length > 0 ? true : false);
@@ -184,7 +184,7 @@ const PatientHome = () => {
             <label className="form-label">Location:</label>
             <PLaceAutoComplete
               onPlaceSelected={(place) => {
-                console.log("place", place);
+                // console.log("place", place);
                 setLatitude(place?.lat_lng[0]);
                 setLongitude(place?.lat_lng[1]);
               }}

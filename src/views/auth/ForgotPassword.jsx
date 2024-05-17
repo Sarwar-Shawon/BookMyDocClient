@@ -45,7 +45,7 @@ const ForgotPassword = () => {
           apiEndpoints.auth.sendforgotPasswordOtp,
           params
         );
-        console.log("resp:::", resp);
+        // console.log("resp:::", resp);
         if(resp?.success){
             setOtpSuccess(true);
         }
@@ -86,7 +86,7 @@ const ForgotPassword = () => {
           apiEndpoints.auth.changeForgotPassword,
           params
         );
-        console.log("resp:::", resp);
+        // console.log("resp:::", resp);
         setRespMsg(resp);
       }
     } catch {
@@ -99,7 +99,7 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       const resp = await PublicGet(apiEndpoints.auth.requestOtp);
-      console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       setRespMsg(resp);
     } catch {
       //

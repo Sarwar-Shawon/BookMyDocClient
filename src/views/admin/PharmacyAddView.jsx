@@ -120,7 +120,6 @@ const PharmacyAddView = ({
       errorsObj.licence = "Licence is required";
       isValid = false;
     }
-    console.log("formData",formData)
     // if (!formData.active) {
     //   errorsObj.active = "Status is required";
     //   isValid = false;
@@ -137,7 +136,6 @@ const PharmacyAddView = ({
       errorsObj.addr_postal_code = "Postal Code is required";
       isValid = false;
     }
-    console.log("errorsObj",errorsObj)
     setError(errorsObj);
     return isValid;
   };
@@ -167,7 +165,7 @@ const PharmacyAddView = ({
     try {
       //
       const resp = await Put(apiEndpoints.admin.updatePharmacy, formData);
-      console.log("resp:::", resp);
+      // console.log("resp:::", resp);
       const respObj = {};
       if (resp.success) {
         updatePharmacyList({ updNur: resp?.data });
@@ -189,7 +187,7 @@ const PharmacyAddView = ({
       //
       if(selectedPharmacy?._id){
         const resp = await Delete(apiEndpoints.admin.deletePharmacy, {_id: selectedPharmacy._id});
-        console.log("resp:::", resp);
+        // console.log("resp:::", resp);
         const respObj = {};
         if (resp.success) {
           delteFromPharmacyList({ del_id: resp?.data });

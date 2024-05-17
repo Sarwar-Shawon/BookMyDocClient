@@ -26,7 +26,7 @@ const FindPrescriptions = ({ doctorId }) => {
       const resp = await Get(
         `${apiEndpoints.pharmacy.findPrescriptions}?searchText=${searchText}`
       );
-      console.log("resp", resp);
+      // console.log("resp", resp);
       if (resp.success) {
         setPrescriptions(resp.data);
       }

@@ -19,7 +19,7 @@ const CheckoutSuccess = () => {
   const { search } = location.state || {};
   const searchParams = new URLSearchParams(search);
   const sessionId = searchParams.get("session_id");
-  console.log("sessionId::::", sessionId);
+  // console.log("sessionId::::", sessionId);
   //
   useEffect(() => {
     const fetchTransactionDetails = async () => {
@@ -34,7 +34,7 @@ const CheckoutSuccess = () => {
           },
           "application/json"
         );
-        console.log("resp:::", resp);
+        // console.log("resp:::", resp);
         //
         const respObj = {};
         if (resp.success) {
