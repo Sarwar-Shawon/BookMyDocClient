@@ -7,3 +7,5 @@
 ![Screenshot 2024-05-24 at 21 22 18](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/8ba8a6bb-e79b-4991-a79f-ab45c2db9ba1)
 ![Screenshot 2024-05-24 at 21 21 59](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/4a0c460b-23c1-43e3-ad0f-3e5285b9349b)
 ![Screenshot 2024-05-24 at 21 24 42](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/3b1071a4-cb07-4799-969e-1936c795a2fd)
+![Screenshot 2024-05-24 at 21 32 00](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/bb8aa8c6-8c90-4b51-bed0-a7b672607c68)
+![Screenshot 2024-05-24 at 21 32 39](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/987b1a25-69d5-49a6-a7f9-226fc2542976)
