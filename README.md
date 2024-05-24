@@ -1,18 +1,9 @@
-## Prerequisites
-
-Before you begin, ensure you have the following installed on your system:
-
-- Node.js: [Download and Install Node.js](https://nodejs.org/en/download/)
-- npm (Node Package Manager): Installed automatically with Node.js
-
-**Navigate to the Project Directory**: /bookmydoc/client
-
-**Install Dependencies with command**: npm install
-
-## Running the Project
-Once you have installed the dependencies, you can run the project with the following command:
-
-npm start
-
-## Important Note
-**To run this client you need to run the server first from the Directory** : /bookmydoc/server
+![Screenshot 2024-05-24 at 21 21 44](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/3675f666-61a1-43cd-b011-58d278052fa7)
+![Screenshot 2024-05-24 at 21 25 05](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/1030a970-7ae9-415a-80a0-1c0b77e6ecb3)
+![Screenshot 2024-05-24 at 21 21 03](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/e00d8929-18ea-44e2-8f46-6628bc8d0d08)
+![Screenshot 2024-05-24 at 21 21 13](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/79463403-b07f-46a7-b9c7-e612c12a13ce)
+![Screenshot 2024-05-24 at 21 23 26](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/868810de-263d-478d-8be9-32b51a75f9dc)
+![Screenshot 2024-05-24 at 21 21 23](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/ff2bf1a9-1af1-4f80-8728-b44f86cdd9f8)
+![Screenshot 2024-05-24 at 21 22 18](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/8ba8a6bb-e79b-4991-a79f-ab45c2db9ba1)
+![Screenshot 2024-05-24 at 21 21 59](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/4a0c460b-23c1-43e3-ad0f-3e5285b9349b)
+![Screenshot 2024-05-24 at 21 24 42](https://github.com/Sarwar-Shawon/BookMyDocClient/assets/16131704/3b1071a4-cb07-4799-969e-1936c795a2fd)
