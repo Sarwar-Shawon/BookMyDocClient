@@ -160,7 +160,7 @@ const PrescriptionUpdate = ({
                         </div>
                         <div>
                           <p>
-                            <strong>Price:</strong> {"£9.65"}
+                            <strong>Price:</strong> {"£" + process.env.REACT_APP_PRES_PRICE}
                           </p>
                         </div>
                       </div>
@@ -177,8 +177,11 @@ const PrescriptionUpdate = ({
               <div className="card">
                 <div className="card-header">
                   <strong>{"Total Amount:"}</strong>
-                  {" £"}
-                  {prescription?.amount}
+                  {"£" +
+                      parseFloat(
+                        prescription?.medications.length *
+                          process.env.REACT_APP_PRES_PRICE
+                      ).toFixed(2)}
                 </div>
               </div>
             </div>

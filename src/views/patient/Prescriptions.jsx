@@ -82,7 +82,7 @@ const PatientPrescriptions = () => {
     setRange(val);
   };
   //
-  const fetchPrescriptions = async ({ pSkip }) => {
+  const fetchPrescriptions = async ({ pSkip = false } = {}) => {
     try {
       const skip = pSkip ? 0 : prescriptions.length;
       const resp = await Get(
@@ -474,7 +474,7 @@ const PatientPrescriptions = () => {
                 {pr.repeatOption &&
                   !pr.repeatReq &&
                   pr.status === "Dispensed" &&
-                  !pr.rpid && (
+                   (
                     <button
                       style={{
                         width: "200px",

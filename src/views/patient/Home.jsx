@@ -77,9 +77,10 @@ const PatientHome = () => {
     }
   };
   //get doctors
-  const fetchDoctors = async ({ pSkip }) => {
+  const fetchDoctors = async ({ pSkip = false } = {}) => {
     try {
-      const skip = pSkip ? 0 : doctors.length;
+      const skip = pSkip ? 0 : doctors.length + 1;
+      console.log("skipskipskipskip",skip)
       const resp = await Get(
           selDate
           ? `${apiEndpoints.patient.getAllDoctorsDate}?date=${selDate}&skip=${skip}&dept=${selDept}&lat=${latitude}&lng=${longitude}&range=${range}&limit=15`

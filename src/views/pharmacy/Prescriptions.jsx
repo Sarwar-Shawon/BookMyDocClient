@@ -49,7 +49,7 @@ const PharmacyPrescriptions = () => {
       fetchPrescriptions({ pSkip: true });
   }, [range, prStatus]);
   //
-  const fetchPrescriptions = async ({ pSkip }) => {
+  const fetchPrescriptions = async ({ pSkip = false } = {}) => {
     try {
       const skip = pSkip ? 0 : prescriptions.length;
       const resp = await Get(
